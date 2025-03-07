@@ -1,6 +1,7 @@
+
 <?php
 include '../user_module/database.php';
-
+//TODO: add post , add comment, check if user rated before, create dropdown menu for recipe
 // Query to fetch recipes
 $sql = "SELECT p.post_id, p.title, p.content, u.username,
         (SELECT AVG(rating_value) FROM Rating WHERE recipe_id = r.recipe_id AND r.post_id = p.post_id) AS avg_rating
@@ -126,7 +127,7 @@ $result = $con->query($sql);
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="./Community.html">Community</a>
+                        <a class="nav-link" href="./Community.php">Community</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">Competitions</a>
@@ -173,7 +174,7 @@ $result = $con->query($sql);
                                 <img src="<?php echo htmlspecialchars($row["image_url"]); ?>" class="card-img-top"
                                     alt="<?php echo htmlspecialchars($row["title"]); ?>">
                             <?php } else { ?>
-                                <!-- <img src="/api/placeholder/400/200" class="card-img-top" alt="Recipe Image"> -->
+
                             <?php } ?>
                             <div class="card-body">
                                 <div class="d-flex justify-content-between align-items-center mb-2">
@@ -322,18 +323,7 @@ $result = $con->query($sql);
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Custom JS -->
     <script>
-        // Toggle reply forms
-        document.querySelectorAll('.reply-toggle').forEach(button => {
-            button.addEventListener('click', function () {
-                const targetId = this.getAttribute('data-target');
-                const replyForm = document.getElementById(targetId);
-                if (replyForm.style.display === 'none') {
-                    replyForm.style.display = 'block';
-                } else {
-                    replyForm.style.display = 'none';
-                }
-            });
-        });
+
 
         // Star Rating System
         document.querySelectorAll('.rating-stars i').forEach(star => {
@@ -368,32 +358,6 @@ $result = $con->query($sql);
             });
         });
 
-        // Helpful button functionality
-        document.querySelectorAll('.btn-outline-secondary i.fa-thumbs-up').forEach(btn => {
-            btn.parentElement.addEventListener('click', function () {
-                if (!this.classList.contains('active')) {
-                    const text = this.innerHTML;
-                    const count = parseInt(text.match(/\((\d+)\)/)[1]) + 1;
-                    this.innerHTML = text.replace(/\(\d+\)/, `(${count})`);
-                    this.classList.add('active');
-                    this.classList.replace('btn-outline-secondary', 'btn-secondary');
-                    // Here you would send to the server
-                }
-            });
-        });
-        function loadComments(recipeId) {
-            // Make AJAX GET request to fetch comments
-            const xhr = new XMLHttpRequest();
-            xhr.open('GET', 'fetch_comments.php?recipe_id=' + recipeId, true);
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState == 4 && xhr.status == 200) {
-                    // Once data is fetched, insert comments into the modal
-                    const commentsContainer = document.getElementById('comments-container-' + recipeId);
-                    commentsContainer.innerHTML = xhr.responseText;
-                }
-            };
-            xhr.send();
-        }
     </script>
 </body>
 

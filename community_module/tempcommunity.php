@@ -74,7 +74,148 @@
     $con->close();
     ?>
 </div>
-
+    <!-- Comment Modal for Recipe 1 -->
+    <div class="modal fade" id="commentModal1" tabindex="-1" aria-labelledby="commentModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="commentModalLabel">Pasta Carbonara - Comments</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Rating Section -->
+                    <div class="mb-4">
+                        <h6>Rate this recipe:</h6>
+                        <div class="rating-stars fs-4">
+                            <i class="far fa-star" data-rating="1"></i>
+                            <i class="far fa-star" data-rating="2"></i>
+                            <i class="far fa-star" data-rating="3"></i>
+                            <i class="far fa-star" data-rating="4"></i>
+                            <i class="far fa-star" data-rating="5"></i>
+                        </div>
+                    </div>
+                    
+                    <!-- Comment Form -->
+                    <form class="mb-4">
+                        <div class="mb-3">
+                            <label for="commentText" class="form-label">Add your comment or tip:</label>
+                            <textarea class="form-control" id="commentText" rows="2"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Post Comment</button>
+                    </form>
+                    
+                    <!-- Comment List -->
+                    <h6>Comments (12)</h6>
+                    <div class="comment-list">
+                        <!-- Comment 1 -->
+                        <div class="comment-box">
+                            <div class="d-flex justify-content-between">
+                                <div class="d-flex align-items-center mb-1">
+                                    <img src="/api/placeholder/32/32" class="rounded-circle me-2" alt="User avatar">
+                                    <div>
+                                        <h6 class="mb-0">Julia K.</h6>
+                                        <small class="text-muted">2 days ago</small>
+                                    </div>
+                                </div>
+                                <div class="rating-stars small">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                            </div>
+                            <p class="small mb-1">I added extra pepper and it was amazing! Everyone loved it.</p>
+                            <div class="d-flex mb-2">
+                                <button class="btn btn-sm btn-outline-secondary me-2">
+                                    <i class="fas fa-thumbs-up"></i> Helpful (8)
+                                </button>
+                                <button class="btn btn-sm btn-outline-secondary reply-toggle" data-target="reply1">
+                                    Reply
+                                </button>
+                            </div>
+                            <div id="reply1" class="reply-form mb-2" style="display: none;">
+                                <div class="input-group">
+                                    <input type="text" class="form-control form-control-sm" placeholder="Write a reply...">
+                                    <button class="btn btn-sm btn-primary">Send</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Comment 2 -->
+                        <div class="comment-box">
+                            <div class="d-flex justify-content-between">
+                                <div class="d-flex align-items-center mb-1">
+                                    <img src="/api/placeholder/32/32" class="rounded-circle me-2" alt="User avatar">
+                                    <div>
+                                        <h6 class="mb-0">Marco T.</h6>
+                                        <small class="text-muted">1 week ago</small>
+                                    </div>
+                                </div>
+                                <div class="rating-stars small">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                </div>
+                            </div>
+                            <p class="small mb-1">The recipe was good but too rich for my taste. I'd use less cheese next time.</p>
+                            <div class="d-flex mb-2">
+                                <button class="btn btn-sm btn-outline-secondary me-2">
+                                    <i class="fas fa-thumbs-up"></i> Helpful (3)
+                                </button>
+                                <button class="btn btn-sm btn-outline-secondary reply-toggle" data-target="reply2">
+                                    Reply
+                                </button>
+                            </div>
+                            <div id="reply2" class="reply-form mb-2" style="display: none;">
+                                <div class="input-group">
+                                    <input type="text" class="form-control form-control-sm" placeholder="Write a reply...">
+                                    <button class="btn btn-sm btn-primary">Send</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center mt-3">
+                            <button class="btn btn-sm btn-outline-primary">Load More Comments</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Comment Modals for other recipes would be similar but with different content -->
+    <div class="modal fade" id="commentModal2" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Chocolate Brownies - Comments</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Similar structure as the first modal -->
+                    <p class="text-center text-muted">Comment content would go here</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal fade" id="commentModal3" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Greek Salad - Comments</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Similar structure as the first modal -->
+                    <p class="text-center text-muted">Comment content would go here</p>
+                </div>
+            </div>
+        </div>
+    </div>
 <!-- Comment Modals - You would need to generate these dynamically too -->
 <?php
 // Reopen connection
