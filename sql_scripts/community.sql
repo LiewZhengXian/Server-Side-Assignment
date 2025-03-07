@@ -91,11 +91,19 @@ INSERT INTO Comment (content) VALUES
 
 -- Insert into Recipe table (linking posts to recipes with image URLs)
 INSERT INTO Recipe (post_id, title, description, image_url) VALUES
-(1, 'Chocolate Cake', 'A rich and moist chocolate cake recipe.', 'https://example.com/chocolate-cake.jpg'),
-(3, 'Homemade Pizza', 'Step-by-step guide to making perfect homemade pizza.', 'https://example.com/homemade-pizza.jpg'),
-(4, 'Sushi Rolls', 'Learn how to make sushi rolls with simple ingredients.', 'https://example.com/sushi-rolls.jpg'),
-(5, 'Coffee Brewing', 'Discover different ways to brew coffee.', 'https://example.com/coffee-brewing.jpg'),
-(2, 'Healthy Eating', 'A detailed guide to balanced meals.', 'https://example.com/healthy-eating.jpg');
+(1, 'Chocolate Cake', '1. Preheat the oven to 350°F (175°C).
+2. Grease and flour a cake pan.
+3. In a bowl, mix 2 cups of flour, 1 and 3/4 cups of sugar, 3/4 cup of cocoa powder, 1 and 1/2 teaspoons of baking powder, 1 and 1/2 teaspoons of baking soda, and 1 teaspoon of salt.
+4. Add 2 eggs, 1 cup of milk, 1/2 cup of vegetable oil, and 2 teaspoons of vanilla extract. Mix well.
+5 .Stir in 1 cup of boiling water until the batter is smooth.
+6 .Pour the batter into the prepared cake pan.
+7. Bake for 30 to 35 minutes or until a toothpick inserted in the center comes out clean.
+8. Let the cake cool in the pan for 10 minutes, then transfer to a wire rack to cool completely.
+9. Frost with your favorite chocolate frosting and serve.', ''),
+(3, 'Homemade Pizza', 'Step-by-step guide to making perfect homemade pizza.', ''),
+(4, 'Sushi Rolls', 'Learn how to make sushi rolls with simple ingredients.', ''),
+(5, 'Coffee Brewing', 'Discover different ways to brew coffee.', ''),
+(2, 'Healthy Eating', 'A detailed guide to balanced meals.', '');
 
 -- Insert into Rating table (linking recipes to ratings)
 INSERT INTO Rating (recipe_id, rating_value) VALUES
@@ -104,3 +112,4 @@ INSERT INTO Rating (recipe_id, rating_value) VALUES
 (3, 5),
 (4, 3),
 (5, 4);
+

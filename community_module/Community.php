@@ -1,12 +1,8 @@
-
 <?php
 include '../user_module/database.php';
 //TODO: add post , add comment, check if user rated before, create dropdown menu for recipe
 // Query to fetch recipes
-$sql = "SELECT p.post_id, p.title, p.content, u.username,
-        (SELECT AVG(rating_value) FROM Rating WHERE recipe_id = r.recipe_id AND r.post_id = p.post_id) AS avg_rating
-        FROM Recipe r, Post p , user u
-        WHERE r.post_id = p.post_id AND u.post_id = p.post_id ORDER BY r.creation_datetime DESC;
+$sql = "SELECT p.post_id, p.title, p.content, r.title AS recipe_title, r.description AS recipe_desc, r.image_url AS recipe_image, u.username, (SELECT AVG(rating_value) FROM Rating WHERE recipe_id = r.recipe_id) AS avg_rating FROM Post p LEFT JOIN Recipe r ON p.post_id = r.post_id JOIN user u ON u.post_id = p.post_id ORDER BY r.creation_datetime DESC;
         ";
 
 
@@ -153,6 +149,9 @@ $result = $con->query($sql);
                         $ratingClass = "bg-success";
                     } else if ($rating >= 3.0) {
                         $ratingClass = "bg-warning";
+                    } else if ($rating == 0) {
+                        $rating = "N/A";
+                        $ratingClass = "bg-secondary";
                     }
                     $post_id = $row["post_id"];
                     $sql2 = "SELECT c.content, u.username, c.creation_datetime 
@@ -170,25 +169,48 @@ $result = $con->query($sql);
 
                     <div class="col">
                         <div class="card h-100 recipe-card">
-                            <?php if (!empty($row["image_url"])) { ?>
-                                <img src="<?php echo htmlspecialchars($row["image_url"]); ?>" class="card-img-top"
-                                    alt="<?php echo htmlspecialchars($row["title"]); ?>">
-                            <?php } else { ?>
 
-                            <?php } ?>
                             <div class="card-body">
                                 <div class="d-flex justify-content-between align-items-center mb-2">
-                                    <h5 class="card-title"><?php echo htmlspecialchars($row["title"]); ?></h5>
+                                    <h5 class="card-title"><?php echo htmlspecialchars($row["title"]); ?></h5> <br>
+
+
                                     <div class="recipe-rating">
                                         <span class="badge <?php echo $ratingClass; ?>"><?php echo $rating; ?> ★</span>
                                     </div>
                                 </div>
+                                <?php if (!empty($row["recipe_image"])) { ?>
+                                    <div style="width: 200px; height: 200px; overflow: hidden; display: block;">
+                                        <img src="<?php echo htmlspecialchars($row["recipe_image"]); ?>" width="200" height="200"
+                                            class="card-img-top" alt="<?php echo htmlspecialchars($row["title"]); ?>">
+                                    </div>
+
+                                <?php } else { ?>
+
+                                <?php } ?>
                                 <p class="card-text small"><?php echo htmlspecialchars($row["content"]); ?></p>
+                                <?php if (!empty($row["recipe_title"])) { ?>
+                                    <button class="btn btn-primary btn-sm mt-2" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#collapse<?php echo $row['post_id']; ?>">
+                                        Show Recipe
+                                    </button>
+
+                                <?php } ?>
+
+
+                                <!-- Collapsible content -->
+                                <div class="collapse mt-2" id="collapse<?php echo $row['post_id']; ?>">
+
+                                    <p class="card-text"><?php echo htmlspecialchars($row["recipe_title"]); ?></p>
+                                    <p class="card-text small"><?php echo nl2br($row["recipe_desc"]); ?></p>
+                                </div>
+
                                 <hr>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div class="rating-stars">
                                         <?php
                                         // Generate stars based on rating
+                                        if(is_numeric($rating) ){
                                         $fullStars = floor($rating);
                                         $halfStar = $rating - $fullStars >= 0.5;
 
@@ -201,11 +223,14 @@ $result = $con->query($sql);
                                                 echo '<i class="far fa-star"></i>';
                                             }
                                         }
+                                    } else {
+                                        echo "No ratings yet";}
                                         ?>
+                                        <h6 class="card-text text-muted fst-italic">
+                                            posted by: <?php echo htmlspecialchars($row["username"]); ?></h6>
                                     </div>
                                     <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal"
-                                        data-bs-target="#commentModal<?php echo $row["post_id"]; ?>"
-                                        >
+                                        data-bs-target="#commentModal<?php echo $row["post_id"]; ?>">
                                         <i class="fas fa-comment"></i> Comments (<?php echo $comments->num_rows; ?>)
                                     </button>
 
@@ -213,67 +238,70 @@ $result = $con->query($sql);
                             </div>
                         </div>
                     </div>
-        <!-- Comment Modal for Recipe 1 -->
-        <div class="modal fade" id="commentModal<?php echo $row["post_id"]; ?>" tabindex="-1"
-            aria-labelledby="commentModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="commentModalLabel"><?php echo htmlspecialchars($row["title"]); ?> -
-                            Comments</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <!-- Rating Section -->
-                        <div class="mb-4">
-                            <h6>Rate this recipe:</h6>
-                            <div class="rating-stars fs-4">
-                                <i class="far fa-star" data-rating="1"></i>
-                                <i class="far fa-star" data-rating="2"></i>
-                                <i class="far fa-star" data-rating="3"></i>
-                                <i class="far fa-star" data-rating="4"></i>
-                                <i class="far fa-star" data-rating="5"></i>
-                            </div>
-                        </div>
 
-                        <!-- Comment Form -->
-                        <form class="mb-4">
-                            <div class="mb-3">
-                                <label for="commentText" class="form-label">Add your comment or tip:</label>
-                                <textarea class="form-control" id="commentText" rows="2"></textarea>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Post Comment</button>
-                        </form>
-
-                        <!-- Comment List -->
-                        <h6>Comments (<?php echo $comments->num_rows; ?>) </h6>
-                        <div class="comment-list">
-                            <?php
-                            while ($comment = $comments->fetch_assoc()) { ?>
-                                <div class="comment-box">
-                                    <div class="d-flex justify-content-between">
-                                        <div class="d-flex align-items-center mb-1">
-                                            <div>
-                                                <h6 class="mb-0"><?php echo htmlspecialchars($comment["username"]); ?></h6>
-                                                <small
-                                                    class="text-muted"><?php echo htmlspecialchars($comment["creation_datetime"]); ?></small>
-                                            </div>
+                    <div class="modal fade" id="commentModal<?php echo $row["post_id"]; ?>" tabindex="-1"
+                        aria-labelledby="commentModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="commentModalLabel">
+                                        <?php echo htmlspecialchars($row["title"]); ?> -
+                                        Comments
+                                    </h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <!-- Rating Section -->
+                                    <div class="mb-4">
+                                        <h6>Rate this recipe:</h6>
+                                        <div class="rating-stars fs-4">
+                                            <i class="far fa-star" data-rating="1"></i>
+                                            <i class="far fa-star" data-rating="2"></i>
+                                            <i class="far fa-star" data-rating="3"></i>
+                                            <i class="far fa-star" data-rating="4"></i>
+                                            <i class="far fa-star" data-rating="5"></i>
                                         </div>
+                                    </div>
+
+                                    <!-- Comment Form -->
+                                    <form class="mb-4">
+                                        <div class="mb-3">
+                                            <label for="commentText" class="form-label">Add your comment or tip:</label>
+                                            <textarea class="form-control" id="commentText" rows="2"></textarea>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Post Comment</button>
+                                    </form>
+
+                                    <!-- Comment List -->
+                                    <h6>Comments (<?php echo $comments->num_rows; ?>) </h6>
+                                    <div class="comment-list">
+                                        <?php
+                                        while ($comment = $comments->fetch_assoc()) { ?>
+                                            <div class="comment-box">
+                                                <div class="d-flex justify-content-between">
+                                                    <div class="d-flex align-items-center mb-1">
+                                                        <div>
+                                                            <h6 class="mb-0"><?php echo htmlspecialchars($comment["username"]); ?>
+                                                            </h6>
+                                                            <small
+                                                                class="text-muted"><?php echo htmlspecialchars($comment["creation_datetime"]); ?></small>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                <p class="small mb-1"><?php echo htmlspecialchars($comment["content"]); ?>.</p>
+
+
+                                            </div>
+
+
+                                        <?php } ?>
 
                                     </div>
-                                    <p class="small mb-1"><?php echo htmlspecialchars($comment["content"]); ?>.</p>
-
-
                                 </div>
-
-
-                            <?php } ?>
-                            
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
                     <?php
                 }
             } else {
@@ -359,6 +387,6 @@ $result = $con->query($sql);
         });
 
     </script>
-</body>
+    </body>
 
 </html>
