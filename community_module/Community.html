@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe Community</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .rating-stars {
+            color: #ffc107;
+            cursor: pointer;
+        }
+        .comment-box {
+            border-left: 3px solid #6c757d;
+            padding-left: 15px;
+            margin-bottom: 15px;
+        }
+        .recipe-card {
+            transition: transform 0.3s;
+        }
+        .recipe-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .add-post-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+        }
+        .hover-form {
+            display: none;
+            position: absolute;
+            right: 0;
+            bottom: 60px;
+            width: 300px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            padding: 15px;
+        }
+        .add-post-container:hover .hover-form {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- Simple Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">Recipe Hub</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Recipes</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="mealPlanningDropdown" role="button" data-bs-toggle="dropdown">
+                            Meal Planning
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">Plan a Meal</a></li>
+                            <li><a class="dropdown-item" href="#">View Schedule</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="./Community.html">Community</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Competitions</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container my-4">
+        <h2 class="mb-4">Community Recipes</h2>
+        
+        <!-- Recipe Grid -->
+        <div class="row row-cols-1 row-cols-md-3 g-4 mb-5">
+            <!-- Recipe Card 1 -->
+            <div class="col">
+                <div class="card h-100 recipe-card">
+                    <img src="/api/placeholder/400/200" class="card-img-top" alt="Recipe Image">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h5 class="card-title">Pasta Carbonara</h5>
+                            <div class="recipe-rating">
+                                <span class="badge bg-success">4.8 ★</span>
+                            </div>
+                        </div>
+                        <p class="card-text small">A classic Italian pasta dish with eggs, cheese, pancetta, and black pepper.</p>
+                        <hr>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="rating-stars">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                            </div>
+                            <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#commentModal1">
+                                <i class="fas fa-comment"></i> Comments (12)
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Recipe Card 2 -->
+            <div class="col">
+                <div class="card h-100 recipe-card">
+                    <img src="/api/placeholder/400/200" class="card-img-top" alt="Recipe Image">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h5 class="card-title">Chocolate Brownies</h5>
+                            <div class="recipe-rating">
+                                <span class="badge bg-success">4.6 ★</span>
+                            </div>
+                        </div>
+                        <p class="card-text small">Rich, fudgy brownies with a crackly top. Perfect for chocolate lovers!</p>
+                        <hr>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="rating-stars">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                            </div>
+                            <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#commentModal2">
+                                <i class="fas fa-comment"></i> Comments (8)
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Recipe Card 3 -->
+            <div class="col">
+                <div class="card h-100 recipe-card">
+                    <img src="/api/placeholder/400/200" class="card-img-top" alt="Recipe Image">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h5 class="card-title">Greek Salad</h5>
+                            <div class="recipe-rating">
+                                <span class="badge bg-success">4.5 ★</span>
+                            </div>
+                        </div>
+                        <p class="card-text small">A refreshing salad with cucumber, tomato, olives, and feta cheese.</p>
+                        <hr>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="rating-stars">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                            </div>
+                            <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#commentModal3">
+                                <i class="fas fa-comment"></i> Comments (5)
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Floating Add Post Button with Hover Form -->
+        <div class="add-post-container">
+            <button class="btn btn-primary rounded-circle add-post-btn">
+                <i class="fas fa-plus fa-lg"></i>
+            </button>
+            
+            <div class="hover-form">
+                <h5>Share Your Recipe</h5>
+                <form id="quickPostForm" action="add_recipe.php" method="post">
+                    <div class="mb-3">
+                        <input type="text" class="form-control" placeholder="Recipe Title" required>
+                    </div>
+                    <div class="mb-3">
+                        <textarea class="form-control" rows="3" placeholder="Brief Description" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Upload Image</label>
+                        <input type="file" class="form-control">
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Post Recipe</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Comment Modal for Recipe 1 -->
+    <div class="modal fade" id="commentModal1" tabindex="-1" aria-labelledby="commentModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="commentModalLabel">Pasta Carbonara - Comments</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Rating Section -->
+                    <div class="mb-4">
+                        <h6>Rate this recipe:</h6>
+                        <div class="rating-stars fs-4">
+                            <i class="far fa-star" data-rating="1"></i>
+                            <i class="far fa-star" data-rating="2"></i>
+                            <i class="far fa-star" data-rating="3"></i>
+                            <i class="far fa-star" data-rating="4"></i>
+                            <i class="far fa-star" data-rating="5"></i>
+                        </div>
+                    </div>
+                    
+                    <!-- Comment Form -->
+                    <form class="mb-4">
+                        <div class="mb-3">
+                            <label for="commentText" class="form-label">Add your comment or tip:</label>
+                            <textarea class="form-control" id="commentText" rows="2"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Post Comment</button>
+                    </form>
+                    
+                    <!-- Comment List -->
+                    <h6>Comments (12)</h6>
+                    <div class="comment-list">
+                        <!-- Comment 1 -->
+                        <div class="comment-box">
+                            <div class="d-flex justify-content-between">
+                                <div class="d-flex align-items-center mb-1">
+                                    <img src="/api/placeholder/32/32" class="rounded-circle me-2" alt="User avatar">
+                                    <div>
+                                        <h6 class="mb-0">Julia K.</h6>
+                                        <small class="text-muted">2 days ago</small>
+                                    </div>
+                                </div>
+                                <div class="rating-stars small">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                            </div>
+                            <p class="small mb-1">I added extra pepper and it was amazing! Everyone loved it.</p>
+                            <div class="d-flex mb-2">
+                                <button class="btn btn-sm btn-outline-secondary me-2">
+                                    <i class="fas fa-thumbs-up"></i> Helpful (8)
+                                </button>
+                                <button class="btn btn-sm btn-outline-secondary reply-toggle" data-target="reply1">
+                                    Reply
+                                </button>
+                            </div>
+                            <div id="reply1" class="reply-form mb-2" style="display: none;">
+                                <div class="input-group">
+                                    <input type="text" class="form-control form-control-sm" placeholder="Write a reply...">
+                                    <button class="btn btn-sm btn-primary">Send</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Comment 2 -->
+                        <div class="comment-box">
+                            <div class="d-flex justify-content-between">
+                                <div class="d-flex align-items-center mb-1">
+                                    <img src="/api/placeholder/32/32" class="rounded-circle me-2" alt="User avatar">
+                                    <div>
+                                        <h6 class="mb-0">Marco T.</h6>
+                                        <small class="text-muted">1 week ago</small>
+                                    </div>
+                                </div>
+                                <div class="rating-stars small">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                </div>
+                            </div>
+                            <p class="small mb-1">The recipe was good but too rich for my taste. I'd use less cheese next time.</p>
+                            <div class="d-flex mb-2">
+                                <button class="btn btn-sm btn-outline-secondary me-2">
+                                    <i class="fas fa-thumbs-up"></i> Helpful (3)
+                                </button>
+                                <button class="btn btn-sm btn-outline-secondary reply-toggle" data-target="reply2">
+                                    Reply
+                                </button>
+                            </div>
+                            <div id="reply2" class="reply-form mb-2" style="display: none;">
+                                <div class="input-group">
+                                    <input type="text" class="form-control form-control-sm" placeholder="Write a reply...">
+                                    <button class="btn btn-sm btn-primary">Send</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center mt-3">
+                            <button class="btn btn-sm btn-outline-primary">Load More Comments</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Comment Modals for other recipes would be similar but with different content -->
+    <div class="modal fade" id="commentModal2" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Chocolate Brownies - Comments</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Similar structure as the first modal -->
+                    <p class="text-center text-muted">Comment content would go here</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal fade" id="commentModal3" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Greek Salad - Comments</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Similar structure as the first modal -->
+                    <p class="text-center text-muted">Comment content would go here</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script>
+        // Toggle reply forms
+        document.querySelectorAll('.reply-toggle').forEach(button => {
+            button.addEventListener('click', function() {
+                const targetId = this.getAttribute('data-target');
+                const replyForm = document.getElementById(targetId);
+                if (replyForm.style.display === 'none') {
+                    replyForm.style.display = 'block';
+                } else {
+                    replyForm.style.display = 'none';
+                }
+            });
+        });
+        
+        // Star Rating System
+        document.querySelectorAll('.rating-stars i').forEach(star => {
+            star.addEventListener('mouseover', function() {
+                const rating = this.getAttribute('data-rating');
+                if (rating) {
+                    const stars = this.parentElement.querySelectorAll('i');
+                    stars.forEach((s, index) => {
+                        if (index < rating) {
+                            s.className = 'fas fa-star';
+                        } else {
+                            s.className = 'far fa-star';
+                        }
+                    });
+                }
+            });
+            
+            star.addEventListener('click', function() {
+                const rating = this.getAttribute('data-rating');
+                if (rating) {
+                    // Here you would send rating to the server
+                    alert(`You rated this recipe ${rating} stars!`);
+                }
+            });
+        });
+        
+        // Reset hover effect when mouse leaves rating area
+        document.querySelectorAll('.modal .rating-stars').forEach(container => {
+            container.addEventListener('mouseleave', function() {
+                // Reset to initial state or show saved rating
+                // This would normally check the user's saved rating
+            });
+        });
+        
+        // Helpful button functionality
+        document.querySelectorAll('.btn-outline-secondary i.fa-thumbs-up').forEach(btn => {
+            btn.parentElement.addEventListener('click', function() {
+                if (!this.classList.contains('active')) {
+                    const text = this.innerHTML;
+                    const count = parseInt(text.match(/\((\d+)\)/)[1]) + 1;
+                    this.innerHTML = text.replace(/\(\d+\)/, `(${count})`);
+                    this.classList.add('active');
+                    this.classList.replace('btn-outline-secondary', 'btn-secondary');
+                    // Here you would send to the server
+                }
+            });
+        });
+    </script>
+</body>
+</html>
