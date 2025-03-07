@@ -18,7 +18,7 @@ session_start();
         $password = stripslashes($_REQUEST['password']);
         $password = mysqli_real_escape_string($con, $password);
         $query = "SELECT *
- FROM `users`
+ FROM `user`
  WHERE username='$username'
  AND password='" . md5($password) . "'"
         ;
@@ -27,7 +27,7 @@ session_start();
         if ($rows == 1) {
             $_SESSION['username'] = $username;
 
-            header("Location: index.php");
+            header("Location: ../index.php");
             exit();
         } else {
             echo "<div class='form'>

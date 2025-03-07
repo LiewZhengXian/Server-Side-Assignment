@@ -1,7 +1,12 @@
 <?php
-$con = mysqli_connect("localhost","root","","users");
-if (mysqli_connect_errno())
- {
- echo "Failed to connect to MySQL: " . mysqli_connect_error();
- }
+$host = 'localhost';
+$user = 'root';
+$pass = '';
+$dbname = 'recipehub_db';
+
+$con = new mysqli($host, $user, $pass, $dbname);
+
+if ($con->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
 ?>

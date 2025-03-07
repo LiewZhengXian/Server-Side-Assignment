@@ -13,7 +13,7 @@ token='$token' LIMIT 1");
         ) {
             $password = mysqli_real_escape_string($con, $_POST['password']);
             $hashed_password = md5($password);
-            mysqli_query($con, "UPDATE users SET password='$hashed_password'
+            mysqli_query($con, "UPDATE user SET password='$hashed_password'
  WHERE email='$email'");
             mysqli_query($con, "DELETE FROM password_resets WHERE
  email='$email'");

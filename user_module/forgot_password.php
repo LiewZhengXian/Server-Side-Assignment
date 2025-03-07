@@ -2,7 +2,7 @@
 require('database.php');
 if (isset($_POST['email'])) {
     $email = mysqli_real_escape_string($con, $_POST['email']);
-    $check_user = mysqli_query($con, "SELECT * FROM users WHERE email='$email'");
+    $check_user = mysqli_query($con, "SELECT * FROM user WHERE email='$email'");
     if (mysqli_num_rows($check_user) > 0) {
         $token = bin2hex(random_bytes(50));
         mysqli_query($con, "INSERT INTO password_resets (email, token) VALUES
