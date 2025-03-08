@@ -1,40 +1,17 @@
 <?php
+session_start();
 include '../user_module/database.php';
-//TODO: add post , add comment, check if user rated before, create dropdown menu for recipe
-// Query to fetch recipes
-$sql = "SELECT p.post_id, p.title, p.content, r.title AS recipe_title, r.description AS recipe_desc, r.image_url AS recipe_image, u.username, (SELECT AVG(rating_value) FROM Rating WHERE recipe_id = r.recipe_id) AS avg_rating FROM Post p LEFT JOIN Recipe r ON p.post_id = r.post_id JOIN user u ON u.post_id = p.post_id ORDER BY r.creation_datetime DESC;
-        ";
 
 
-$result = $con->query($sql);
-
-
-// Check if results exist
-// if ($result->num_rows > 0) {
-//     echo "<table border='1'>
-//             <tr>
-//                 <th>Recipe ID</th>
-//                 <th>Title</th>
-//                 <th>Description</th>
-//                 <th>Average Rating</th>
-//                 <th>Comment Count</th>
-//             </tr>";
-
-//     // Fetch data row by row
-//     while ($row = $result->fetch_assoc()) {
-//         echo "<tr>
-//                 <td>" . $row["recipe_id"] . "</td>
-//                 <td>" . $row["title"] . "</td>
-//                 <td>" . $row["description"] . "</td>
-//                 <td>" . number_format($row["avg_rating"], 2) . "</td>
-//                 <td>" . $row["comment_count"] . "</td>
-//               </tr>";
-//     }
-
-//     echo "</table>";
-// } else {
-//     echo "No recipes found.";
-// }
+$sql = "SELECT p.post_id, p.title, p.content, 
+       r.title AS recipe_title, r.description AS recipe_desc, 
+       r.image_url AS recipe_image, u.username, 
+       (SELECT AVG(rating_value) FROM Rating rt WHERE rt.post_id = p.post_id) AS avg_rating 
+        FROM Post p 
+        LEFT JOIN Recipe r ON p.recipe_id = r.recipe_id 
+        JOIN User u ON p.user_id = u.user_id 
+        ORDER BY p.creation_datetime DESC;";
+        $result = $con->query($sql);
 
 ?>
 
@@ -95,7 +72,7 @@ $result = $con->query($sql);
     </style>
 </head>
 
-<di>
+
     <!-- Simple Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
@@ -107,7 +84,7 @@ $result = $con->query($sql);
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link active" href="#">Home</a>
+                        <a class="nav-link active" href="../index.php">Home</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">Recipes</a>
@@ -128,6 +105,10 @@ $result = $con->query($sql);
                     <li class="nav-item">
                         <a class="nav-link" href="#">Competitions</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../user_module/logout.php">Logout</a>
+
+                    </li>
                 </ul>
             </div>
         </div>
@@ -143,7 +124,6 @@ $result = $con->query($sql);
                     // Format the rating to 1 decimal place
                     $rating = number_format($row["avg_rating"], 1);
 
-                    // Determine rating color based on value
                     $ratingClass = "bg-danger";
                     if ($rating >= 4.0) {
                         $ratingClass = "bg-success";
@@ -154,12 +134,14 @@ $result = $con->query($sql);
                         $ratingClass = "bg-secondary";
                     }
                     $post_id = $row["post_id"];
-                    $sql2 = "SELECT c.content, u.username, c.creation_datetime 
-                             FROM Comment c, post p, user u
-                             WHERE c.comment_id = p.comment_id AND c.comment_id = u.comment_id AND p.post_id = ?
-                             ORDER BY c.creation_datetime DESC";
 
-                    // Prepare and bind statement for security (to prevent SQL injection)
+
+                    $sql2 = "SELECT c.comment_id, c.content, c.creation_datetime, u.username
+                            FROM Comment c
+                            JOIN User u ON c.user_id = u.user_id
+                            WHERE c.post_id = ?
+                            ORDER BY c.creation_datetime DESC";
+
                     $stmt = $con->prepare($sql2);
                     $stmt->bind_param('i', $post_id);
                     $stmt->execute();
@@ -210,21 +192,22 @@ $result = $con->query($sql);
                                     <div class="rating-stars">
                                         <?php
                                         // Generate stars based on rating
-                                        if(is_numeric($rating) ){
-                                        $fullStars = floor($rating);
-                                        $halfStar = $rating - $fullStars >= 0.5;
+                                        if (is_numeric($rating)) {
+                                            $fullStars = floor($rating);
+                                            $halfStar = $rating - $fullStars >= 0.5;
 
-                                        for ($i = 1; $i <= 5; $i++) {
-                                            if ($i <= $fullStars) {
-                                                echo '<i class="fas fa-star"></i>';
-                                            } else if ($i == $fullStars + 1 && $halfStar) {
-                                                echo '<i class="fas fa-star-half-alt"></i>';
-                                            } else {
-                                                echo '<i class="far fa-star"></i>';
+                                            for ($i = 1; $i <= 5; $i++) {
+                                                if ($i <= $fullStars) {
+                                                    echo '<i class="fas fa-star"></i>';
+                                                } else if ($i == $fullStars + 1 && $halfStar) {
+                                                    echo '<i class="fas fa-star-half-alt"></i>';
+                                                } else {
+                                                    echo '<i class="far fa-star"></i>';
+                                                }
                                             }
+                                        } else {
+                                            echo "No ratings yet";
                                         }
-                                    } else {
-                                        echo "No ratings yet";}
                                         ?>
                                         <h6 class="card-text text-muted fst-italic">
                                             posted by: <?php echo htmlspecialchars($row["username"]); ?></h6>
@@ -251,6 +234,7 @@ $result = $con->query($sql);
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
+                                    
                                     <!-- Rating Section -->
                                     <div class="mb-4">
                                         <h6>Rate this recipe:</h6>
@@ -264,7 +248,7 @@ $result = $con->query($sql);
                                     </div>
 
                                     <!-- Comment Form -->
-                                    <form class="mb-4">
+                                    <form class="mb-4" method = "post" action = "Add_comment.php">
                                         <div class="mb-3">
                                             <label for="commentText" class="form-label">Add your comment or tip:</label>
                                             <textarea class="form-control" id="commentText" rows="2"></textarea>
@@ -322,26 +306,10 @@ $result = $con->query($sql);
 
         <!-- Floating Add Post Button with Hover Form -->
         <div class="add-post-container">
-            <button class="btn btn-primary rounded-circle add-post-btn">
+            <!-- Redirect to add_post.php when button is clicked -->
+            <a href="Add_post.php" class="btn btn-primary rounded-circle add-post-btn">
                 <i class="fas fa-plus fa-lg"></i>
-            </button>
-
-            <div class="hover-form">
-                <h5>Share Your Recipe</h5>
-                <form id="quickPostForm" action="add_recipe.php" method="post">
-                    <div class="mb-3">
-                        <input type="text" class="form-control" placeholder="Recipe Title" required>
-                    </div>
-                    <div class="mb-3">
-                        <textarea class="form-control" rows="3" placeholder="Brief Description" required></textarea>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Upload Image</label>
-                        <input type="file" class="form-control">
-                    </div>
-                    <button type="submit" class="btn btn-primary w-100">Post Recipe</button>
-                </form>
-            </div>
+            </a>
         </div>
     </div>
 
