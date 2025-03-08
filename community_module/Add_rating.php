@@ -7,10 +7,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $post_id = $_POST['post_id'] ?? null;
     $rating_value = $_POST['rating'] ?? null;
 
-    if (!$user_id || !$post_id || !$rating_value) {
-        echo json_encode(["success" => false, "message" => "Invalid data."]);
-        exit;
-    }
+
 
     // Check if rating exists
     $query = "SELECT * FROM Rating WHERE user_id = ? AND post_id = ?";
@@ -32,7 +29,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 
     if ($stmt->execute()) {
-        echo json_encode(["success" => true, "message" => "Rating saved."]);
+        header("Location: Community.php");
+        exit();
+
     } else {
         echo json_encode(["success" => false, "message" => "Database error."]);
     }
