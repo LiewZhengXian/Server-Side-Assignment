@@ -10,15 +10,56 @@ CREATE TABLE User (
     password VARCHAR(255) NOT NULL
 );
 
--- Recipe table
+CREATE TABLE Cuisine (
+    cuisine_id INT AUTO_INCREMENT PRIMARY KEY,
+    cuisine_name VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE Category (
+    category_id INT AUTO_INCREMENT PRIMARY KEY,
+    category_name VARCHAR(50) NOT NULL
+);
+
 CREATE TABLE Recipe (
     recipe_id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT,
+    user_id INT NOT NULL,
+    cuisine_id INT,
+    category_id INT,
     title VARCHAR(100) NOT NULL,
     description TEXT NOT NULL,
-    creation_datetime DATETIME DEFAULT CURRENT_TIMESTAMP,
+    prep_time TIME NOT NULL,
+    cook_time TIME NOT NULL,
+    servings INT NOT NULL,
+    spicy BOOLEAN NOT NULL DEFAULT FALSE,
     image_url VARCHAR(255),
-    FOREIGN KEY (user_id) REFERENCES User(user_id)
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES User(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (cuisine_id) REFERENCES Cuisine(cuisine_id) ON DELETE SET NULL,
+    FOREIGN KEY (category_id) REFERENCES Category(category_id) ON DELETE SET NULL
+);
+
+CREATE TABLE Ingredient (
+    ingredient_id INT AUTO_INCREMENT PRIMARY KEY,
+    ingredient_name VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE Recipe_Ingredient (
+    recipe_id INT,
+    ingredient_id INT,
+    quantity DECIMAL(10,2) NOT NULL,
+    units VARCHAR(20) NOT NULL,
+    PRIMARY KEY (recipe_id, ingredient_id),
+    FOREIGN KEY (recipe_id) REFERENCES Recipe(recipe_id) ON DELETE CASCADE,
+    FOREIGN KEY (ingredient_id) REFERENCES Ingredient(ingredient_id) ON DELETE CASCADE
+);
+
+CREATE TABLE Step (
+    step_id INT AUTO_INCREMENT PRIMARY KEY,
+    recipe_id INT NOT NULL,
+    step_num INT NOT NULL,
+    instruction TEXT NOT NULL,
+    FOREIGN KEY (recipe_id) REFERENCES Recipe(recipe_id) ON DELETE CASCADE
 );
 
 -- Post table
@@ -29,9 +70,10 @@ CREATE TABLE Post (
     content TEXT NOT NULL,
     title VARCHAR(100) NOT NULL,
     creation_datetime DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (recipe_id) REFERENCES Recipe(recipe_id),
-    FOREIGN KEY (user_id) REFERENCES User(user_id)
+    FOREIGN KEY (recipe_id) REFERENCES Recipe(recipe_id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES User(user_id) ON DELETE CASCADE
 );
+
 
 -- Comment table
 CREATE TABLE Comment (
@@ -54,6 +96,8 @@ CREATE TABLE Rating (
     FOREIGN KEY (post_id) REFERENCES Post(post_id)
 );
 
+
+
 -- Insert dummy data
 -- Users
 INSERT INTO User (username, email, password) VALUES 
@@ -63,66 +107,45 @@ INSERT INTO User (username, email, password) VALUES
 ('foodie_lisa', 'lisa@foodblog.com', '$2y$10$6aXvPlKPzEXHBsY4LDaQc.Nkch3xIX.7MWdrXMXg5XNvuJMD3PnKO'),
 ('cooking_dad', 'dad@familyrecipes.com', '$2y$10$Z7kUBRDg3cLVx2fvwQvVKOIlCd0jCQH9bIEEYAVi3/WJHmcniPNJ2');
 
--- Recipes with detailed step-by-step instructions
-INSERT INTO Recipe (user_id, title, description, creation_datetime, image_url) VALUES 
-(1, 'Classic Chocolate Chip Cookies', 
-'1. Preheat oven to 375°F (190°C).
-2. In a large bowl, cream together butter, white sugar, and brown sugar until smooth.
-3. Beat in eggs one at a time, then stir in vanilla.
-4. Dissolve baking soda in hot water and add to batter along with salt.
-5. Stir in flour and chocolate chips.
-6. Drop by large spoonfuls onto ungreased pans.
-7. Bake for about 10 minutes or until edges are nicely browned.
-8. Let cool on baking sheet for 5 minutes before transferring to a wire rack.', 
-'2024-02-15 14:30:00', 'cookies.jpg'),
+-- Insert Dummy Data
 
-(2, 'Homemade Margherita Pizza', 
-'1. Prepare pizza dough and let it rise for 1-2 hours.
-2. Preheat oven to 475°F (245°C) with pizza stone inside.
-3. Roll out dough on floured surface to desired thickness.
-4. Spread tomato sauce evenly over dough, leaving a small border for the crust.
-5. Arrange fresh mozzarella slices over sauce.
-6. Bake for 10-12 minutes until crust is golden and cheese is bubbly.
-7. Remove from oven and immediately top with fresh basil leaves.
-8. Drizzle with olive oil and sprinkle with salt before serving.', 
-'2024-01-20 18:45:00', 'pizza.jpg'),
+-- Cuisines
+INSERT INTO Cuisine (cuisine_name) VALUES ('Italian'), ('Chinese'), ('Mexican'), ('Indian'), ('American');
 
-(3, 'Creamy Mushroom Risotto', 
-'1. Heat broth in a saucepan and keep warm over low heat.
-2. In a large pot, heat olive oil and sauté onions until translucent.
-3. Add mushrooms and cook until they release their moisture and brown.
-4. Add arborio rice and stir to coat with oil.
-5. Add white wine and cook until absorbed.
-6. Add warm broth 1/2 cup at a time, stirring continuously and waiting until liquid is absorbed before adding more.
-7. Continue process for about 20 minutes until rice is creamy and al dente.
-8. Remove from heat and stir in butter and parmesan cheese.
-9. Season with salt and pepper to taste.
-10. Let stand for 2 minutes before serving.', 
-'2024-03-05 19:15:00', 'risotto.jpg'),
+-- Categories
+INSERT INTO Category (category_name) VALUES ('Appetizer'), ('Main Course'), ('Dessert'), ('Beverage'), ('Snack');
 
-(4, 'Fresh Summer Salad', 
-'1. Wash and dry all vegetables thoroughly.
-2. Chop lettuce, cucumber, bell peppers, and cherry tomatoes.
-3. Slice red onion thinly and soak in cold water for 10 minutes to reduce sharpness.
-4. In a small bowl, whisk together olive oil, lemon juice, dijon mustard, honey, salt and pepper.
-5. Drain onions and combine all vegetables in a large bowl.
-6. Pour dressing over salad just before serving and toss gently.
-7. Top with crumbled feta cheese and toasted pine nuts.', 
-'2024-06-10 12:00:00', 'salad.jpg'),
+-- Recipes
+INSERT INTO Recipe (user_id, cuisine_id, category_id, title, description, prep_time, cook_time, servings, spicy, image_url)
+VALUES
+(1, 1, 2, 'Spaghetti Carbonara', 'Classic Italian pasta dish with creamy sauce', '00:15:00', '00:20:00', 2, FALSE, 'https://img.freepik.com/free-photo/top-view-table-full-delicious-food-composition_23-2149141352.jpg'),
+(2, 2, 2, 'Kung Pao Chicken', 'A spicy, stir-fried Chinese dish with peanuts', '00:10:00', '00:15:00', 4, TRUE, 'https://img.freepik.com/free-photo/top-view-table-full-delicious-food-composition_23-2149141352.jpg'),
+(3, 3, 2, 'Tacos al Pastor', 'Traditional Mexican tacos with marinated pork', '00:20:00', '00:30:00', 3, TRUE, 'https://img.freepik.com/free-photo/top-view-table-full-delicious-food-composition_23-2149141352.jpg'),
+(4, 4, 2, 'Butter Chicken', 'Creamy and flavorful Indian chicken dish', '00:25:00', '00:40:00', 4, TRUE, 'https://img.freepik.com/free-photo/top-view-table-full-delicious-food-composition_23-2149141352.jpg'),
+(5, 5, 3, 'Chocolate Brownie', 'Rich and fudgy American chocolate dessert', '00:10:00', '00:25:00', 6, FALSE, 'https://img.freepik.com/free-photo/top-view-table-full-delicious-food-composition_23-2149141352.jpg');
 
-(5, 'Slow Cooker Beef Stew', 
-'1. Cut beef into 1-inch cubes and season with salt and pepper.
-2. Heat oil in a large skillet and brown meat on all sides.
-3. Transfer meat to slow cooker.
-4. In the same skillet, sauté onions and garlic until soft.
-5. Add flour and tomato paste, stirring to combine.
-6. Gradually stir in beef broth and red wine, scraping up browned bits from pan.
-7. Pour mixture over beef in slow cooker.
-8. Add carrots, potatoes, celery, bay leaves, thyme, and rosemary.
-9. Cover and cook on low for 7-8 hours or on high for 4 hours.
-10. In the last 30 minutes, stir in frozen peas.
-11. Remove bay leaves before serving.', 
-'2024-04-22 09:30:00', 'beef_stew.jpg');
+-- Ingredients
+INSERT INTO Ingredient (ingredient_name) VALUES ('Pasta'), ('Chicken'), ('Peanuts'), ('Pork'), ('Butter'), ('Chocolate');
+
+-- Recipe Ingredients
+INSERT INTO Recipe_Ingredient (recipe_id, ingredient_id, quantity, units)
+VALUES
+(1, 1, 200, 'grams'),
+(2, 2, 300, 'grams'),
+(2, 3, 50, 'grams'),
+(3, 4, 400, 'grams'),
+(4, 5, 100, 'grams'),
+(5, 6, 150, 'grams');
+
+-- Steps
+INSERT INTO Step (recipe_id, step_num, instruction)
+VALUES
+(1, 1, 'Boil pasta in salted water for 10 minutes'),
+(1, 2, 'Mix with sauce and serve hot'),
+(2, 1, 'Stir-fry chicken with peanuts and spices'),
+(3, 1, 'Grill marinated pork and serve in tacos'),
+(4, 1, 'Cook chicken in butter and tomato sauce'),
+(5, 1, 'Bake chocolate mixture in preheated oven for 25 minutes');
 
 -- Posts
 INSERT INTO Post (recipe_id, user_id, content, title, creation_datetime) VALUES 
