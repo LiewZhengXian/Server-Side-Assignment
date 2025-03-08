@@ -246,12 +246,17 @@ $sql = "SELECT p.post_id, p.title, p.content,
                                             <i class="far fa-star" data-rating="5"></i>
                                         </div>
                                     </div>
-
+                                    <?php
+                                    $comment_user_id = $_SESSION["user_id"];
+                                    $comment_post_id = $row["post_id"]
+                                    ?>
                                     <!-- Comment Form -->
                                     <form class="mb-4" method = "post" action = "Add_comment.php">
+                                        <input type="hidden" name="user_id" value="<?= htmlspecialchars($comment_user_id) ?>">
+                                        <input type="hidden" name="post_id" value="<?= htmlspecialchars($comment_post_id) ?>">
                                         <div class="mb-3">
                                             <label for="commentText" class="form-label">Add your comment or tip:</label>
-                                            <textarea class="form-control" id="commentText" rows="2"></textarea>
+                                            <textarea class="form-control" id="commentText" name="commentText"  rows="2" required></textarea>
                                         </div>
                                         <button type="submit" class="btn btn-primary">Post Comment</button>
                                     </form>
@@ -273,7 +278,7 @@ $sql = "SELECT p.post_id, p.title, p.content,
                                                     </div>
 
                                                 </div>
-                                                <p class="small mb-1"><?php echo htmlspecialchars($comment["content"]); ?>.</p>
+                                                <p class="small mb-1"><?php echo htmlspecialchars($comment["content"]); ?></p>
 
 
                                             </div>
