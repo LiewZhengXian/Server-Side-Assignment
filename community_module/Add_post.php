@@ -6,13 +6,14 @@ if (isset($_POST['post_title']) && isset($_POST['post_description']) ){
 $post_title = mysqli_real_escape_string($con, $_POST['post_title']);
 $post_description = mysqli_real_escape_string($con, $_POST['post_description']);
 $user_id = mysqli_real_escape_string($con, $_SESSION["user_id"]);
+$recipe_id = mysqli_real_escape_string($con, $_POST["selected_recipe"]) ?? null;
 $selected_recipe = !empty($_POST['selected_recipe']) ? mysqli_real_escape_string($con, $_POST['selected_recipe']) : NULL;
 
 
 
 // Insert query for Post table
-$insert_query = "INSERT INTO Post (user_id, content, title) 
-                VALUES ( '$user_id', '$post_description', '$post_title')";
+$insert_query = "INSERT INTO Post (user_id, content, title, recipe_id) 
+                VALUES ( '$user_id', '$post_description', '$post_title', '$selected_recipe')";
 
 // Execute the query
 if (mysqli_query($con, $insert_query)) {
