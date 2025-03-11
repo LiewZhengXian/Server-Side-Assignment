@@ -122,7 +122,7 @@ $result = $con->query($sql);
                                 <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#viewModal"
                                     onclick="loadRecipeDetails(<?php echo $row['recipe_id']; ?>)">View</button>
                                 <?php if ($row['user_id'] == $user_id) { ?>
-                                    <button class="btn btn-warning btn-sm">Edit</button>
+                                    <a href="edit_recipe.php?id=<?php echo $row['recipe_id']; ?>" class="btn btn-warning btn-sm">Edit</a>
                                     <button class="btn btn-danger btn-sm" onclick="confirmDelete(<?php echo $row['recipe_id']; ?>)">Delete</button>
                                 <?php } ?>
                             </td>

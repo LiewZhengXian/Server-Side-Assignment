@@ -39,14 +39,36 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $recipe_id = $stmt->insert_id; // Get the last inserted recipe ID
 
         // Insert ingredients
-        if (!empty($_POST['ingredients']) && !empty($_POST['quantities']) && !empty($_POST['units'])) {
-            $stmt = $con->prepare("INSERT INTO Recipe_Ingredient (recipe_id, ingredient_id, quantity, units) VALUES (?, ?, ?, ?)");
-            foreach ($_POST['ingredients'] as $index => $ingredient_id) {
-                $ingredient_id = intval($ingredient_id);
+        if (!empty($_POST['ingredient_names']) && !empty($_POST['quantities']) && !empty($_POST['units'])) {
+            foreach ($_POST['ingredient_names'] as $index => $ingredient_name) {
+                $ingredient_name = trim($ingredient_name);
                 $quantity = floatval($_POST['quantities'][$index]);
                 $unit = trim($_POST['units'][$index]);
 
+                // Check if the ingredient already exists (case-insensitive)
+                $sql = "SELECT ingredient_id FROM Ingredient WHERE LOWER(ingredient_name) = LOWER(?)";
+                $stmt_check = $con->prepare($sql);
+                $stmt_check->bind_param("s", $ingredient_name);
+                $stmt_check->execute();
+                $stmt_check->bind_result($ingredient_id);
+                $stmt_check->fetch();
+                $stmt_check->close();
+
+                // If the ingredient does not exist, insert it
+                if (empty($ingredient_id)) {
+                    $sql = "INSERT INTO Ingredient (ingredient_name) VALUES (?)";
+                    $stmt_insert = $con->prepare($sql);
+                    $stmt_insert->bind_param("s", $ingredient_name);
+                    $stmt_insert->execute();
+                    $ingredient_id = $stmt_insert->insert_id;
+                    $stmt_insert->close();
+                }
+
+                // Insert into Recipe_Ingredient table
                 if ($ingredient_id > 0 && $quantity > 0 && !empty($unit)) {
+                    $sql = "INSERT INTO Recipe_Ingredient (recipe_id, ingredient_id, quantity, units) VALUES (?, ?, ?, ?)
+                            ON DUPLICATE KEY UPDATE quantity = VALUES(quantity), units = VALUES(units)";
+                    $stmt = $con->prepare($sql);
                     $stmt->bind_param("iids", $recipe_id, $ingredient_id, $quantity, $unit);
                     $stmt->execute();
                 }
