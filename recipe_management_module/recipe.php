@@ -4,6 +4,10 @@ require '../user_module/database.php';
 
 $user_id = $_SESSION['user_id'];
 
+// Fetch all cuisines and categories for filters
+$cuisines = $con->query("SELECT * FROM Cuisine");
+$categories = $con->query("SELECT * FROM Category");
+
 // Fetch all recipes initially
 $sql = "SELECT r.recipe_id, r.title, r.description, c.cuisine_name, cat.category_name, r.user_id 
         FROM Recipe r 
@@ -95,9 +99,42 @@ $result = $con->query($sql);
     <div class="container mt-4">
         <h2 class="mb-3">Recipe Management</h2>
         <div class="d-flex justify-content-between mb-3">
-            <button class="btn btn-secondary" id="toggleRecipes" onclick="toggleRecipes()">My Recipes</button>
             <a href="add_recipe.php" class="btn btn-primary">Add Recipe</a>
         </div>
+
+        <!-- Search and Filter Form -->
+        <form id="searchForm" class="mb-3">
+            <div class="row">
+                <div class="col-md-3">
+                    <input type="text" class="form-control" id="searchTitle" placeholder="Search by recipe name">
+                </div>
+                <div class="col-md-3">
+                    <select class="form-control" id="filterCuisine">
+                        <option value="">All Cuisines</option>
+                        <?php while ($row = $cuisines->fetch_assoc()) { ?>
+                            <option value="<?php echo $row['cuisine_name']; ?>"><?php echo $row['cuisine_name']; ?></option>
+                        <?php } ?>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select class="form-control" id="filterCategory">
+                        <option value="">All Categories</option>
+                        <?php while ($row = $categories->fetch_assoc()) { ?>
+                            <option value="<?php echo $row['category_name']; ?>"><?php echo $row['category_name']; ?></option>
+                        <?php } ?>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <select class="form-control" id="filterOwnership">
+                        <option value="all">All Recipes</option>
+                        <option value="my">My Recipes</option>
+                    </select>
+                </div>
+                <div class="col-md-1">
+                    <button type="button" class="btn btn-primary" onclick="searchRecipes()">Search</button>
+                </div>
+            </div>
+        </form>
 
         <!-- Recipe Table -->
         <div class="table-responsive">
@@ -113,7 +150,7 @@ $result = $con->query($sql);
                 </thead>
                 <tbody>
                     <?php while ($row = $result->fetch_assoc()) { ?>
-                        <tr data-user-id="<?php echo $row['user_id']; ?>">
+                        <tr data-user-id="<?php echo $row['user_id']; ?>" data-title="<?php echo htmlspecialchars($row['title']); ?>" data-cuisine="<?php echo htmlspecialchars($row['cuisine_name']); ?>" data-category="<?php echo htmlspecialchars($row['category_name']); ?>">
                             <td><?php echo htmlspecialchars($row['title']); ?></td>
                             <td align=left><?php echo htmlspecialchars($row['description']); ?></td>
                             <td><?php echo htmlspecialchars($row['cuisine_name']); ?></td>
@@ -149,24 +186,6 @@ $result = $con->query($sql);
     </div>
 
     <script>
-        let showMyRecipes = false;
-
-        function toggleRecipes() {
-            let rows = document.querySelectorAll('#recipeTable tbody tr');
-            let button = document.getElementById('toggleRecipes');
-            showMyRecipes = !showMyRecipes;
-            rows.forEach(row => {
-                if (showMyRecipes) {
-                    if (row.dataset.userId !== '<?php echo $user_id; ?>') {
-                        row.style.display = 'none';
-                    }
-                } else {
-                    row.style.display = '';
-                }
-            });
-            button.textContent = showMyRecipes ? 'All Recipes' : 'My Recipes';
-        }
-
         function loadRecipeDetails(recipeId) {
             const xhr = new XMLHttpRequest();
             xhr.open("GET", "view_recipe.php?id=" + recipeId, true);
@@ -182,6 +201,32 @@ $result = $con->query($sql);
             if (confirm("Are you sure you want to delete this recipe?")) {
                 window.location.href = "delete_recipe.php?id=" + recipeId;
             }
+        }
+
+        function searchRecipes() {
+            const title = document.getElementById('searchTitle').value.toLowerCase();
+            const cuisine = document.getElementById('filterCuisine').value.toLowerCase();
+            const category = document.getElementById('filterCategory').value.toLowerCase();
+            const ownership = document.getElementById('filterOwnership').value;
+
+            const rows = document.querySelectorAll('#recipeTable tbody tr');
+            rows.forEach(row => {
+                const rowTitle = row.dataset.title.toLowerCase();
+                const rowCuisine = row.dataset.cuisine.toLowerCase();
+                const rowCategory = row.dataset.category.toLowerCase();
+                const rowUserId = row.dataset.userId;
+
+                const matchesTitle = rowTitle.includes(title);
+                const matchesCuisine = !cuisine || rowCuisine === cuisine;
+                const matchesCategory = !category || rowCategory === category;
+                const matchesOwnership = ownership === 'all' || (ownership === 'my' && rowUserId === '<?php echo $user_id; ?>');
+
+                if (matchesTitle && matchesCuisine && matchesCategory && matchesOwnership) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
         }
     </script>
 
