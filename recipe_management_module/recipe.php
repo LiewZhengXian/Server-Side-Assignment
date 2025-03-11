@@ -123,7 +123,7 @@ $result = $con->query($sql);
                                     onclick="loadRecipeDetails(<?php echo $row['recipe_id']; ?>)">View</button>
                                 <?php if ($row['user_id'] == $user_id) { ?>
                                     <button class="btn btn-warning btn-sm">Edit</button>
-                                    <button class="btn btn-danger btn-sm">Delete</button>
+                                    <button class="btn btn-danger btn-sm" onclick="confirmDelete(<?php echo $row['recipe_id']; ?>)">Delete</button>
                                 <?php } ?>
                             </td>
                         </tr>
@@ -176,6 +176,12 @@ $result = $con->query($sql);
                 }
             };
             xhr.send();
+        }
+
+        function confirmDelete(recipeId) {
+            if (confirm("Are you sure you want to delete this recipe?")) {
+                window.location.href = "delete_recipe.php?id=" + recipeId;
+            }
         }
     </script>
 
