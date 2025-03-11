@@ -162,7 +162,7 @@ $result = $con->query($sql);
                 $rating_result = $stmt2->get_result();
                 $user_rating = $rating_result->fetch_assoc();
                 $existing_rating = $user_rating['rating_value'] ?? 0; // Default to 0 if no rating exists
-                ?>
+        ?>
 
                 <div class="col">
                     <div class="card h-100 recipe-card">
@@ -258,7 +258,7 @@ $result = $con->query($sql);
                                         <input type="hidden" name="user_id" value="<?= $user_id ?>">
                                         <input type="hidden" name="rating" id="selectedRating" value="<?= $existing_rating ?>">
 
-                                        <div class="rating-stars fs-4" data-existing-rating="<?= $existing_rating ?>" >
+                                        <div class="rating-stars fs-4" data-existing-rating="<?= $existing_rating ?>">
                                             <?php for ($i = 1; $i <= 5; $i++): ?>
                                                 <i class="fa-star <?= $i <= $existing_rating ? 'fas' : 'far' ?>"
                                                     data-rating="<?= $i ?>"></i>
@@ -280,7 +280,7 @@ $result = $con->query($sql);
                                 <?php
                                 $comment_user_id = $_SESSION["user_id"];
                                 $comment_post_id = $row["post_id"]
-                                    ?>
+                                ?>
                                 <!-- Comment Form -->
                                 <form class="mb-4" method="post" action="Add_comment.php">
                                     <input type="hidden" name="user_id" value="<?= htmlspecialchars($comment_user_id) ?>">
@@ -323,7 +323,7 @@ $result = $con->query($sql);
                         </div>
                     </div>
                 </div>
-                <?php
+            <?php
             }
         } else {
             // Display a message if no recipes are found
@@ -333,7 +333,7 @@ $result = $con->query($sql);
                     No recipes found. Be the first to add a recipe!
                 </div>
             </div>
-            <?php
+        <?php
         }
         $con->close();
         ?>
@@ -356,8 +356,6 @@ $result = $con->query($sql);
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <!-- Custom JS -->
 <script>
-
-
     // Star Rating System
     // document.querySelectorAll('.rating-stars i').forEach(star => {
     //     star.addEventListener('mouseover', function () {
@@ -387,7 +385,7 @@ $result = $con->query($sql);
         const ratingContainer = star.parentElement;
         const existingRating = ratingContainer.getAttribute('data-existing-rating') || 0; // Get the user's previous rating
 
-        star.addEventListener('mouseover', function () {
+        star.addEventListener('mouseover', function() {
 
             const rating = parseInt(this.getAttribute('data-rating'), 10); // Convert to number
             const stars = ratingContainer.querySelectorAll('i');
@@ -398,7 +396,7 @@ $result = $con->query($sql);
             });
         });
 
-        star.addEventListener('mouseleave', function () {
+        star.addEventListener('mouseleave', function() {
             const stars = ratingContainer.querySelectorAll('i');
 
             stars.forEach((s, index) => {
@@ -406,10 +404,10 @@ $result = $con->query($sql);
             });
         });
 
-        star.addEventListener('click', function () {
+        star.addEventListener('click', function() {
 
-            let ratingContainer = this.closest('.rating-stars'); 
-            let ratingForm = ratingContainer.closest('form'); 
+            let ratingContainer = this.closest('.rating-stars');
+            let ratingForm = ratingContainer.closest('form');
             let rating = this.getAttribute('data-rating');
             let post_id = ratingContainer.getAttribute('data-post-id');
             let user_id = ratingContainer.getAttribute('data-user-id');
@@ -423,12 +421,11 @@ $result = $con->query($sql);
 
     // Reset hover effect when mouse leaves rating area
     document.querySelectorAll('.modal .rating-stars').forEach(container => {
-        container.addEventListener('mouseleave', function () {
+        container.addEventListener('mouseleave', function() {
             // Reset to initial state or show saved rating
             // This would normally check the user's saved rating
         });
     });
-
 </script>
 </body>
 

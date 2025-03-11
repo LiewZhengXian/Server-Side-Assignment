@@ -28,7 +28,7 @@ require('./user_module/database.php');
                         <a class="nav-link active" href="./index.php">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Recipes</a>
+                        <a class="nav-link" href="./recipe_management_module/recipe.php">Recipes</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="mealPlanningDropdown" role="button"
@@ -68,7 +68,7 @@ require('./user_module/database.php');
                     <div class="card-body text-center">
                         <h5 class="card-title">Recipes 🍽️</h5>
                         <p class="card-text">Discover and share amazing recipes.</p>
-                        <a href="#" class="btn btn-primary">Explore</a>
+                        <a href="./recipe_management_module/recipe.php" class="btn btn-primary">Explore</a>
                     </div>
                 </div>
             </div>
