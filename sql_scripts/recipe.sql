@@ -1,3 +1,4 @@
+
 CREATE TABLE Cuisine (
     cuisine_id INT AUTO_INCREMENT PRIMARY KEY,
     cuisine_name VARCHAR(50) NOT NULL

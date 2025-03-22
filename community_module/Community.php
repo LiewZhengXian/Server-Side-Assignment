@@ -5,7 +5,7 @@ include '../user_module/database.php';
 
 $sql = "SELECT p.post_id, p.title, p.content, 
        r.title AS recipe_title, r.description AS recipe_desc, 
-       r.image_url AS recipe_image, u.username, 
+       r.image_url AS recipe_image, u.username, r.recipe_id,
        (SELECT AVG(rating_value) FROM Rating rt WHERE rt.post_id = p.post_id) AS avg_rating 
         FROM Post p 
         LEFT JOIN Recipe r ON p.recipe_id = r.recipe_id 
@@ -162,7 +162,21 @@ $result = $con->query($sql);
                 $rating_result = $stmt2->get_result();
                 $user_rating = $rating_result->fetch_assoc();
                 $existing_rating = $user_rating['rating_value'] ?? 0; // Default to 0 if no rating exists
-        ?>
+                ?>
+                <!-- View Recipe Modal -->
+                <div class="modal fade" id="viewModal" tabindex="-1">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header border-0">
+                                <h5 class="modal-title">Recipe Details</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body" id="recipeDetails">
+                                <!-- Recipe details will be loaded here via AJAX -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
                 <div class="col">
                     <div class="card h-100 recipe-card">
@@ -185,10 +199,13 @@ $result = $con->query($sql);
                             <?php } else { ?>
 
                             <?php } ?>
+
                             <p class="card-text small"><?php echo htmlspecialchars($row["content"]); ?></p>
+
                             <?php if (!empty($row["recipe_title"])) { ?>
-                                <button class="btn btn-primary btn-sm mt-2" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#collapse<?php echo $row['post_id']; ?>">
+                                <button class="btn btn-primary btn-sm mt-2" type="button"
+                                    onclick="loadRecipeDetails(<?php echo $row['recipe_id']; ?>)" data-bs-toggle="modal"
+                                    data-bs-target="#viewModal">
                                     Show Recipe
                                 </button>
 
@@ -266,21 +283,10 @@ $result = $con->query($sql);
                                         </div>
                                     </form>
                                 </div>
-
-                                <!-- <div class="mb-4">
-                                    <h6>Rate this recipe:</h6>
-                                    <div class="rating-stars fs-4">
-                                        <i class="far fa-star" data-rating="1"></i>
-                                        <i class="far fa-star" data-rating="2"></i>
-                                        <i class="far fa-star" data-rating="3"></i>
-                                        <i class="far fa-star" data-rating="4"></i>
-                                        <i class="far fa-star" data-rating="5"></i>
-                                    </div>
-                                </div> -->
                                 <?php
                                 $comment_user_id = $_SESSION["user_id"];
                                 $comment_post_id = $row["post_id"]
-                                ?>
+                                    ?>
                                 <!-- Comment Form -->
                                 <form class="mb-4" method="post" action="Add_comment.php">
                                     <input type="hidden" name="user_id" value="<?= htmlspecialchars($comment_user_id) ?>">
@@ -323,7 +329,7 @@ $result = $con->query($sql);
                         </div>
                     </div>
                 </div>
-            <?php
+                <?php
             }
         } else {
             // Display a message if no recipes are found
@@ -333,7 +339,7 @@ $result = $con->query($sql);
                     No recipes found. Be the first to add a recipe!
                 </div>
             </div>
-        <?php
+            <?php
         }
         $con->close();
         ?>
@@ -356,36 +362,22 @@ $result = $con->query($sql);
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <!-- Custom JS -->
 <script>
-    // Star Rating System
-    // document.querySelectorAll('.rating-stars i').forEach(star => {
-    //     star.addEventListener('mouseover', function () {
-    //         const rating = this.getAttribute('data-rating');
-    //         if (rating) {
-    //             const stars = this.parentElement.querySelectorAll('i');
-    //             stars.forEach((s, index) => {
-    //                 if (index < rating) {
-    //                     s.className = 'fas fa-star';
-    //                 } else {
-    //                     s.className = 'far fa-star';
-    //                 }
-    //             });
-    //         }
-    //     });
-
-    //     star.addEventListener('click', function () {
-    //         const rating = this.getAttribute('data-rating');
-    //         if (rating) {
-    //             // Here you would send rating to the server
-    //             alert(`You rated this recipe ${rating} stars!`);
-    //         }
-    //     });
-    // });
+    function loadRecipeDetails(recipeId) {
+        const xhr = new XMLHttpRequest();
+        xhr.open("GET", "../recipe_management_module/view_recipe.php?id=" + recipeId, true);
+        xhr.onload = function () {
+            if (this.status === 200) {
+                document.getElementById("recipeDetails").innerHTML = this.responseText;
+            }
+        };
+        xhr.send();
+    }
 
     document.querySelectorAll('.rating-stars i').forEach(star => {
         const ratingContainer = star.parentElement;
         const existingRating = ratingContainer.getAttribute('data-existing-rating') || 0; // Get the user's previous rating
 
-        star.addEventListener('mouseover', function() {
+        star.addEventListener('mouseover', function () {
 
             const rating = parseInt(this.getAttribute('data-rating'), 10); // Convert to number
             const stars = ratingContainer.querySelectorAll('i');
@@ -396,7 +388,7 @@ $result = $con->query($sql);
             });
         });
 
-        star.addEventListener('mouseleave', function() {
+        star.addEventListener('mouseleave', function () {
             const stars = ratingContainer.querySelectorAll('i');
 
             stars.forEach((s, index) => {
@@ -404,7 +396,7 @@ $result = $con->query($sql);
             });
         });
 
-        star.addEventListener('click', function() {
+        star.addEventListener('click', function () {
 
             let ratingContainer = this.closest('.rating-stars');
             let ratingForm = ratingContainer.closest('form');
@@ -421,7 +413,7 @@ $result = $con->query($sql);
 
     // Reset hover effect when mouse leaves rating area
     document.querySelectorAll('.modal .rating-stars').forEach(container => {
-        container.addEventListener('mouseleave', function() {
+        container.addEventListener('mouseleave', function () {
             // Reset to initial state or show saved rating
             // This would normally check the user's saved rating
         });

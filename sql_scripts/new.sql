@@ -2,7 +2,9 @@
 DROP DATABASE IF EXISTS recipehub_db;
 CREATE DATABASE recipehub_db;
 USE recipehub_db;
+
 -- Users table
+
 CREATE TABLE User (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50) NOT NULL,
