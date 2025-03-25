@@ -36,8 +36,8 @@ require('./user_module/database.php');
                             Meal Planning
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Plan a Meal</a></li>
-                            <li><a class="dropdown-item" href="#">View Schedule</a></li>
+                            <li><a class="dropdown-item" href="./meal_planning_module/meal_plan_add.php">Plan a Meal</a></li>
+                            <li><a class="dropdown-item" href="./meal_planning_module/meal_plan_list.php">View Schedule</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">
@@ -77,7 +77,7 @@ require('./user_module/database.php');
                     <div class="card-body text-center">
                         <h5 class="card-title">Meal Planning 📅</h5>
                         <p class="card-text">Plan your meals and stay organized.</p>
-                        <a href="#" class="btn btn-primary">Start Planning</a>
+                        <a href="./meal_planning_module/meal_plan_list.php" class="btn btn-primary">Start Planning</a>
                     </div>
                 </div>
             </div>
