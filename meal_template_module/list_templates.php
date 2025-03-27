@@ -52,8 +52,8 @@ $templates_result = $stmt->get_result();
                             Meal Planning
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="../meal_plan_module/meal_plan_add.php">Plan a Meal</a></li>
-                            <li><a class="dropdown-item" href="../meal_plan_module/meal_plan_list.php">View Schedule</a></li>
+                            <li><a class="dropdown-item" href="../meal_planning_module/meal_plan_add.php">Plan a Meal</a></li>
+                            <li><a class="dropdown-item" href="../meal_planning_module/meal_plan_list.php">View Schedule</a></li>
                             <li><a class="dropdown-item active" href="list_templates.php">Manage Templates</a></li>
                         </ul>
                     </li>
