@@ -1,7 +1,7 @@
 <?php
     include("../user_module/auth.php");
     require("../user_module/database.php");
-    require_once(__DIR__ . "/function/voting_and_results.php");
+    require_once(__DIR__ . "/model/function.php");
 
     // Fetch competition details based on the competition ID passed in the URL
     $competition_id = isset($_GET['id']) ? intval($_GET['id']) : '';
@@ -217,7 +217,7 @@
                     <tbody>
                         <?php
                             // Fetch participants for the competition
-                            $query = "SELECT u.username, r.title, c.submission_id    
+                            $query = "SELECT u.username, r.title, c.submission_id, r.recipe_id    
                                     FROM Recipe r INNER JOIN User u ON r.user_id = u.user_id 
                                     INNER JOIN competition_submission c ON r.recipe_id = c.recipe_id 
                                     WHERE competition_id = '$competition_id'";
@@ -227,7 +227,15 @@
                                 while ($row = mysqli_fetch_assoc($result)) {
                                     echo "<tr>";
                                     echo "<td>" . $row['username'] . "</td>";
-                                    echo "<td><a href='../recipe_management_module/view_recipe.php?id=" . $row['submission_id'] . "'>" . $row['title'] . "</a></td>";
+                                    echo '<td>
+                                            <a href="#" 
+                                               onclick="loadRecipeDetails(' . $row['recipe_id'] . ');" 
+                                               class="text-info"
+                                               data-bs-toggle="modal"
+                                               data-bs-target="#viewModal">
+                                                ' . htmlspecialchars($row['title']) . '
+                                            </a>
+                                        </td>';
                                     echo "<td>
                                             <form action='' method='POST' style='display:inline;'>
                                                 <input type='hidden' name='submission_id' value='" . $row['submission_id'] . "'>
@@ -252,11 +260,24 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                         </div>
                         <div class="modal-body" id="recipeDetails">
-                            <!-- Recipe details will be loaded here -->
+                            <!-- Recipe details will be loaded here via AJAX -->
                         </div>
                     </div>
                 </div>
             </div>
+            <script>
+                function loadRecipeDetails(recipeId) {
+                    console.log("Loading recipe: ", recipeId);
+                    const xhr = new XMLHttpRequest();
+                    xhr.open("GET", "../recipe_management_module/view_recipe.php?id=" + recipeId, true);
+                    xhr.onload = function() {
+                        if (this.status === 200) {
+                            document.getElementById("recipeDetails").innerHTML = this.responseText;
+                        }
+                    };
+                    xhr.send();
+                }
+            </script>
         </div>
     </body>
 </html>
