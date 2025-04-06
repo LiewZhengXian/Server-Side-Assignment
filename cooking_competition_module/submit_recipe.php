@@ -72,6 +72,7 @@
                 </div>
 
                 <!-- New Recipe Form Section -->
+                <!-- Still need to edit the details for the new recipe -->
                 <div id="new_recipe_section">
                     <div class="mb-3">
                         <label for="recipe_title" class="form-label">Recipe Title</label>
