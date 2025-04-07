@@ -43,7 +43,7 @@
                 font-weight: bold;
             }
 
-            .container {
+            .content-wrapper {
                 margin-top: 20px;
             }
 
@@ -141,7 +141,7 @@
                             <a class="nav-link" href="./Community.php">Community</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Competitions</a>
+                            <a class="nav-link" href="../cooking_competition_module/competition_main.php">Competitions</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="../user_module/logout.php">Logout</a>
@@ -152,85 +152,87 @@
             </div>
         </nav>
         <!-- Page Content -->
-        <h1>Cooking Competition</h1>
-        <p>Where food becomes your own dream</p>
+        <div class="content-wrapper">
+            <h1>Cooking Competition</h1>
+            <p>Where food becomes your own dream</p>
 
-        <!-- Ongoing Competitions -->
-        <h2>Ongoing Competitions</h2>
-        <?php
-            $query = "SELECT * FROM competition WHERE end_date > NOW() AND start_date <= NOW() ORDER BY start_date DESC";
-            $result = mysqli_query($con, $query);
+            <!-- Ongoing Competitions -->
+            <h2>Ongoing Competitions</h2>
+            <?php
+                $query = "SELECT * FROM competition WHERE end_date > NOW() AND start_date <= NOW() ORDER BY start_date DESC";
+                $result = mysqli_query($con, $query);
 
-            if (mysqli_num_rows($result) > 0) {
-                echo '<div class="container"><div class="row">';
-                while ($row = mysqli_fetch_assoc($result)) {
-                    echo '<div class="col-md-4">';
-                    echo '<div class="card mb-4">';
-                    echo '<img src="' . htmlspecialchars($row['image_path']) . '" class="card-img-top" alt="Competition Image">';
-                    echo '<div class="card-body">';
-                    echo '<h5 class="card-title">' . htmlspecialchars($row['competition_name']) . '</h5>';
-                    echo '<p class="card-text">Start Date: ' . htmlspecialchars($row['start_date']) . '</p>';
-                    echo '<p class="card-text">End Date: ' . htmlspecialchars($row['end_date']) . '</p>';
-                    echo '<a href="competition_details.php?id=' . $row['competition_id'] . '" class="btn btn-primary">View Details</a>';
-                    echo '</div></div></div>';
+                if (mysqli_num_rows($result) > 0) {
+                    echo '<div class="container"><div class="row">';
+                    while ($row = mysqli_fetch_assoc($result)) {
+                        echo '<div class="col-md-4">';
+                        echo '<div class="card mb-4">';
+                        echo '<img src="' . htmlspecialchars($row['image_path']) . '" class="card-img-top" alt="Competition Image">';
+                        echo '<div class="card-body">';
+                        echo '<h5 class="card-title">' . htmlspecialchars($row['competition_name']) . '</h5>';
+                        echo '<p class="card-text">Start Date: ' . htmlspecialchars($row['start_date']) . '</p>';
+                        echo '<p class="card-text">End Date: ' . htmlspecialchars($row['end_date']) . '</p>';
+                        echo '<a href="competition_details.php?id=' . $row['competition_id'] . '" class="btn btn-primary">View Details</a>';
+                        echo '</div></div></div>';
+                    }
+                    echo '</div></div>';
+                } else {
+                    echo '<p class="no-competitions">There are no ongoing competitions currently.</p>';
                 }
-                echo '</div></div>';
-            } else {
-                echo '<p class="no-competitions">There are no ongoing competitions currently.</p>';
-            }
-        ?>
+            ?>
 
-        <!-- Upcoming Competitions -->
-        <h2>Upcoming Competitions</h2>
-        <?php
-            $query = "SELECT * FROM competition WHERE start_date > NOW() ORDER BY start_date ASC";
-            $result = mysqli_query($con, $query);
+            <!-- Upcoming Competitions -->
+            <h2>Upcoming Competitions</h2>
+            <?php
+                $query = "SELECT * FROM competition WHERE start_date > NOW() ORDER BY start_date ASC";
+                $result = mysqli_query($con, $query);
 
-            if (mysqli_num_rows($result) > 0) {
-                echo '<div class="container"><div class="row">';
-                while ($row = mysqli_fetch_assoc($result)) {
-                    echo '<div class="col-md-4">';
-                    echo '<div class="card mb-4">';
-                    echo '<img src="' . htmlspecialchars($row['image_path']) . '" class="card-img-top" alt="Competition Image">';
-                    echo '<div class="card-body">';
-                    echo '<h5 class="card-title">' . htmlspecialchars($row['competition_name']) . '</h5>';
-                    echo '<p class="card-text">Start Date: ' . htmlspecialchars($row['start_date']) . '</p>';
-                    echo '<p class="card-text">End Date: ' . htmlspecialchars($row['end_date']) . '</p>';
-                    echo '<a href="competition_details.php?id=' . $row['competition_id'] . '" class="btn btn-primary">View Details</a>';
-                    echo '</div></div></div>';
+                if (mysqli_num_rows($result) > 0) {
+                    echo '<div class="container"><div class="row">';
+                    while ($row = mysqli_fetch_assoc($result)) {
+                        echo '<div class="col-md-4">';
+                        echo '<div class="card mb-4">';
+                        echo '<img src="' . htmlspecialchars($row['image_path']) . '" class="card-img-top" alt="Competition Image">';
+                        echo '<div class="card-body">';
+                        echo '<h5 class="card-title">' . htmlspecialchars($row['competition_name']) . '</h5>';
+                        echo '<p class="card-text">Start Date: ' . htmlspecialchars($row['start_date']) . '</p>';
+                        echo '<p class="card-text">End Date: ' . htmlspecialchars($row['end_date']) . '</p>';
+                        echo '<a href="competition_details.php?id=' . $row['competition_id'] . '" class="btn btn-primary">View Details</a>';
+                        echo '</div></div></div>';
+                    }
+                    echo '</div></div>';
+                } else {
+                    echo '<p class="no-competitions">There are no upcoming competitions currently.</p>';
                 }
-                echo '</div></div>';
-            } else {
-                echo '<p class="no-competitions">There are no upcoming competitions currently.</p>';
-            }
-        ?>
+            ?>
 
-        <!-- Past Competitions -->
-        <h2>Past Competitions</h2>
-        <?php
-            $query = "SELECT * FROM competition WHERE end_date < NOW() ORDER BY start_date DESC";
-            $result = mysqli_query($con, $query);
+            <!-- Past Competitions -->
+            <h2>Past Competitions</h2>
+            <?php
+                $query = "SELECT * FROM competition WHERE end_date < NOW() ORDER BY start_date DESC";
+                $result = mysqli_query($con, $query);
 
-            if (mysqli_num_rows($result) > 0) {
-                echo '<div class="container"><div class="row">';
-                while ($row = mysqli_fetch_assoc($result)) {
-                    echo '<div class="col-md-4">';
-                    echo '<div class="card mb-4">';
-                    echo '<img src="' . htmlspecialchars($row['image_path']) . '" class="card-img-top" alt="Competition Image">';
-                    echo '<div class="card-body">';
-                    echo '<h5 class="card-title">' . htmlspecialchars($row['competition_name']) . '</h5>';
-                    echo '<p class="card-text">Start Date: ' . htmlspecialchars($row['start_date']) . '</p>';
-                    echo '<p class="card-text">End Date: ' . htmlspecialchars($row['end_date']) . '</p>';
-                    echo '<a href="competition_details.php?id=' . $row['competition_id'] . '" class="btn btn-primary">View Details</a>';
-                    echo '</div></div></div>';
+                if (mysqli_num_rows($result) > 0) {
+                    echo '<div class="container"><div class="row">';
+                    while ($row = mysqli_fetch_assoc($result)) {
+                        echo '<div class="col-md-4">';
+                        echo '<div class="card mb-4">';
+                        echo '<img src="' . htmlspecialchars($row['image_path']) . '" class="card-img-top" alt="Competition Image">';
+                        echo '<div class="card-body">';
+                        echo '<h5 class="card-title">' . htmlspecialchars($row['competition_name']) . '</h5>';
+                        echo '<p class="card-text">Start Date: ' . htmlspecialchars($row['start_date']) . '</p>';
+                        echo '<p class="card-text">End Date: ' . htmlspecialchars($row['end_date']) . '</p>';
+                        echo '<a href="competition_details.php?id=' . $row['competition_id'] . '" class="btn btn-primary">View Details</a>';
+                        echo '</div></div></div>';
+                    }
+                    echo '</div></div>';
+                } else {
+                    echo '<p class="no-competitions">There are no past competitions currently.</p>';
                 }
-                echo '</div></div>';
-            } else {
-                echo '<p class="no-competitions">There are no past competitions currently.</p>';
-            }
 
-            // Close the database connection
-            mysqli_close($con);
-        ?>
+                // Close the database connection
+                mysqli_close($con);
+            ?>
+        </div>
     </body>
 </html>
