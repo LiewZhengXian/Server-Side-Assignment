@@ -1,4 +1,5 @@
 <?php
+    // Start session and include necessary files
     include("../user_module/auth.php");
     require("../user_module/database.php");
     require_once(__DIR__ . "/model/function.php");
@@ -8,10 +9,14 @@
     $query = "SELECT * FROM competition WHERE competition_id = '$competition_id'";
     $result = mysqli_query($con, $query);
     $competition = mysqli_fetch_assoc($result);
+
     if (!$competition) {
         echo "<p>Competition not found.</p>";
         exit;
     }
+
+    $competition_start_date = strtotime($competition['start_date']);
+    $competition_end_date = strtotime($competition['end_date']);
 ?>
 <!DOCTYPE html>
 <html>
@@ -163,11 +168,10 @@
                             <a class="nav-link" href="./Community.php">Community</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Competitions</a>
+                            <a class="nav-link" href="../cooking_competition_module/competition_main.php">Competitions</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="../user_module/logout.php">Logout</a>
-
                         </li>
                     </ul>
                 </div>
@@ -190,22 +194,31 @@
             }       
         ?>
         <div class="container">
+            <!-- Competition Details -->
             <h1><?php echo $competition['competition_name']; ?></h1>
             <p><?php echo $competition['description']; ?></p>
             <p>Start Date: <?php echo $competition['start_date']; ?></p>
             <p>End Date: <?php echo $competition['end_date']; ?></p>
             <p>What you waiting for? Click the button below to join the competition and submit your recipe!</p>
             <p><em>Note: You can only submit one recipe for this competition.</em></p>
+
+            <!-- Submit Recipe Button -->
             <div style="text-align: center; margin: 20px auto;">
                 <a href="submit_recipe.php?competition_id=<?php echo $competition_id; ?>" class="submit-recipe-btn">
                     Submit Your Recipe
                 </a>
             </div>
-            <h2 style="text-align: center; margin-top: 30px;">Participants</h2>
-            <p>These are the participants who have submitted their recipes for this competition.</p>
-            <p>Click the <b>VOTE</b> to vote for your favorite recipe!</p>
-            <p><em>Note: You can only vote once for each recipe.</em></p>
-            <div class="table-container">
+
+            <!-- Participant Info -->
+            <div id="participant-info">
+                <h2 style="text-align: center; margin-top: 30px;">Participants</h2>
+                <p>These are the participants who have submitted their recipes for this competition.</p>
+                <p>Click the <b>VOTE</b> to vote for your favorite recipe!</p>
+                <p><em>Note: You can only vote once for each recipe.</em></p>
+            </div>
+
+            <!-- Ongoing Table -->
+            <div id="ongoing-competition" class="table-container">
                 <table>
                     <thead>
                         <tr>
@@ -251,6 +264,76 @@
                     </tbody>
                 </table>
             </div>
+
+            <!-- Upcoming Table -->
+            <div id="upcoming-competition" class="table-container" style="display: none;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th colspan="3"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td rowspan='3' colspan='3' class="text-center">
+                                <strong>Coming Soon! Stay tuned!</strong>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Past Table -->
+            <div id="past-competition" class="table-container" style="display: none;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Participant Name</th>
+                            <th>Recipe</th>
+                            <th>Number of Vote</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                            // Fetch the ranking of participants, particpants name, recipe title and total number of vote
+                            // rank is from competition_result table
+                            $query = "SELECT cr.rank, u.username, r.title, COUNT(cv.vote_id) AS total_votes, r.recipe_id, cs.submission_id
+                                    FROM competition_result cr
+                                    INNER JOIN competition_submission cs ON cr.submission_id = cs.submission_id
+                                    INNER JOIN Recipe r ON cs.recipe_id = r.recipe_id
+                                    INNER JOIN User u ON r.user_id = u.user_id
+                                    LEFT JOIN competition_vote cv ON cs.submission_id = cv.submission_id
+                                    WHERE cs.competition_id = '$competition_id'
+                                    GROUP BY cr.rank, u.username, r.title
+                                    ORDER BY cr.rank ASC";
+                            $result = mysqli_query($con, $query);
+
+                            if (mysqli_num_rows($result) > 0) {
+                                while ($row = mysqli_fetch_assoc($result)) {
+                                    echo "<tr>";
+                                    echo "<td>" . $row['rank'] . "</td>";
+                                    echo "<td>" . $row['username'] . "</td>";
+                                    echo '<td>
+                                            <a href="#" 
+                                               onclick="loadRecipeDetails(' . $row['recipe_id'] . ');" 
+                                               class="text-info"
+                                               data-bs-toggle="modal"
+                                               data-bs-target="#viewModal">
+                                                ' . htmlspecialchars($row['title']) . '
+                                            </a>
+                                        </td>';
+                                    echo "<td>" . $row['total_votes'] . "</td>";                    
+                                    echo "</tr>";
+                                }
+                            } else {
+                                echo "<p>No participants found for this competition.</p>";
+                            }
+                        ?>
+                    </tbody>
+                </table>
+            </div>
+
             <!-- View Recipe Modal -->
             <div class="modal fade" id="viewModal" tabindex="-1">
                 <div class="modal-dialog modal-lg">
@@ -266,6 +349,41 @@
                 </div>
             </div>
             <script>
+                // Define the elements for each competition section and participant info section
+                const ongoingCompetition = document.getElementById("ongoing-competition");
+                const upcomingCompetition = document.getElementById("upcoming-competition");
+                const pastCompetition = document.getElementById("past-competition");
+                const participantInfo = document.getElementById("participant-info");
+
+                // Get the current date and competition start and end dates
+                const currentDate = new Date();
+                const competitionStartDate = new Date(<?php echo json_encode(date('Y-m-d H:i:s', $competition_start_date)); ?>);
+                const competitionEndDate = new Date(<?php echo json_encode(date('Y-m-d H:i:s', $competition_end_date)); ?>);
+                
+                // Load competition details based on the current date
+                function loadCompetitionDetails() {
+                    if (currentDate < competitionStartDate) {
+                        // Show upcoming competition and hide others
+                        upcomingCompetition.style.display = "block";
+                        ongoingCompetition.style.display = "none";
+                        pastCompetition.style.display = "none";
+                        participantInfo.style.display = "none";
+                    } else if (currentDate > competitionEndDate) {
+                        // Show past competition and hide others
+                        pastCompetition.style.display = "block";
+                        ongoingCompetition.style.display = "none";
+                        upcomingCompetition.style.display = "none";
+                    } else {
+                        // Show ongoing competition and hide others
+                        ongoingCompetition.style.display = "block";
+                        upcomingCompetition.style.display = "none";
+                        pastCompetition.style.display = "none";
+                    }
+                }
+
+                document.addEventListener("DOMContentLoaded", loadCompetitionDetails);
+
+                // Function to load recipe details into the modal
                 function loadRecipeDetails(recipeId) {
                     console.log("Loading recipe: ", recipeId);
                     const xhr = new XMLHttpRequest();
