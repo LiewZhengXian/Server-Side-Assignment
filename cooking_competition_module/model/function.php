@@ -16,17 +16,4 @@
             }
         }
     }
-
-    function viewResult($competition_id, $submission_id, $con) {
-        // Fetch the results for the given competition and submission
-        $query = "SELECT * FROM competition_vote WHERE competition_id = '$competition_id' AND submission_id = '$submission_id'";
-        $result = mysqli_query($con, $query);
-
-        if (mysqli_num_rows($result) > 0) {
-            $votes = mysqli_fetch_assoc($result);
-            return ['status' => 'success', 'data' => $votes];
-        } else {
-            return ['status' => 'error', 'message' => 'No results found for this competition.'];
-        }
-    }
 ?>
