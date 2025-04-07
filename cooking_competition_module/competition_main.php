@@ -2,6 +2,11 @@
     // Include the authentication and database connection files
     include("../user_module/auth.php");
     require("../user_module/database.php");
+
+    // task todo
+    // 1. error handling
+    // 2. mvc structure
+    // 3. admin competition management
 ?>
 <!DOCTYPE html>
 <html lang="en">

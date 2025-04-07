@@ -131,6 +131,8 @@
             }
         ?>
         <script>
+            // JavaScript to toggle between new and existing recipe sections
+            // Wait for the DOM to load before executing the script
             document.addEventListener('DOMContentLoaded', function() {
                 const newRecipeRadio = document.getElementById('new_recipe');
                 const existingRecipeRadio = document.getElementById('existing_recipe_option');
