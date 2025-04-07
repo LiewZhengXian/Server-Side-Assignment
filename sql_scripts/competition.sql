@@ -63,7 +63,7 @@ VALUES
 -- Insert dummy data into competition_submission
 INSERT INTO competition_submission (competition_id, user_id, recipe_id, submission_date) VALUES
 (1, 2, 4, '2025-03-28 12:00:00'),
-(1, 4, 2, '2025-03-28 14:00:00'),
+(2, 4, 2, '2025-03-28 14:00:00'),
 (4, 5, 5, '2025-04-11 10:30:00'),
 (4, 1, 3, '2025-04-12 16:15:00'),
 (5, 3, 1, '2025-08-21 09:45:00');
@@ -72,14 +72,16 @@ INSERT INTO competition_submission (competition_id, user_id, recipe_id, submissi
 INSERT INTO competition_vote (submission_id, user_id, vote_date) VALUES
 (1, 3, '2025-03-29 10:00:00'),
 (1, 1, '2025-03-29 11:30:00'),
-(2, 4, '2025-03-30 14:00:00'),
+(3, 4, '2025-03-30 14:00:00'),
 (3, 2, '2025-04-12 15:20:00'),
-(4, 5, '2025-04-13 17:45:00');
+(5, 1, '2025-04-13 17:45:00');
+(2, 5, '2025-04-05 22:30:00');
+(1, 5, '2025-04-08 16:20:00');
 
 -- Insert dummy data into competition_result
 INSERT INTO competition_result (competition_id, submission_id, rank, prize) VALUES
 (1, 1, 1, 'RM5000 Cash'),
-(1, 2, 2, 'RM3000 Cash'),
-(4, 3, 1, 'RM4000 Cash'),
-(4, 4, 2, 'RM2000 Cash'),
+(2, 1, 2, 'RM3000 Cash'),
+(3, 4, 3, 'RM4000 Cash'),
+(4, 4, 4, 'RM2000 Cash'),
 (5, 5, 1, 'RM6000 Cash');
