@@ -297,7 +297,6 @@
                     <tbody>
                         <?php
                             // Fetch the ranking of participants, particpants name, recipe title and total number of vote
-                            // rank is from competition_result table
                             $query = "SELECT cr.rank, u.username, r.title, COUNT(cv.vote_id) AS total_votes, r.recipe_id, cs.submission_id
                                     FROM competition_result cr
                                     INNER JOIN competition_submission cs ON cr.submission_id = cs.submission_id
@@ -309,6 +308,7 @@
                                     ORDER BY cr.rank ASC";
                             $result = mysqli_query($con, $query);
 
+                            // Display the ranking of participants
                             if (mysqli_num_rows($result) > 0) {
                                 while ($row = mysqli_fetch_assoc($result)) {
                                     echo "<tr>";

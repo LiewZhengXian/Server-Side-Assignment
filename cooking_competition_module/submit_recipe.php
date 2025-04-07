@@ -44,7 +44,7 @@
                             <a class="nav-link" href="./Community.php">Community</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Competitions</a>
+                            <a class="nav-link" href="../cooking_competition_module/competition_main.php">Competitions</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="../user_module/logout.php">Logout</a>
@@ -64,9 +64,9 @@
             <form action="submit_recipes.php" method="POST" enctype="multipart/form-data">
                 <!-- Radio Button Selection -->
                 <div class="mb-3">
-                    <label for="choose_recipe" class="form-label">Choose Recipe Type</label><br>
+                    <label for="choose_recipe" class="form-label">Choose Recipe From:</label><br>
                     <input type="radio" id="existing_recipe_option" name="recipe_type" value="existing" checked>
-                    <label for="existing_recipe_option" class="form-label">Choose Existing Recipe</label>
+                    <label for="existing_recipe_option" class="form-label">Existing Recipe</label>
                     <input type="radio" id="new_recipe" name="recipe_type" value="new">
                     <label for="new_recipe" class="form-label">Upload New Recipe</label>
                 </div>
@@ -106,7 +106,7 @@
                 </div>
                 <div class="mb-3">
                     <input type="checkbox" id="terms" name="terms" required>
-                    <label for="terms" class="form-label">I agree to the <a href="#">terms and conditions</a></label>
+                    <label for="terms" class="form-label">I agree to the <a href="../cooking_competition_module/terms_and_conditions.html">terms and conditions</a></label>
                 </div>
                 <button type="submit" class="btn btn-primary">Submit Recipe</button>
             </form>
