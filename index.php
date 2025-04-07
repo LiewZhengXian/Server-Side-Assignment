@@ -44,7 +44,7 @@ require('./user_module/database.php');
                         <a class="nav-link" href="./community_module/Community.php">Community</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Competitions</a>
+                        <a class="nav-link" href="./cooking_competition_module/competition_main.php">Competitions</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="./user_module/logout.php">Logout</a>
@@ -95,7 +95,7 @@ require('./user_module/database.php');
                     <div class="card-body text-center">
                         <h5 class="card-title">Competitions 🏆</h5>
                         <p class="card-text">Participate and win exciting prizes.</p>
-                        <a href="#" class="btn btn-primary">View Competitions</a>
+                        <a href="./cooking_competition_module/competition_main.php" class="btn btn-primary">View Competitions</a>
                     </div>
                 </div>
             </div>
