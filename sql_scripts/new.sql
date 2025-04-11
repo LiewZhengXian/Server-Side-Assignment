@@ -3,6 +3,14 @@ DROP DATABASE IF EXISTS recipehub_db;
 CREATE DATABASE recipehub_db;
 USE recipehub_db;
 
+--Password Reset table
+
+CREATE TABLE password_resets (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    email VARCHAR(255) NOT NULL,
+    token VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+);
 -- Users table
 
 CREATE TABLE User (
