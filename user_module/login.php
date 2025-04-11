@@ -10,7 +10,6 @@ session_start();
     <title>User Login</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Custom styles -->
     <style>
         body {
             background-color: #f8f9fa;
@@ -49,33 +48,28 @@ session_start();
     <div class="container">
         <?php
         require('database.php');
-        if (isset($_POST['username'])) {
-            $username = stripslashes($_REQUEST['username']);
-            $username = mysqli_real_escape_string($con, $username);
+        if (isset($_POST['email'])) {
+            $email = stripslashes($_REQUEST['email']);
+            $email = mysqli_real_escape_string($con, $email);
             $password = stripslashes($_REQUEST['password']);
             $password = mysqli_real_escape_string($con, $password);
 
-            // Modify the query to select the user_id along with other fields
-            $query = "SELECT user_id, username FROM `user` WHERE username='$username' AND password='" . md5($password) . "'";
+            $query = "SELECT user_id, username, email FROM `user` WHERE email='$email' AND password='" . md5($password) . "'";
             $result = mysqli_query($con, $query) or die(mysqli_error($con));
             $rows = mysqli_num_rows($result);
 
-            // Check if user exists
             if ($rows == 1) {
-                // Fetch the user_id and username
                 $user = mysqli_fetch_assoc($result);
-                
-                // Store the user_id and username in the session
                 $_SESSION['user_id'] = $user['user_id'];
                 $_SESSION['username'] = $user['username'];
-                
-                // Redirect to the homepage or dashboard
+                $_SESSION['email'] = $user['email'];
+
                 header("Location: ../index.php");
                 exit();
             } else {
                 echo "<div class='login-container'>
                     <div class='alert alert-danger text-center' role='alert'>
-                        <strong>Error!</strong> Username or password is incorrect.
+                        <strong>Error!</strong> Email or password is incorrect.
                     </div>
                     <div class='text-center'>
                         <a href='login.php' class='btn btn-outline-primary'>Try Again</a>
@@ -88,8 +82,8 @@ session_start();
             <h1 class="form-title">Welcome Back</h1>
             <form action="" method="post" name="login">
                 <div class="mb-3">
-                    <label for="username" class="form-label">Username</label>
-                    <input type="text" class="form-control" id="username" name="username" placeholder="Enter your username" required>
+                    <label for="email" class="form-label">Email Address</label>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required>
                 </div>
                 <div class="mb-3">
                     <label for="password" class="form-label">Password</label>
