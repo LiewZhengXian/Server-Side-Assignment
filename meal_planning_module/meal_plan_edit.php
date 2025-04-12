@@ -101,7 +101,8 @@ $meal_type = ($meal['recipe_id'] !== NULL) ? 'existing_recipe' : 'custom_meal';
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="meal_plan_add.php">Plan a Meal</a></li>
                             <li><a class="dropdown-item" href="meal_plan_list.php">View Schedule</a></li>
-                            <li><a class="dropdown-item active" href="../meal_template_module/list_templates.php">Manage Templates</a></li>
+                            <li><a class="dropdown-item" href="../meal_template_module/list_templates.php">Manage Templates</a></li>
+                            <li><a class="dropdown-item" href="meal_plan_display.php">Display Schedule Table</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">

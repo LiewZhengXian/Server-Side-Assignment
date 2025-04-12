@@ -16,11 +16,16 @@ $template_id = $_GET['template_id'] ?? null; // For filtering templates
 // Fetch template data if needed
 $templates = [];
 if ($display_table === 'meal_template_details') {
-    $template_sql = "SELECT DISTINCT template_id FROM meal_template_details";
-    $template_result = $con->query($template_sql);
-    while ($row = $template_result->fetch_assoc()) {
-        $templates[] = $row['template_id'];
+    // New code fetching both template_id and template_name from meal_template:
+    $template_sql = "SELECT template_id, template_name FROM meal_template WHERE user_id = ?";
+    $stmt_templates = $con->prepare($template_sql);
+    $stmt_templates->bind_param("i", $user_id);
+    $stmt_templates->execute();
+    $result_templates = $stmt_templates->get_result();
+    while ($row = $result_templates->fetch_assoc()) {
+        $templates[] = $row;
     }
+
 }
 
 // Fetch meal plan or template details based on the selected table
@@ -75,10 +80,11 @@ $meal_times = ["Breakfast", "Lunch", "Dinner"];
                         Meal Planning
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="meal_plan_add.php">Plan a Meal</a></li>
-                        <li><a class="dropdown-item" href="meal_plan_list.php">View Schedule</a></li>
-                        <li><a class="dropdown-item active" href="../meal_template_module/list_templates.php">Manage Templates</a></li>
-                    </ul>
+                            <li><a class="dropdown-item" href="meal_plan_add.php">Plan a Meal</a></li>
+                            <li><a class="dropdown-item" href="meal_plan_list.php">View Schedule</a></li>
+                            <li><a class="dropdown-item" href="../meal_template_module/list_templates.php">Manage Templates</a></li>
+                            <li><a class="dropdown-item" href="meal_plan_display.php">Display Schedule Table</a></li>
+                        </ul>
                 </li>
                 <li class="nav-item"><a class="nav-link" href="../community_module/Community.php">Community</a></li>
                 <li class="nav-item"><a class="nav-link" href="../user_module/logout.php">Logout</a></li>
@@ -107,8 +113,8 @@ $meal_times = ["Breakfast", "Lunch", "Dinner"];
                 <select name="template_id" id="template_id" class="form-select" onchange="this.form.submit()">
                     <option value="">All Templates</option>
                     <?php foreach ($templates as $template): ?>
-                        <option value="<?= $template ?>" <?= $template == $template_id ? 'selected' : '' ?>>
-                            Template ID <?= $template ?>
+                        <option value="<?= $template['template_id'] ?>" <?= $template['template_id'] == $template_id ? 'selected' : '' ?>>
+                            Template <?= $template['template_id'] ?> - <?= htmlspecialchars($template['template_name']) ?>
                         </option>
                     <?php endforeach; ?>
                 </select>
