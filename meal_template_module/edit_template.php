@@ -242,7 +242,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         </option>
                                     </select>
                                 </div>
-                                <div class="col-md-3 recipe-select-section">
+                                <div class="col-md-3 recipe-select-section" <?= ($detail && $detail['meal_type'] == 'custom') ? 'style="display:none;"' : '' ?>>
                                     <label class="form-label">Select Recipe</label>
                                     <select class="form-control" name="<?= $day ?>_<?= $meal_time ?>_recipe_id">
                                         <option value="">-- Select a Recipe --</option>
@@ -252,14 +252,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         ?>
                                             <option value="<?= $recipe['recipe_id'] ?>" 
                                                 <?= isset($template_details[$day][$meal_time]['recipe_id']) 
-                                                && $template_details[$day][$meal_time]['recipe_id'] == $recipe['recipe_id'] 
-                                                ? 'selected' : '' ?>>
+                                                    && $template_details[$day][$meal_time]['recipe_id'] == $recipe['recipe_id'] 
+                                                    ? 'selected' : '' ?>>
                                                 <?= htmlspecialchars($recipe['title']) ?>
                                             </option>
                                         <?php endwhile; ?>
                                     </select>
                                 </div>
-
                                 <div class="col-md-4 custom-meal-input"
                                     <?= $detail && $detail['meal_type'] == 'recipe' ? 'style="display:none;"' : '' ?>>
                                     <label class="form-label">Custom Meal</label>
