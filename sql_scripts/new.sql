@@ -2,7 +2,16 @@
 DROP DATABASE IF EXISTS recipehub_db;
 CREATE DATABASE recipehub_db;
 USE recipehub_db;
+
+-- Password reset table
+CREATE TABLE password_resets (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    email VARCHAR(255) NOT NULL,
+    token VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 -- Users table
+
 CREATE TABLE User (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50) NOT NULL,
@@ -205,7 +214,7 @@ INSERT INTO Post (recipe_id, user_id, content, title, creation_datetime) VALUES
 INSERT INTO Comment (user_id, post_id, content, creation_datetime) VALUES 
 (2, 1, 'I tried these cookies last night and they were amazing! My kids ate them all in one sitting. I added some walnuts for extra crunch.', '2024-02-17 15:20:00'),
 (3, 1, 'Great recipe! I found that chilling the dough for an hour before baking made them even better. Thanks for sharing!', '2024-02-18 09:45:00'),
-(1, 2, 'This pizza dough recipe is incredible. I\'ve been struggling with getting the right texture until now. Will definitely make again!', '2024-01-22 19:30:00'),
+(1, 2, 'This pizza dough recipe is incredible. I''ve been struggling with getting the right texture until now. Will definitely make again!', '2024-01-22 19:30:00'),
 (4, 3, 'I never thought I could make restaurant-quality risotto at home, but your detailed instructions made it foolproof. Delicious!', '2024-03-10 18:15:00'),
 (5, 4, 'Added some grilled chicken to make this a complete meal. The dressing is perfect - not too heavy but full of flavor.', '2024-06-15 13:40:00');
 

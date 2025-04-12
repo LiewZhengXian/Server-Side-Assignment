@@ -15,46 +15,10 @@ require('./user_module/database.php');
 <body>
 
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
-            <a class="navbar-brand" href="#">Recipe Hub</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+    <?php include("./navbar.php");
+    ?>
 
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="./index.php">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="./recipe_management_module/recipe.php">Recipes</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="mealPlanningDropdown" role="button"
-                            data-bs-toggle="dropdown">
-                            Meal Planning
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Plan a Meal</a></li>
-                            <li><a class="dropdown-item" href="#">View Schedule</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="./community_module/Community.php">Community</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="./cooking_competition_module/competition_main.php">Competitions</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="./user_module/logout.php">Logout</a>
 
-                    </li>
-
-                </ul>
-            </div>
-        </div>
-    </nav>
     <header class="text-center my-4">
         <h1 class="mt-3">Welcome to Recipe Hub!</h1>
         <p>Your one-stop destination for delicious recipes, meal planning, and competitions.</p>
@@ -100,13 +64,6 @@ require('./user_module/database.php');
                 </div>
             </div>
         </div>
-    </div>
-    <div class="form">
-
-        <p>User Dashboard</p>
-        <p>Access Granted - This page is protected.</p>
-        <p>TODO: Reset password table </p>
-
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>

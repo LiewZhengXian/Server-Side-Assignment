@@ -18,7 +18,7 @@
                     if (mysqli_num_rows($check_user) > 0) {
                         $token = bin2hex(random_bytes(50));
                         mysqli_query($con, "INSERT INTO password_resets (email, token) VALUES ('$email', '$token')");
-                        echo '<div class="alert alert-success text-center">Password reset link: <a href="reset_password.php?token=$token">Reset Password</a></div>';
+                        echo "<div class=\"alert alert-success text-center\">Password reset link: <a href=\"reset_password.php?token=$token\">Reset Password</a></div>";
                     } else {
                         echo '<div class="alert alert-danger text-center">Email not found.</div>';
                     }
