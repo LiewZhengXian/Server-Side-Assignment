@@ -18,6 +18,7 @@ require('./user_module/database.php');
     <?php include("./navbar.php");
     ?>
 
+
     <header class="text-center my-4">
         <h1 class="mt-3">Welcome to Recipe Hub!</h1>
         <p>Your one-stop destination for delicious recipes, meal planning, and competitions.</p>
@@ -58,7 +59,7 @@ require('./user_module/database.php');
                     <div class="card-body text-center">
                         <h5 class="card-title">Competitions 🏆</h5>
                         <p class="card-text">Participate and win exciting prizes.</p>
-                        <a href="#" class="btn btn-primary">View Competitions</a>
+                        <a href="./cooking_competition_module/competition_main.php" class="btn btn-primary">View Competitions</a>
                     </div>
                 </div>
             </div>
