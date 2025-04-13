@@ -21,8 +21,8 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="/Server-Side-Assignment/meal_planning_module/meal_plan_add.php">Plan a Meal</a></li>
-                            <li><a class="dropdown-item" href="#">View Schedule</a></li>
-                            <li><a class="dropdown-item" href="#">Manage Templates</a></li>
+                            <li><a class="dropdown-item" href="/Server-Side-Assignment/meal_planning_module/meal_plan_list.php">View Schedule</a></li>
+                            <li><a class="dropdown-item" href="/Server-Side-Assignment/meal_template_module/list_templates.php">Manage Templates</a></li>
                             <li><a class="dropdown-item" href="/Server-Side-Assignment/meal_planning_module/meal_plan_display.php">Display Schedule table</a></li>
                         </ul>
                     </li>
