@@ -14,46 +14,10 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     </head>
     <body>
-        <!-- Simple Navbar -->
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <div class="container">
-                <a class="navbar-brand" href="#">Recipe Hub</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+        <!-- Navbar -->
+        <?php include("./navbar.php");?>
 
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav">
-                        <li class="nav-item">
-                            <a class="nav-link active" href="../index.php">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Recipes</a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="mealPlanningDropdown" role="button"
-                                data-bs-toggle="dropdown">
-                                Meal Planning
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">Plan a Meal</a></li>
-                                <li><a class="dropdown-item" href="#">View Schedule</a></li>
-                            </ul>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="./Community.php">Community</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="../cooking_competition_module/competition_main.php">Competitions</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="../user_module/logout.php">Logout</a>
-
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
+        <!-- Page Title and Description -->
         <div class="container mt-5">
             <h2 class="text-center">Submit Your Recipe</h2>
             <p class="text-center">

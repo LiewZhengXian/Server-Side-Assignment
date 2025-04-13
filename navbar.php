@@ -20,15 +20,17 @@
                             Meal Planning
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Plan a Meal</a></li>
+                            <li><a class="dropdown-item" href="/Server-Side-Assignment/meal_planning_module/meal_plan_add.php">Plan a Meal</a></li>
                             <li><a class="dropdown-item" href="#">View Schedule</a></li>
+                            <li><a class="dropdown-item" href="#">Manage Templates</a></li>
+                            <li><a class="dropdown-item" href="/Server-Side-Assignment/meal_planning_module/meal_plan_display.php">Display Schedule table</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/Server-Side-Assignment/community_module/Community.php">Community</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Competitions</a>
+                        <a class="nav-link" href="/Server-Side-Assignment/cooking_competition_module/competition_main.php">Competitions</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/Server-Side-Assignment/user_module/logout.php">Logout</a>
