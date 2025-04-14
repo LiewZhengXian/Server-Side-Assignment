@@ -45,45 +45,7 @@ mysqli_close($con);
 
 <body>
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
-            <a class="navbar-brand" href="#">Recipe Hub</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Recipes</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="mealPlanningDropdown" role="button"
-                            data-bs-toggle="dropdown">
-                            Meal Planning
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Plan a Meal</a></li>
-                            <li><a class="dropdown-item" href="#">View Schedule</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="./Community.php">Community</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Competitions</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="../user_module/logout.php">Logout</a>
-
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <?php include "../navbar.php"?>
     <div class="container mt-5">
         <h2 class="mb-4 text-center">Share Your Recipe</h2>
 
@@ -109,8 +71,8 @@ mysqli_close($con);
             <div class="row mb-3">
                 <label for="selected_recipe" class="col-sm-2 col-form-label">Select an Existing Recipe</label>
                 <div class="col-sm-10">
-                    <select class="form-control" name="selected_recipe" id="selected_recipe">
-                        <option value="">Select a Recipe or Leave Empty</option>
+                    <select class="form-control" name="selected_recipe" id="selected_recipe" required>
+                        <option value="">Select a Recipe </option>
                         <?php
                         // Your SQL query to fetch recipes
                         $sel_query = "SELECT r.title ,r.recipe_id
