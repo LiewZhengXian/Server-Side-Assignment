@@ -112,8 +112,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     $recipe_id = null;
                     $custom_meal = null;
                 }
-                
-        
+
+
                 $detail_stmt->bind_param(
                     "issssss",
                     $template_id,
@@ -124,11 +124,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     $recipe_id,
                     $custom_meal
                 );
-        
+
                 $detail_stmt->execute();
             }
         }
-        
+
 
         $con->commit();
         header("Location: list_templates.php?success=1");
@@ -142,53 +142,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Meal Plan Template - Recipe Hub</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
-    <!-- Navbar (Similar to previous pages) -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
-            <a class="navbar-brand" href="#">Recipe Hub</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
 
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="../index.php">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Recipes</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle active" href="#" id="mealPlanningDropdown" role="button" data-bs-toggle="dropdown">
-                            Meal Planning
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="../meal_planning_module/meal_plan_add.php">Plan a Meal</a></li>
-                            <li><a class="dropdown-item" href="../meal_planning_module/meal_plan_list.php">View Schedule</a></li>
-                            <li><a class="dropdown-item" href="list_templates.php">Manage Templates</a></li>
-                            <li><a class="dropdown-item" href="../meal_planning_module/meal_plan_display.php">Display Schedule Table</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="../community_module/Community.php">Community</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Competitions</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="../user_module/logout.php">Logout</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+<body>
+    <!-- Navbar  -->
+    <?php include("../navbar.php"); ?>
 
     <div class="container mt-4">
         <h1 class="text-center">Edit Meal Plan Template</h1>
@@ -200,8 +164,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <form method="POST">
             <div class="mb-3">
                 <label for="template_name" class="form-label">Template Name</label>
-                <input type="text" class="form-control" id="template_name" name="template_name" 
-                       value="<?= htmlspecialchars($template['template_name']) ?>" required>
+                <input type="text" class="form-control" id="template_name" name="template_name"
+                    value="<?= htmlspecialchars($template['template_name']) ?>" required>
             </div>
 
             <div class="mb-3">
@@ -217,21 +181,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <h4><?= $day ?></h4>
                     </div>
                     <div class="card-body">
-                        <?php foreach ($meal_times as $meal_time): 
+                        <?php foreach ($meal_times as $meal_time):
                             $detail = $template_details[$day][$meal_time] ?? null;
                         ?>
                             <div class="row mb-3">
                                 <div class="col-md-4">
                                     <label class="form-label"><?= $meal_time ?> Meal Name</label>
-                                    <input type="text" class="form-control" 
-                                           name="<?= $day ?>_<?= $meal_time ?>_name" 
-                                           value="<?= $detail ? htmlspecialchars($detail['meal_name']) : '' ?>" 
-                                           placeholder="Enter meal name" required>
+                                    <input type="text" class="form-control"
+                                        name="<?= $day ?>_<?= $meal_time ?>_name"
+                                        value="<?= $detail ? htmlspecialchars($detail['meal_name']) : '' ?>"
+                                        placeholder="Enter meal name" required>
                                 </div>
                                 <div class="col-md-4">
                                     <label class="form-label">Meal Type</label>
                                     <select class="form-select meal-type-select"
-                                            name="<?= $day ?>_<?= $meal_time ?>_type">
+                                        name="<?= $day ?>_<?= $meal_time ?>_type">
                                         <option value="recipe"
                                             <?= $detail && $detail['meal_type'] == 'recipe' ? 'selected' : '' ?>>
                                             Recipe
@@ -246,13 +210,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     <label class="form-label">Select Recipe</label>
                                     <select class="form-control" name="<?= $day ?>_<?= $meal_time ?>_recipe_id">
                                         <option value="">-- Select a Recipe --</option>
-                                        <?php 
-                                            $recipes_result = $con->query("SELECT recipe_id, title FROM recipe"); // Re-fetch inside the loop
-                                            while ($recipe = $recipes_result->fetch_assoc()):
+                                        <?php
+                                        $recipes_result = $con->query("SELECT recipe_id, title FROM recipe"); // Re-fetch inside the loop
+                                        while ($recipe = $recipes_result->fetch_assoc()):
                                         ?>
-                                            <option value="<?= $recipe['recipe_id'] ?>" 
-                                                <?= isset($template_details[$day][$meal_time]['recipe_id']) 
-                                                    && $template_details[$day][$meal_time]['recipe_id'] == $recipe['recipe_id'] 
+                                            <option value="<?= $recipe['recipe_id'] ?>"
+                                                <?= isset($template_details[$day][$meal_time]['recipe_id'])
+                                                    && $template_details[$day][$meal_time]['recipe_id'] == $recipe['recipe_id']
                                                     ? 'selected' : '' ?>>
                                                 <?= htmlspecialchars($recipe['title']) ?>
                                             </option>
@@ -264,8 +228,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     <label class="form-label">Custom Meal</label>
                                     <input type="text" class="form-control"
                                         name="<?= $day ?>_<?= $meal_time ?>_custom"
-                                        value="<?= $detail && $detail['meal_type'] == 'custom' 
-                                                    ? htmlspecialchars($detail['custom_meal']) 
+                                        value="<?= $detail && $detail['meal_type'] == 'custom'
+                                                    ? htmlspecialchars($detail['custom_meal'])
                                                     : '' ?>"
                                         placeholder="Enter custom meal">
                                 </div>
@@ -283,29 +247,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-    document.querySelectorAll('.meal-type-select').forEach(select => {
-        select.addEventListener('change', function () {
-            const row = this.closest('.row');
-            const recipeSelectSection = row.querySelector('.recipe-select-section');
-            const customMealSection = row.querySelector('.custom-meal-input');
-            const recipeSelect = recipeSelectSection.querySelector('select');
-            const customMealInput = customMealSection.querySelector('input');
+        document.querySelectorAll('.meal-type-select').forEach(select => {
+            select.addEventListener('change', function() {
+                const row = this.closest('.row');
+                const recipeSelectSection = row.querySelector('.recipe-select-section');
+                const customMealSection = row.querySelector('.custom-meal-input');
+                const recipeSelect = recipeSelectSection.querySelector('select');
+                const customMealInput = customMealSection.querySelector('input');
 
-            if (this.value === 'recipe') {
-                recipeSelectSection.style.display = 'block';
-                customMealSection.style.display = 'none';
-                recipeSelect.required = true;
-                customMealInput.required = false;
-            } else {
-                recipeSelectSection.style.display = 'none';
-                customMealSection.style.display = 'block';
-                recipeSelect.required = false;
-                customMealInput.required = true;
-            }
+                if (this.value === 'recipe') {
+                    recipeSelectSection.style.display = 'block';
+                    customMealSection.style.display = 'none';
+                    recipeSelect.required = true;
+                    customMealInput.required = false;
+                } else {
+                    recipeSelectSection.style.display = 'none';
+                    customMealSection.style.display = 'block';
+                    recipeSelect.required = false;
+                    customMealInput.required = true;
+                }
+            });
         });
-    });
-</script>
+    </script>
 
+<?php include '../footer.php'; ?>
 
 </body>
+
 </html>
