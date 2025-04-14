@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         (template_id, day_of_week, meal_time, meal_name, meal_type, recipe_id, custom_meal) 
         VALUES (?, ?, ?, ?, ?, ?, ?)
         ");
-        
+
         $detail_stmt->bind_param(
             "issssss",  // 's' for the `meal_type` as a string
             $template_id,
@@ -48,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $recipe_id,
             $custom_meal
         );
-    
+
 
         foreach ($days as $day) {
             foreach ($meal_times as $meal_time) {
@@ -56,28 +56,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $meal_type = $_POST[$day . '_' . $meal_time . '_meal_type'] ?? null;
 
                 if ($meal_type === 'recipe') { // Change 'existing_recipe' to 'recipe'
-                    $recipe_id = $_POST[$day . '_' . $meal_time . '_recipe_id'] != '' 
-                        ? $_POST[$day . '_' . $meal_time . '_recipe_id'] 
+                    $recipe_id = $_POST[$day . '_' . $meal_time . '_recipe_id'] != ''
+                        ? $_POST[$day . '_' . $meal_time . '_recipe_id']
                         : null;
                     $custom_meal = null;
-                }
-                 elseif ($meal_type === 'custom_meal') {
+                } elseif ($meal_type === 'custom_meal') {
                     $recipe_id = null;
                     $custom_meal = $_POST[$day . '_' . $meal_time . '_custom_meal'] ?? null;
                 } else {
                     $recipe_id = null;
                     $custom_meal = null;
                 }
-                
+
 
                 $detail_stmt->bind_param(
-                    "issssss", 
-                    $template_id, 
-                    $day, 
-                    $meal_time, 
-                    $meal_name, 
-                    $meal_type, 
-                    $recipe_id, 
+                    "issssss",
+                    $template_id,
+                    $day,
+                    $meal_time,
+                    $meal_name,
+                    $meal_type,
+                    $recipe_id,
                     $custom_meal
                 );
                 $detail_stmt->execute();
@@ -96,69 +95,34 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Meal Plan Template - Recipe Hub</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-    .day-container {
-        display: none;
-    }
-    .day-container.active {
-        display: block;
-    }
-</style>
-<style>
-    .is-invalid {
-        border-color: #dc3545;
-    }
-</style>
+        .day-container {
+            display: none;
+        }
+
+        .day-container.active {
+            display: block;
+        }
+    </style>
+    <style>
+        .is-invalid {
+            border-color: #dc3545;
+        }
+    </style>
 
 
 
 </head>
-<body>
-    <!-- Navbar (Similar to previous pages) -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
-            <a class="navbar-brand" href="#">Recipe Hub</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
 
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="../index.php">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Recipes</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle active" href="#" id="mealPlanningDropdown" role="button" data-bs-toggle="dropdown">
-                            Meal Planning
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="../meal_planning_module/meal_plan_add.php">Plan a Meal</a></li>
-                            <li><a class="dropdown-item" href="../meal_planning_module/meal_plan_list.php">View Schedule</a></li>
-                            <li><a class="dropdown-item" href="list_templates.php">Manage Templates</a></li>
-                            <li><a class="dropdown-item" href="../meal_planning_module/meal_plan_display.php">Display Schedule Table</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="../community_module/Community.php">Community</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Competitions</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="../user_module/logout.php">Logout</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+<body>
+    <!-- Navbar -->
+    <?php include("../navbar.php"); ?>
 
     <div class="container mt-4">
         <h1 class="text-center">Create Meal Plan Template</h1>
@@ -174,7 +138,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
 
             <div class="mb-3">
-                <label for="description" class="form-label">Description (Optional)</label>
+                <label for="description" class="form-label">Description</label>
                 <textarea class="form-control" id="description" name="description" rows="3"></textarea>
             </div>
 
@@ -217,7 +181,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         <label class="form-label">Select Recipe</label>
                                         <select class="form-control" name="<?= $day ?>_<?= $meal_time ?>_recipe_id">
                                             <option value="">-- Select a Recipe --</option>
-                                            <?php 
+                                            <?php
                                             $recipe_result = $con->query("SELECT recipe_id, title FROM recipe"); // Re-fetch inside the loop
                                             while ($recipe = $recipe_result->fetch_assoc()): ?>
                                                 <option value="<?= $recipe['recipe_id'] ?>">
@@ -241,6 +205,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             <button type="submit" class="btn btn-primary">Create Template</button>
         </form>
+        <br>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
@@ -253,7 +218,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 const customMealSection = row.querySelector('.custom-meal-section');
                 const recipeSelect = recipeSelectSection.querySelector('select');
                 const customMealTextarea = customMealSection.querySelector('textarea');
-                
+
                 if (this.value === 'recipe') { // Change 'existing_recipe' to 'recipe'
                     recipeSelectSection.style.display = 'block';
                     customMealSection.style.display = 'none';
@@ -301,28 +266,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
         });
     </script>
-<script>
-    document.getElementById('mealPlanForm').addEventListener('submit', function(event) {
-        let isValid = true;
-        const requiredFields = document.querySelectorAll('#mealPlanForm [required]');
-        
-        requiredFields.forEach(field => {
-            if (!field.value.trim()) {
-                isValid = false;
-                field.classList.add('is-invalid');
-            } else {
-                field.classList.remove('is-invalid');
+    <script>
+        document.getElementById('mealPlanForm').addEventListener('submit', function(event) {
+            let isValid = true;
+            const requiredFields = document.querySelectorAll('#mealPlanForm [required]');
+
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    isValid = false;
+                    field.classList.add('is-invalid');
+                } else {
+                    field.classList.remove('is-invalid');
+                }
+            });
+
+            if (!isValid) {
+                event.preventDefault();
+                alert('Please fill in all required fields.');
             }
         });
-
-        if (!isValid) {
-            event.preventDefault();
-            alert('Please fill in all required fields.');
-        }
-    });
-</script>
+    </script>
 
 
+<?php include '../footer.php'; ?>
 
 </body>
+
 </html>

@@ -38,10 +38,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $meal_date = $_POST['meal_date'];
     $meal_time = $_POST['meal_time'];
     $duration = intval($_POST['duration']);
-    
+
     // Determine if using existing recipe or custom meal
     $meal_type = $_POST['meal_type'];
-    
+
     if ($meal_type == 'existing_recipe') {
         $recipe_id = $_POST['recipe_id'] != '' ? $_POST['recipe_id'] : NULL;
         $custom_meal = NULL;
@@ -49,12 +49,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $recipe_id = NULL;
         $custom_meal = $_POST['custom_meal'];
     }
-    
+
     // Update the SQL query and bind parameters
     $stmt = $con->prepare("UPDATE meal_plans SET meal_name=?, meal_date=?, meal_time=?, meal_type=?, recipe_id=?, duration=?, custom_meal=? WHERE meal_id=? AND user_id=?");
     $meal_type = ($meal_type == 'existing_recipe') ? 'recipe' : 'custom';
     $stmt->bind_param("ssssissii", $meal_name, $meal_date, $meal_time, $meal_type, $recipe_id, $duration, $custom_meal, $id, $user_id);
-    
+
     if ($stmt->execute()) {
         header("Location: meal_plan_list.php");
         exit();
@@ -69,6 +69,7 @@ $meal_type = ($meal['recipe_id'] !== NULL) ? 'existing_recipe' : 'custom_meal';
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -78,47 +79,8 @@ $meal_type = ($meal['recipe_id'] !== NULL) ? 'existing_recipe' : 'custom_meal';
 
 <body>
 
-    <!-- Navbar (Same as meal_plan_list.php) -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
-            <a class="navbar-brand" href="#">Recipe Hub</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="../index.php">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Recipes</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle active" href="#" id="mealPlanningDropdown" role="button" data-bs-toggle="dropdown">
-                            Meal Planning
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="meal_plan_add.php">Plan a Meal</a></li>
-                            <li><a class="dropdown-item" href="meal_plan_list.php">View Schedule</a></li>
-                            <li><a class="dropdown-item" href="../meal_template_module/list_templates.php">Manage Templates</a></li>
-                            <li><a class="dropdown-item" href="meal_plan_display.php">Display Schedule Table</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="../community_module/Community.php">Community</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Competitions</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="../user_module/logout.php">Logout</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-
+    <!-- Navbar  -->
+    <?php include("../navbar.php"); ?>
 
     <div class="container mt-4">
         <h1 class="text-center">Meal Planning 📅</h1>
@@ -147,7 +109,7 @@ $meal_type = ($meal['recipe_id'] !== NULL) ? 'existing_recipe' : 'custom_meal';
                     <label class="form-label">Duration (days)</label>
                     <input type="number" class="form-control" name="duration" min="1" value="<?= $meal['duration'] ?>" required>
                 </div>
-                
+
                 <!-- Meal Type Selection -->
                 <div class="mb-3">
                     <label class="form-label">Meal Type</label>
@@ -164,7 +126,7 @@ $meal_type = ($meal['recipe_id'] !== NULL) ? 'existing_recipe' : 'custom_meal';
                         </label>
                     </div>
                 </div>
-                
+
                 <!-- Recipe Selection (shows when "Use Existing Recipe" is selected) -->
                 <div class="mb-3" id="recipeSelectSection" style="<?= ($meal_type == 'custom_meal') ? 'display: none;' : '' ?>">
                     <label class="form-label">Select Recipe</label>
@@ -177,21 +139,22 @@ $meal_type = ($meal['recipe_id'] !== NULL) ? 'existing_recipe' : 'custom_meal';
                         <?php endwhile; ?>
                     </select>
                 </div>
-                
+
                 <!-- Custom Meal Details (shows when "Create Custom Meal" is selected) -->
                 <div class="mb-3" id="customMealSection" style="<?= ($meal_type == 'existing_recipe') ? 'display: none;' : '' ?>">
                     <label class="form-label">Custom Meal Details</label>
                     <textarea class="form-control" name="custom_meal" rows="3" placeholder="Enter your custom meal details, ingredients, or notes here"><?= htmlspecialchars($meal['custom_meal'] ?? '') ?></textarea>
                 </div>
-                
+
                 <button type="submit" class="btn btn-primary">Update Meal</button>
                 <a href="meal_plan_list.php" class="btn btn-secondary">Cancel</a>
             </form>
         </div>
+        <br>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    
+
     <script>
         // Toggle between recipe selection and custom meal input
         document.querySelectorAll('input[name="meal_type"]').forEach(radio => {
@@ -206,5 +169,9 @@ $meal_type = ($meal['recipe_id'] !== NULL) ? 'existing_recipe' : 'custom_meal';
             });
         });
     </script>
+
+<?php include '../footer.php'; ?>
+
 </body>
+
 </html>

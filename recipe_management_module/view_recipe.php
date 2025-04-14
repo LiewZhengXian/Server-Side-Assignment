@@ -1,12 +1,12 @@
 <?php
 require '../user_module/database.php';
 
-if (isset($_GET['id'])) {
-    $recipe_id = intval($_GET['id']);
+if (isset($_GET['recipe_id'])) {
+    $recipe_id = intval($_GET['recipe_id']);
 
     // Fetch recipe details
     $sql = "SELECT r.title, r.description, r.prep_time, r.cook_time, r.servings, 
-                   r.spicy, r.image_url, r.created_at, r.updated_at,
+                   r.spicy, r.image_path, r.created_at, r.updated_at,
                    c.cuisine_name, cat.category_name, u.username
             FROM Recipe r
             LEFT JOIN Cuisine c ON r.cuisine_id = c.cuisine_id
@@ -28,15 +28,17 @@ if (isset($_GET['id'])) {
         echo "</div>";
 
         echo "<div class='modal-body'>";
-        
+
         // Recipe Creator
         echo "<p class='text-muted text-center'><strong>Created By:</strong> " . htmlspecialchars($recipe['username']) . "</p>";
 
-        // Display Image
-        if (!empty($recipe['image_url'])) {
+        // Display Uploaded Image
+        if (!empty($recipe['image_path']) && file_exists($recipe['image_path'])) {
             echo "<div class='text-center mb-3'>";
-            echo "<img src='" . htmlspecialchars($recipe['image_url']) . "' class='img-fluid rounded shadow' style='max-width: 300px; height: auto;'>";
+            echo "<img src='" . htmlspecialchars($recipe['image_path']) . "' class='img-fluid rounded shadow' style='max-width: 300px; height: auto;'>";
             echo "</div>";
+        } else {
+            echo "<p class='text-center text-muted'>No image available for this recipe.</p>";
         }
 
         // Convert time format (hh:ii:ss → X hours Y minutes)
@@ -103,3 +105,4 @@ if (isset($_GET['id'])) {
     $stmt->close();
 }
 $con->close();
+?>

@@ -2,33 +2,33 @@
 include("../user_module/auth.php");
 include '../user_module/database.php'; ?>
 <?php
-if (isset($_POST['post_title']) && isset($_POST['post_description']) ){
-$post_title = mysqli_real_escape_string($con, $_POST['post_title']);
-$post_description = mysqli_real_escape_string($con, $_POST['post_description']);
-$user_id = mysqli_real_escape_string($con, $_SESSION["user_id"]);
-$recipe_id = mysqli_real_escape_string($con, $_POST["selected_recipe"]) ?? null;
-$selected_recipe = !empty($_POST['selected_recipe']) ? mysqli_real_escape_string($con, $_POST['selected_recipe']) : NULL;
+if (isset($_POST['post_title']) && isset($_POST['post_description'])) {
+    $post_title = mysqli_real_escape_string($con, $_POST['post_title']);
+    $post_description = mysqli_real_escape_string($con, $_POST['post_description']);
+    $user_id = mysqli_real_escape_string($con, $_SESSION["user_id"]);
+    $recipe_id = mysqli_real_escape_string($con, $_POST["selected_recipe"]) ?? null;
+    $selected_recipe = !empty($_POST['selected_recipe']) ? mysqli_real_escape_string($con, $_POST['selected_recipe']) : NULL;
 
 
 
-// Insert query for Post table
-$insert_query = "INSERT INTO Post (user_id, content, title, recipe_id) 
+    // Insert query for Post table
+    $insert_query = "INSERT INTO Post (user_id, content, title, recipe_id) 
                 VALUES ( '$user_id', '$post_description', '$post_title', '$selected_recipe')";
 
-// Execute the query
-if (mysqli_query($con, $insert_query)) {
-    
-    // Redirect to success page or show success message
-    // header("Location: dashboard.php?success=1");
-    header("Location: Community.php");
-    exit();
-} else {
-    // Handle error
-    echo "Error: " . mysqli_error($con);
-}
+    // Execute the query
+    if (mysqli_query($con, $insert_query)) {
 
-// Close connection
-mysqli_close($con);
+        // Redirect to success page or show success message
+        // header("Location: dashboard.php?success=1");
+        header("Location: Community.php");
+        exit();
+    } else {
+        // Handle error
+        echo "Error: " . mysqli_error($con);
+    }
+
+    // Close connection
+    mysqli_close($con);
 }
 
 ?>
@@ -45,7 +45,9 @@ mysqli_close($con);
 
 <body>
     <!-- Navbar -->
-    <?php include "../navbar.php"?>
+
+    <?php include("../navbar.php"); ?>
+
     <div class="container mt-5">
         <h2 class="mb-4 text-center">Share Your Recipe</h2>
 
@@ -97,10 +99,12 @@ mysqli_close($con);
             </div>
         </form>
         <!-- Form End -->
+        <br>
     </div>
 
     <!-- Bootstrap JS (optional for features like modals, dropdowns, etc.) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <?php include '../footer.php'; ?>
 
 </body>
 
