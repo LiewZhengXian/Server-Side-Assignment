@@ -14,6 +14,7 @@ session_start();
         body {
             background-color: #f8f9fa;
         }
+
         .login-container {
             max-width: 400px;
             margin: 100px auto;
@@ -22,11 +23,13 @@ session_start();
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
             background-color: #fff;
         }
+
         .form-title {
             text-align: center;
             margin-bottom: 30px;
             color: #333;
         }
+
         .btn-login {
             width: 100%;
             padding: 10px;
@@ -34,10 +37,12 @@ session_start();
             margin-top: 20px;
             font-weight: 600;
         }
+
         .links {
             text-align: center;
             margin-top: 20px;
         }
+
         .alert {
             margin-bottom: 20px;
         }
@@ -54,7 +59,8 @@ session_start();
             $password = stripslashes($_REQUEST['password']);
             $password = mysqli_real_escape_string($con, $password);
 
-            $query = "SELECT user_id, username, email FROM `user` WHERE email='$email' AND password='" . md5($password) . "'";
+            // Fetch user details including isAdmin
+            $query = "SELECT user_id, username, email, isAdmin FROM `User` WHERE email='$email' AND password='" . md5($password) . "'";
             $result = mysqli_query($con, $query) or die(mysqli_error($con));
             $rows = mysqli_num_rows($result);
 
@@ -63,6 +69,7 @@ session_start();
                 $_SESSION['user_id'] = $user['user_id'];
                 $_SESSION['username'] = $user['username'];
                 $_SESSION['email'] = $user['email'];
+                $_SESSION['isAdmin'] = $user['isAdmin']; // Store isAdmin in session
 
                 header("Location: ../index.php");
                 exit();
@@ -78,24 +85,24 @@ session_start();
             }
         } else {
         ?>
-        <div class="login-container">
-            <h1 class="form-title">Welcome Back</h1>
-            <form action="" method="post" name="login">
-                <div class="mb-3">
-                    <label for="email" class="form-label">Email Address</label>
-                    <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required>
+            <div class="login-container">
+                <h1 class="form-title">Welcome Back</h1>
+                <form action="" method="post" name="login">
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email Address</label>
+                        <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required>
+                    </div>
+                    <button type="submit" name="submit" class="btn btn-primary btn-login">Login</button>
+                </form>
+                <div class="links">
+                    <p class="mt-3">Forgot Password? <a href="forgot_password.php">Reset Here</a></p>
+                    <p>Not registered yet? <a href="registration.php">Register Here</a></p>
                 </div>
-                <div class="mb-3">
-                    <label for="password" class="form-label">Password</label>
-                    <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required>
-                </div>
-                <button type="submit" name="submit" class="btn btn-primary btn-login">Login</button>
-            </form>
-            <div class="links">
-                <p class="mt-3">Forgot Password? <a href="forgot_password.php">Reset Here</a></p>
-                <p>Not registered yet? <a href="registration.php">Register Here</a></p>
             </div>
-        </div>
         <?php } ?>
     </div>
 

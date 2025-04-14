@@ -3,6 +3,8 @@ session_start();
 require '../user_module/database.php';
 
 $user_id = $_SESSION['user_id'];
+$isAdmin = $_SESSION['isAdmin']; // Check if the user is an admin
+
 
 // Fetch all cuisines and categories for filters
 $cuisines = $con->query("SELECT * FROM Cuisine");
@@ -53,91 +55,89 @@ $result = $con->query($sql);
         .category-column {
             width: 15%;
         }
+
+        .search-bar {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .table-container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-header {
+            background-color: #343a40;
+            color: #ffffff;
+        }
+
+        .modal-title {
+            font-weight: bold;
+        }
     </style>
 </head>
 
 <body>
+    <?php if (isset($_SESSION['success'])): ?>
+        <script>
+            alert("<?php echo $_SESSION['success']; ?>");
+        </script>
+        <?php unset($_SESSION['success']); ?>
+    <?php endif; ?>
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
-            <a class="navbar-brand" href="#">Recipe Hub</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'index.php' ? 'active' : ''; ?>" href="../index.php">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'recipe.php' ? 'active' : ''; ?>" href="recipe.php">Recipes</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="mealPlanningDropdown" role="button" data-bs-toggle="dropdown">
-                            Meal Planning
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Plan a Meal</a></li>
-                            <li><a class="dropdown-item" href="#">View Schedule</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="./Community.php">Community</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Competitions</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="../user_module/logout.php">Logout</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <?php include("../navbar.php"); ?>
 
     <!-- Recipe Management Controls -->
     <div class="container mt-4">
-        <h2 class="mb-3">Recipe Management</h2>
-        <div class="d-flex justify-content-between mb-3">
-            <a href="add_recipe.php" class="btn btn-primary">Add Recipe</a>
+        <h2 class="mb-4 text-center">Recipe Management</h2>
+
+        <!-- Add Recipe Button -->
+        <div class="d-flex justify-content-end mb-3">
+            <a href="add_recipe.php" class="btn btn-success btn-lg">+ Add Recipe</a>
         </div>
 
         <!-- Search and Filter Form -->
-        <form id="searchForm" class="mb-3">
-            <div class="row">
-                <div class="col-md-3">
-                    <input type="text" class="form-control" id="searchTitle" placeholder="Search by recipe name">
+        <div class="search-bar mb-4">
+            <form id="searchForm">
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <input type="text" class="form-control" id="searchTitle" placeholder="Search by recipe name">
+                    </div>
+                    <div class="col-md-3">
+                        <select class="form-control" id="filterCuisine">
+                            <option value="">All Cuisines</option>
+                            <?php while ($row = $cuisines->fetch_assoc()) { ?>
+                                <option value="<?php echo $row['cuisine_name']; ?>"><?php echo $row['cuisine_name']; ?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <select class="form-control" id="filterCategory">
+                            <option value="">All Categories</option>
+                            <?php while ($row = $categories->fetch_assoc()) { ?>
+                                <option value="<?php echo $row['category_name']; ?>"><?php echo $row['category_name']; ?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <select class="form-control" id="filterOwnership">
+                            <option value="all">All Recipes</option>
+                            <option value="my">My Recipes</option>
+                        </select>
+                    </div>
+                    <div class="col-md-1">
+                        <button type="button" class="btn btn-primary w-100" onclick="searchRecipes()">Search</button>
+                    </div>
                 </div>
-                <div class="col-md-3">
-                    <select class="form-control" id="filterCuisine">
-                        <option value="">All Cuisines</option>
-                        <?php while ($row = $cuisines->fetch_assoc()) { ?>
-                            <option value="<?php echo $row['cuisine_name']; ?>"><?php echo $row['cuisine_name']; ?></option>
-                        <?php } ?>
-                    </select>
-                </div>
-                <div class="col-md-3">
-                    <select class="form-control" id="filterCategory">
-                        <option value="">All Categories</option>
-                        <?php while ($row = $categories->fetch_assoc()) { ?>
-                            <option value="<?php echo $row['category_name']; ?>"><?php echo $row['category_name']; ?></option>
-                        <?php } ?>
-                    </select>
-                </div>
-                <div class="col-md-2">
-                    <select class="form-control" id="filterOwnership">
-                        <option value="all">All Recipes</option>
-                        <option value="my">My Recipes</option>
-                    </select>
-                </div>
-                <div class="col-md-1">
-                    <button type="button" class="btn btn-primary" onclick="searchRecipes()">Search</button>
-                </div>
-            </div>
-        </form>
+            </form>
+        </div>
 
         <!-- Recipe Table -->
-        <div class="table-responsive">
+        <div class="table-container">
             <table class="table table-striped table-hover table-bordered text-center" id="recipeTable">
                 <thead class="table-dark">
                     <tr>
@@ -152,14 +152,14 @@ $result = $con->query($sql);
                     <?php while ($row = $result->fetch_assoc()) { ?>
                         <tr data-user-id="<?php echo $row['user_id']; ?>" data-title="<?php echo htmlspecialchars($row['title']); ?>" data-cuisine="<?php echo htmlspecialchars($row['cuisine_name']); ?>" data-category="<?php echo htmlspecialchars($row['category_name']); ?>">
                             <td><?php echo htmlspecialchars($row['title']); ?></td>
-                            <td align=left><?php echo htmlspecialchars($row['description']); ?></td>
+                            <td align="left"><?php echo htmlspecialchars($row['description']); ?></td>
                             <td><?php echo htmlspecialchars($row['cuisine_name']); ?></td>
                             <td><?php echo htmlspecialchars($row['category_name']); ?></td>
                             <td>
                                 <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#viewModal"
                                     onclick="loadRecipeDetails(<?php echo $row['recipe_id']; ?>)">View</button>
-                                <?php if ($row['user_id'] == $user_id) { ?>
-                                    <a href="edit_recipe.php?id=<?php echo $row['recipe_id']; ?>" class="btn btn-warning btn-sm">Edit</a>
+                                <?php if ($row['user_id'] == $user_id || $isAdmin == 1) { ?>
+                                    <a href="edit_recipe.php?recipe_id=<?php echo $row['recipe_id']; ?>" class="btn btn-warning btn-sm">Edit</a>
                                     <button class="btn btn-danger btn-sm" onclick="confirmDelete(<?php echo $row['recipe_id']; ?>)">Delete</button>
                                 <?php } ?>
                             </td>
@@ -174,7 +174,7 @@ $result = $con->query($sql);
     <div class="modal fade" id="viewModal" tabindex="-1">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
-                <div class="modal-header border-0">
+                <div class="modal-header">
                     <h5 class="modal-title">Recipe Details</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
@@ -185,10 +185,11 @@ $result = $con->query($sql);
         </div>
     </div>
 
+
     <script>
         function loadRecipeDetails(recipeId) {
             const xhr = new XMLHttpRequest();
-            xhr.open("GET", "view_recipe.php?id=" + recipeId, true);
+            xhr.open("GET", "view_recipe.php?recipe_id=" + recipeId, true);
             xhr.onload = function() {
                 if (this.status === 200) {
                     document.getElementById("recipeDetails").innerHTML = this.responseText;
@@ -199,7 +200,7 @@ $result = $con->query($sql);
 
         function confirmDelete(recipeId) {
             if (confirm("Are you sure you want to delete this recipe?")) {
-                window.location.href = "delete_recipe.php?id=" + recipeId;
+                window.location.href = "delete_recipe.php?recipe_id=" + recipeId;
             }
         }
 
@@ -228,8 +229,42 @@ $result = $con->query($sql);
                 }
             });
         }
+
+        // Save search data to sessionStorage
+        function saveSearchData() {
+            const searchTitle = document.getElementById('searchTitle').value;
+            const filterCuisine = document.getElementById('filterCuisine').value;
+            const filterCategory = document.getElementById('filterCategory').value;
+            const filterOwnership = document.getElementById('filterOwnership').value;
+
+            sessionStorage.setItem('searchTitle', searchTitle);
+            sessionStorage.setItem('filterCuisine', filterCuisine);
+            sessionStorage.setItem('filterCategory', filterCategory);
+            sessionStorage.setItem('filterOwnership', filterOwnership);
+        }
+
+        // Restore search data from sessionStorage
+        function restoreSearchData() {
+            const searchTitle = sessionStorage.getItem('searchTitle');
+            const filterCuisine = sessionStorage.getItem('filterCuisine');
+            const filterCategory = sessionStorage.getItem('filterCategory');
+            const filterOwnership = sessionStorage.getItem('filterOwnership');
+
+            if (searchTitle !== null) document.getElementById('searchTitle').value = searchTitle;
+            if (filterCuisine !== null) document.getElementById('filterCuisine').value = filterCuisine;
+            if (filterCategory !== null) document.getElementById('filterCategory').value = filterCategory;
+            if (filterOwnership !== null) document.getElementById('filterOwnership').value = filterOwnership;
+
+            // Optionally trigger the search function to filter results on page load
+            searchRecipes();
+        }
+
+        // Attach event listeners
+        document.getElementById('searchForm').addEventListener('input', saveSearchData);
+        window.addEventListener('load', restoreSearchData);
     </script>
 
+    <?php include '../footer.php'; ?>
 </body>
 
 </html>
