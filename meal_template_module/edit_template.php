@@ -277,6 +277,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <?php endforeach; ?>
 
             <button type="submit" class="btn btn-primary">Update Template</button>
+            <a href="list_templates.php" class="btn btn-secondary">Cancel</a>
         </form>
     </div>
 
