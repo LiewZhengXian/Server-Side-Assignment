@@ -208,7 +208,27 @@ INSERT INTO User (username, email, password, isAdmin) VALUES
 ('foodie_lisa', 'lisa@foodblog.com', '$2y$10$6aXvPlKPzEXHBsY4LDaQc.Nkch3xIX.7MWdrXMXg5XNvuJMD3PnKO', 0),
 ('cooking_dad', 'dad@familyrecipes.com', '$2y$10$Z7kUBRDg3cLVx2fvwQvVKOIlCd0jCQH9bIEEYAVi3/WJHmcniPNJ2', 0),
 ('test1', 'test1@gmail.com', '5a105e8b9d40e1329780d62ea2265d8a', 0),
-('admin1', 'admin1@gmail.com', 'e00cf25ad42683b3df678c61f42c6bda', 1);
+('admin1', 'admin1@gmail.com', 'e00cf25ad42683b3df678c61f42c6bda', 1),
+('gordon_ramsey', 'gordon_ramsey@flavorvault.org', MD5('abcd12341'), 0),
+('uncle_roger', 'uncle_roger@flavorvault.org', MD5('abcd12342'), 0),
+('cathy_liu', 'cathy_liu@tastybite.net', MD5('abcd12343'), 0),
+('daniel_ross', 'daniel_ross@flavorvault.org', MD5('abcd12344'), 0),
+('emily_tan', 'emily_tan@foodlover.net', MD5('abcd12345'), 0),
+('felix_ng', 'felix_ng@tastybite.net', MD5('abcd12346'), 0),
+('grace_cho', 'grace_cho@recipemail.info', MD5('abcd12347'), 0),
+('harry_lee', 'harry_lee@recipemail.info', MD5('abcd12348'), 0),
+('ivy_lim', 'ivy_lim@bakersmail.com', MD5('abcd12349'), 0),
+('jackson_yap', 'jackson_yap@bakersmail.com', MD5('abcd123410'), 0),
+('karen_ong', 'karen_ong@foodlover.net', MD5('abcd123411'), 0),
+('leon_ho', 'leon_ho@yumrecipes.io', MD5('abcd123412'), 0),
+('michelle_foo', 'michelle_foo@mailme.org', MD5('abcd123413'), 0),
+('nathan_wong', 'nathan_wong@bakersmail.com', MD5('abcd123414'), 0),
+('olivia_teh', 'olivia_teh@yumrecipes.io', MD5('abcd123415'), 0),
+('peter_chin', 'peter_chin@bakersmail.com', MD5('abcd123416'), 0),
+('quincy_lam', 'quincy_lam@cookmail.com', MD5('abcd123417'), 0),
+('rachel_toh', 'rachel_toh@flavorvault.org', MD5('abcd123418'), 0),
+('samuel_khoo', 'samuel_khoo@yumrecipes.io', MD5('abcd123419'), 0),
+('tina_loke', 'tina_loke@cookmail.com', MD5('abcd123420'), 0);
 
 
 -- Cuisines
@@ -293,30 +313,147 @@ VALUES
     ('Valentine''s Dessert Duel', 'https://foxeslovelemons.com/wp-content/uploads/2022/02/Valentine-Dessert-Foxes-Love-Lemons.jpg', 'Chefs competed to create the most romantic dessert.', '2025-02-10 10:00:00', '2025-02-14 15:00:00');
 
 -- Insert dummy data into competition_submission
+-- For each competition (1-5), create multiple submissions from users 8-25
+-- Note: Competition 3 is upcoming, so there are no submissions for it
 INSERT INTO competition_submission (competition_id, user_id, recipe_id, submission_date) VALUES
-(1, 2, 4, '2025-03-28 12:00:00'),
-(2, 4, 2, '2025-03-28 14:00:00'),
-(4, 5, 5, '2025-04-11 10:30:00'),
-(4, 1, 3, '2025-04-12 16:15:00'),
-(5, 3, 1, '2025-08-21 09:45:00');
+-- Competition 1 submissions (completed)
+(1, 8, 3, '2025-02-15 09:12:34'),  -- submission_id = 6
+(1, 11, 2, '2025-02-17 14:23:45'), -- submission_id = 7
+(1, 15, 5, '2025-02-18 10:45:12'), -- submission_id = 8
+(1, 19, 1, '2025-02-18 16:30:00'), -- submission_id = 9
+(1, 23, 4, '2025-02-19 11:22:33'), -- submission_id = 10
+
+-- Competition 2 submissions (ongoing)
+(2, 9, 1, '2025-03-05 08:15:00'),   -- submission_id = 11
+(2, 12, 4, '2025-03-06 13:40:22'),  -- submission_id = 12
+(2, 16, 3, '2025-03-07 17:25:14'),  -- submission_id = 13
+(2, 20, 5, '2025-03-08 09:52:11'),  -- submission_id = 14
+(2, 24, 2, '2025-03-08 15:18:40'),  -- submission_id = 15
+(2, 10, 1, '2025-03-08 23:59:59'),  -- submission_id = 16
+
+-- Competition 4 submissions (completed)
+(4, 10, 4, '2025-04-08 08:30:00'),  -- submission_id = 17
+(4, 14, 1, '2025-04-09 11:45:22'),  -- submission_id = 18
+(4, 18, 5, '2025-04-10 15:20:17'),  -- submission_id = 19
+(4, 22, 2, '2025-04-11 09:12:34'),  -- submission_id = 20
+(4, 8, 3, '2025-04-11 17:30:00'),   -- submission_id = 21
+(4, 12, 4, '2025-04-12 10:05:55'),  -- submission_id = 22
+(4, 16, 1, '2025-04-12 14:22:38'),  -- submission_id = 23
+
+-- Competition 5 submissions (completed)
+(5, 9, 2, '2025-07-15 09:00:00'),   -- submission_id = 24
+(5, 13, 5, '2025-07-16 12:34:56'),  -- submission_id = 25
+(5, 17, 1, '2025-07-17 14:15:27'),  -- submission_id = 26
+(5, 21, 3, '2025-07-18 16:38:42'),  -- submission_id = 27
+(5, 25, 4, '2025-07-19 10:20:30'),  -- submission_id = 28
+(5, 11, 2, '2025-07-19 15:45:19'),  -- submission_id = 29
+(5, 15, 5, '2025-07-20 08:55:12'),  -- submission_id = 30
+(5, 19, 1, '2025-07-20 13:27:43');  -- submission_id = 31
 
 -- Insert dummy data into competition_vote
+-- Users can vote for submissions they didn't create
+-- Note: No votes for competition 3 as it's upcoming
 INSERT INTO competition_vote (submission_id, user_id, vote_date) VALUES
-(1, 3, '2025-03-29 10:00:00'),
-(1, 1, '2025-03-29 11:30:00'),
-(3, 4, '2025-03-30 14:00:00'),
-(3, 2, '2025-04-12 15:20:00'),
-(5, 1, '2025-04-13 17:45:00'),
-(2, 5, '2025-04-05 22:30:00'),
-(1, 5, '2025-04-08 16:20:00');
+-- Votes for Competition 1 submissions (completed)
+(6, 9, '2025-02-20 10:15:00'),
+(6, 10, '2025-02-20 11:22:33'),
+(6, 12, '2025-02-21 09:30:45'),
+(6, 13, '2025-02-21 14:55:21'),
+(7, 10, '2025-02-22 12:05:15'),
+(7, 14, '2025-02-22 18:20:37'),
+(8, 9, '2025-02-23 08:45:00'),
+(8, 12, '2025-02-23 13:15:29'),
+(8, 13, '2025-02-24 10:30:42'),
+(9, 8, '2025-02-24 15:10:18'),
+(9, 11, '2025-02-25 09:55:33'),
+(10, 9, '2025-02-25 14:20:05'),
+(10, 14, '2025-02-26 11:35:48'),
+
+-- Votes for Competition 2 submissions (ongoing)
+(11, 8, '2025-03-09 09:10:00'),
+(11, 11, '2025-03-09 12:22:15'),
+(11, 13, '2025-03-10 14:05:38'),
+(12, 10, '2025-03-10 16:30:42'),
+(12, 14, '2025-03-11 08:45:19'),
+(12, 15, '2025-03-11 13:18:27'),
+(13, 9, '2025-03-12 10:25:33'),
+(13, 11, '2025-03-12 15:40:51'),
+(14, 8, '2025-03-13 09:15:08'),
+(14, 13, '2025-03-13 14:30:22'),
+(15, 10, '2025-03-14 11:20:37'),
+(15, 12, '2025-03-14 16:45:59'),
+(16, 13, '2025-04-15 09:05:10'),
+(16, 15, '2025-04-15 13:25:48'),
+
+-- Votes for Competition 4 submissions (completed)
+(17, 9, '2025-04-13 09:30:00'),
+(17, 11, '2025-04-13 14:45:15'),
+(17, 13, '2025-04-14 10:15:27'),
+(18, 8, '2025-04-14 15:30:39'),
+(18, 12, '2025-04-15 11:45:52'),
+(18, 15, '2025-04-15 17:00:18'),
+(19, 9, '2025-04-16 08:20:33'),
+(19, 14, '2025-04-16 13:40:45'),
+(20, 11, '2025-04-17 09:55:57'),
+(20, 13, '2025-04-17 15:10:12'),
+(21, 8, '2025-04-18 11:25:24'),
+(21, 15, '2025-04-18 16:40:36'),
+(22, 9, '2025-04-19 08:55:48'),
+(22, 12, '2025-04-19 14:10:03'),
+(23, 11, '2025-04-20 10:25:15'),
+(23, 14, '2025-04-20 15:40:27'),
+
+-- Votes for Competition 5 submissions (completed)
+(24, 8, '2025-07-21 10:00:00'),
+(24, 10, '2025-07-21 15:15:22'),
+(24, 12, '2025-07-22 11:30:33'),
+(25, 14, '2025-07-22 16:45:45'),
+(25, 16, '2025-07-23 08:00:57'),
+(25, 18, '2025-07-23 13:15:09'),
+(24, 20, '2025-07-24 09:30:21'),
+(24, 22, '2025-07-24 14:45:33'),
+(24, 24, '2025-07-25 10:00:45'),
+(23, 8, '2025-07-25 15:15:57'),
+(23, 12, '2025-07-26 11:30:09'),
+(23, 16, '2025-07-26 16:45:21'),
+(22, 20, '2025-07-27 08:00:33'),
+(22, 24, '2025-07-27 13:15:45'),
+(21, 10, '2025-07-28 09:30:57'),
+(21, 14, '2025-07-28 14:45:09'),
+(20, 18, '2025-07-29 10:00:21'),
+(20, 22, '2025-07-29 15:15:33'),
+(19, 8, '2025-07-30 11:30:45'),
+(19, 16, '2025-07-30 16:45:57');
 
 -- Insert dummy data into competition_result
+-- Only top 3 rankings get prizes, others have NULL for prize
+-- Note: No results for competition 2 (ongoing) or competition 3 (upcoming)
 INSERT INTO competition_result (competition_id, submission_id, rank, prize) VALUES
-(1, 1, 1, 'RM5000 Cash'),
-(2, 1, 2, 'RM3000 Cash'),
-(3, 4, 3, 'RM4000 Cash'),
-(4, 4, 4, 'RM2000 Cash'),
-(5, 5, 1, 'RM6000 Cash');
+-- Results for Competition 1 (completed)
+(1, 8, 1, 'RM5000 Cash'),
+(1, 10, 2, 'RM3000 Cash'),
+(1, 7, 3, 'RM1500 Cash'),
+(1, 9, 4, NULL),
+(1, 6, 5, NULL),
+
+-- Results for Competition 4 (completed)
+(4, 19, 1, 'RM5500 Cash'),
+(4, 23, 2, 'RM3200 Cash'),
+(4, 17, 3, 'RM1800 Cash'),
+(4, 21, 4, NULL),
+(4, 20, 5, NULL),
+(4, 18, 6, NULL),
+(4, 22, 7, NULL),
+
+-- Results for Competition 5 (completed)
+(5, 25, 1, 'RM7000 Cash'),
+(5, 10, 2, 'RM4000 Cash'),
+(5, 13, 3, 'RM2500 Cash'),
+(5, 14, 4, NULL),
+(5, 17, 5, NULL),
+(5, 21, 6, NULL),
+(5, 25, 7, NULL),
+(5, 19, 8, NULL);
 
 -- Meal Plans
 INSERT INTO meal_plans (meal_id, user_id, meal_name, meal_date, meal_time, meal_type, created_at, recipe_id, custom_meal, duration, updated_at) VALUES
