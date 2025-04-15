@@ -1,7 +1,7 @@
 <?php
 session_start();
 include '../user_module/database.php';
-
+include '../user_module/auth.php';
 
 $sql = "SELECT p.post_id, p.title, p.content, 
        r.title AS recipe_title, r.description AS recipe_desc, 
