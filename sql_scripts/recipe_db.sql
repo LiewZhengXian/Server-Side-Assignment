@@ -207,8 +207,8 @@ INSERT INTO User (username, email, password, isAdmin) VALUES
 ('chef_mike', 'mike@cookingpro.com', '$2y$10$GtERfCHrxCOcfujO5Vwbteq6gzCBIHyqWmGsKEYCUYiGkYNFCIp6a', 0),
 ('foodie_lisa', 'lisa@foodblog.com', '$2y$10$6aXvPlKPzEXHBsY4LDaQc.Nkch3xIX.7MWdrXMXg5XNvuJMD3PnKO', 0),
 ('cooking_dad', 'dad@familyrecipes.com', '$2y$10$Z7kUBRDg3cLVx2fvwQvVKOIlCd0jCQH9bIEEYAVi3/WJHmcniPNJ2', 0),
-('test1', 'test1@gmail.com', 'test1', 0),
-('admin1', 'admin1@gmail.com', 'admin1', 1);
+('test1', 'test1@gmail.com', '5a105e8b9d40e1329780d62ea2265d8a', 0),
+('admin1', 'admin1@gmail.com', 'e00cf25ad42683b3df678c61f42c6bda', 1);
 
 
 -- Cuisines

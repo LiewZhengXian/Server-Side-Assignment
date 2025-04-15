@@ -91,8 +91,8 @@ CREATE TABLE Comment (
     post_id INT,
     content TEXT NOT NULL,
     creation_datetime DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES User(user_id),
-    FOREIGN KEY (post_id) REFERENCES Post(post_id)
+    FOREIGN KEY (user_id) REFERENCES User(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (post_id) REFERENCES Post(post_id) ON DELETE CASCADE
 );
 
 -- Rating table
@@ -101,8 +101,8 @@ CREATE TABLE Rating (
     user_id INT,
     post_id INT,
     rating_value INT NOT NULL CHECK (rating_value BETWEEN 1 AND 5),
-    FOREIGN KEY (user_id) REFERENCES User(user_id),
-    FOREIGN KEY (post_id) REFERENCES Post(post_id)
+    FOREIGN KEY (user_id) REFERENCES User(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (post_id) REFERENCES Post(post_id) ON DELETE CASCADE
 );
 
 -- Table for competitions

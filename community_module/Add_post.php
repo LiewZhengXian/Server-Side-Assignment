@@ -45,6 +45,7 @@ if (isset($_POST['post_title']) && isset($_POST['post_description'])) {
 
 <body>
     <!-- Navbar -->
+
     <?php include("../navbar.php"); ?>
 
     <div class="container mt-5">
@@ -72,8 +73,8 @@ if (isset($_POST['post_title']) && isset($_POST['post_description'])) {
             <div class="row mb-3">
                 <label for="selected_recipe" class="col-sm-2 col-form-label">Select an Existing Recipe</label>
                 <div class="col-sm-10">
-                    <select class="form-control" name="selected_recipe" id="selected_recipe">
-                        <option value="">Select a Recipe or Leave Empty</option>
+                    <select class="form-control" name="selected_recipe" id="selected_recipe" required>
+                        <option value="">Select a Recipe </option>
                         <?php
                         // Your SQL query to fetch recipes
                         $sel_query = "SELECT r.title ,r.recipe_id
