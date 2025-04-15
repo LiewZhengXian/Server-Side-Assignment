@@ -170,9 +170,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             <div class="mb-3">
                 <label for="description" class="form-label">Description</label>
-                <textarea class="form-control" id="description" name="description" rows="3"><?=
-                                                                                            htmlspecialchars($template['description'] ?? '')
-                                                                                            ?></textarea>
+                <textarea class="form-control" id="description" name="description" rows="3"><?= 
+                    htmlspecialchars($template['description'] ?? '') 
+                ?></textarea>
             </div>
 
             <?php foreach ($days as $day): ?>
