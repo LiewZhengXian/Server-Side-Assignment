@@ -1,5 +1,6 @@
 <?php
 session_start();
+ob_start(); // Start output buffering
 ?>
 <!DOCTYPE html>
 <html>
@@ -50,6 +51,8 @@ session_start();
 </head>
 
 <body>
+    <!-- Navbar -->
+    <?php include("../navbar.php"); ?>
     <div class="container">
         <?php
         require('database.php');
@@ -103,7 +106,7 @@ session_start();
             }
         ?>
             <div class="login-container">
-                <h1 class="form-title">Welcome Back</h1>
+                <h1 class="form-title">Login</h1>
                 <form action="" method="post" name="login">
                     <div class="mb-3">
                         <label for="email" class="form-label">Email Address</label>
@@ -125,6 +128,12 @@ session_start();
 
     <!-- Bootstrap JS Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <?php include '../footer.php'; ?>
+
 </body>
 
 </html>
+<?php
+ob_end_flush(); // Flush the output buffer
+?>

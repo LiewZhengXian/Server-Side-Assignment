@@ -1,6 +1,7 @@
 <?php
 include '../user_module/database.php';
-session_start();
+include("../user_module/auth.php");
+
 
 if (!isset($_SESSION['user_id'])) {
     header("Location: ../user_module/login.php");

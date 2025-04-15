@@ -1,4 +1,6 @@
 <?php
+include("../user_module/auth.php");
+
 // Fetch cuisines and categories for dropdowns
 $cuisines = $con->query("SELECT * FROM Cuisine");
 $categories = $con->query("SELECT * FROM Category");

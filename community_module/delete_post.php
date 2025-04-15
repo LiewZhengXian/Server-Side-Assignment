@@ -1,5 +1,5 @@
 <?php
-session_start();
+include("../user_module/auth.php");
 require '../user_module/database.php';
 
 if ($_SESSION['isAdmin'] != 1) {
