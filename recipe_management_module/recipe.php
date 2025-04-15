@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 // Check if the user is logged in and if isAdmin is set
 if (isset($_SESSION['isAdmin'])) {
     if ($_SESSION['isAdmin'] == 1) {
