@@ -70,7 +70,7 @@ session_start();
                 $_SESSION['username'] = $user['username'];
                 $_SESSION['email'] = $user['email'];
                 $_SESSION['isAdmin'] = $user['isAdmin']; // Store isAdmin in session
-
+        
                 header("Location: ../index.php");
                 exit();
             } else {
@@ -84,20 +84,26 @@ session_start();
                 </div>";
             }
         } else {
-        ?>
+            ?>
             <div class="login-container">
                 <h1 class="form-title">Welcome Back</h1>
                 <form action="" method="post" name="login">
                     <div class="mb-3">
                         <label for="email" class="form-label">Email Address</label>
-                        <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required>
+                        <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email"
+                            required>
                     </div>
                     <div class="mb-3">
                         <label for="password" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required>
+                        <input type="password" class="form-control" id="password" name="password"
+                            placeholder="Enter your password" required>
                     </div>
                     <button type="submit" name="submit" class="btn btn-primary btn-login">Login</button>
                 </form>
+                <p>
+                    <label class="form-label">Remember Me</label>
+                    <input type="checkbox" name="remember_me" id="remember_me">
+                </p>
                 <div class="links">
                     <p class="mt-3">Forgot Password? <a href="forgot_password.php">Reset Here</a></p>
                     <p>Not registered yet? <a href="registration.php">Register Here</a></p>
