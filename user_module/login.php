@@ -70,9 +70,6 @@ session_start();
                 $_SESSION['username'] = $user['username'];
                 $_SESSION['email'] = $user['email'];
                 $_SESSION['isAdmin'] = $user['isAdmin']; // Store isAdmin in session
-<<<<<<< HEAD
-        
-=======
 
                 // If the user is not an admin, store login details in cookies
                 if ($user['isAdmin'] == 0) {
@@ -81,7 +78,6 @@ session_start();
                     setcookie("email", $user['email'], time() + (86400 * 7), "/");
                 }
 
->>>>>>> 6c98f9400631884b66e32210b5347f48015b65ef
                 header("Location: ../index.php");
                 exit();
             } else {
@@ -95,9 +91,6 @@ session_start();
                 </div>";
             }
         } else {
-<<<<<<< HEAD
-            ?>
-=======
             // Check if user cookies exist and log in automatically
             if (isset($_COOKIE['user_id']) && isset($_COOKIE['username']) && isset($_COOKIE['email'])) {
                 $_SESSION['user_id'] = $_COOKIE['user_id'];
@@ -109,7 +102,6 @@ session_start();
                 exit();
             }
         ?>
->>>>>>> 6c98f9400631884b66e32210b5347f48015b65ef
             <div class="login-container">
                 <h1 class="form-title">Welcome Back</h1>
                 <form action="" method="post" name="login">
