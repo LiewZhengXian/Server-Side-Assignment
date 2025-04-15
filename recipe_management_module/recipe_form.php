@@ -49,6 +49,13 @@ $ingredients = $con->query("SELECT * FROM Ingredient");
 </head>
 
 <body>
+    <!-- Display Error Alert -->
+    <?php if (isset($_SESSION['error'])): ?>
+        <script>
+            alert("<?php echo htmlspecialchars($_SESSION['error']); ?>");
+        </script>
+        <?php unset($_SESSION['error']); ?>
+    <?php endif; ?>
     <!-- Navbar -->
     <?php include("../navbar.php"); ?>
 
@@ -107,15 +114,15 @@ $ingredients = $con->query("SELECT * FROM Ingredient");
                 <div class="row mb-3">
                     <div class="col-md-3">
                         <label class="form-label">Prep Time (minutes)</label>
-                        <input type="number" class="form-control" name="prep_time" id="prep_time" min="0" value="<?php echo htmlspecialchars($recipe['prep_time'] ?? ''); ?>" required>
+                        <input type="number" class="form-control" name="prep_time" id="prep_time" min="0.01" step="any" value="<?php echo htmlspecialchars($recipe['prep_time'] ?? ''); ?>" required>
                     </div>
                     <div class="col-md-3">
                         <label class="form-label">Cook Time (minutes)</label>
-                        <input type="number" class="form-control" name="cook_time" id="cook_time" min="0" value="<?php echo htmlspecialchars($recipe['cook_time'] ?? ''); ?>" required>
+                        <input type="number" class="form-control" name="cook_time" id="cook_time" min="0.01" step="any" value="<?php echo htmlspecialchars($recipe['cook_time'] ?? ''); ?>" required>
                     </div>
                     <div class="col-md-3">
                         <label class="form-label">Servings</label>
-                        <input type="number" class="form-control" name="servings" id="servings" min="0" value="<?php echo htmlspecialchars($recipe['servings'] ?? ''); ?>" required>
+                        <input type="number" class="form-control" name="servings" id="servings" min="1" value="<?php echo htmlspecialchars($recipe['servings'] ?? ''); ?>" required>
                     </div>
                     <div class="col-md-3">
                         <label class="form-label">Spicy</label>
@@ -142,7 +149,7 @@ $ingredients = $con->query("SELECT * FROM Ingredient");
                                         </datalist>
                                     </div>
                                     <div class="col-md-2">
-                                        <input type="number" step="any" class="form-control" name="quantities[]" value="<?php echo htmlspecialchars($ingredient['quantity']); ?>" placeholder="Quantity" min="0" required>
+                                        <input type="number" step="any" class="form-control" name="quantities[]" value="<?php echo htmlspecialchars($ingredient['quantity']); ?>" placeholder="Quantity" min="0.01" step="any" required>
                                     </div>
                                     <div class="col-md-2">
                                         <input type="text" class="form-control" name="units[]" value="<?php echo htmlspecialchars($ingredient['units']); ?>" placeholder="Units" required>
@@ -163,7 +170,7 @@ $ingredients = $con->query("SELECT * FROM Ingredient");
                                     </datalist>
                                 </div>
                                 <div class="col-md-2">
-                                    <input type="number" step="any" class="form-control" name="quantities[]" placeholder="Quantity" min="0" required>
+                                    <input type="number" step="any" class="form-control" name="quantities[]" placeholder="Quantity" min="0.01" step="any" required>
                                 </div>
                                 <div class="col-md-2">
                                     <input type="text" class="form-control" name="units[]" placeholder="Units" required>
@@ -239,7 +246,7 @@ $ingredients = $con->query("SELECT * FROM Ingredient");
                 </datalist>
             </div>
             <div class="col-md-2">
-                <input type="number" step="any" class="form-control" name="quantities[]" placeholder="Quantity" min="0" required>
+                <input type="number" step="any" class="form-control" name="quantities[]" placeholder="Quantity" min="0.01" step="any" required>
             </div>
             <div class="col-md-2">
                 <input type="text" class="form-control" name="units[]" placeholder="Units" required>

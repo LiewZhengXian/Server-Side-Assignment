@@ -107,11 +107,11 @@
 
                     <!-- Recipes Dropdown -->
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle <?php echo in_array(basename($_SERVER['PHP_SELF']), ['recipe.php', 'add_recipe.php', 'edit_recipe.php']) ? 'active' : ''; ?>" href="#" id="recipesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle <?php echo in_array(basename($_SERVER['PHP_SELF']), ['recipe.php', 'recipe_user.php', 'recipe_admin.php', 'add_recipe.php', 'edit_recipe.php']) ? 'active' : ''; ?>" href="#" id="recipesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Recipes
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item <?php echo basename($_SERVER['PHP_SELF']) == 'recipe.php' ? 'active' : ''; ?>" href="/Server-Side-Assignment/recipe_management_module/recipe.php">View Recipes</a></li>
+                            <li><a class="dropdown-item <?php echo (basename($_SERVER['PHP_SELF']) == 'recipe.php' || (basename($_SERVER['PHP_SELF']) == 'recipe_admin.php') || (basename($_SERVER['PHP_SELF']) == 'recipe_user.php')) ? 'active' : ''; ?>" href="/Server-Side-Assignment/recipe_management_module/recipe.php">View Recipes</a></li>
                             <li><a class="dropdown-item <?php echo basename($_SERVER['PHP_SELF']) == 'add_recipe.php' ? 'active' : ''; ?>" href="/Server-Side-Assignment/recipe_management_module/add_recipe.php">Add Recipe</a></li>
                         </ul>
                     </li>
