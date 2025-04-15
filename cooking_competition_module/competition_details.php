@@ -199,9 +199,9 @@ $competition_end_date = strtotime($competition['end_date']);
         <p><em>Note: You can only submit one recipe for this competition.</em></p>
 
         <!-- Submit Recipe Button -->
-        <div style="text-align: center; margin: 20px auto;">
+        <div style="text-align: center; margin: 20px auto; display: none;" id="button-container"> 
             <a href="submit_recipe.php?competition_id=<?php echo $competition_id; ?>" class="submit-recipe-btn">
-                Submit Your Recipe
+                Submit Your Recipe !
             </a>
         </div>
 
@@ -225,37 +225,37 @@ $competition_end_date = strtotime($competition['end_date']);
                 </thead>
                 <tbody>
                     <?php
-                    // Fetch participants for the competition
-                    $query = "SELECT u.username, r.title, c.submission_id, r.recipe_id    
-                                    FROM Recipe r INNER JOIN User u ON r.user_id = u.user_id 
-                                    INNER JOIN competition_submission c ON r.recipe_id = c.recipe_id 
-                                    WHERE competition_id = '$competition_id'";
-                    $result = mysqli_query($con, $query);
+                        // Fetch participants for the competition
+                        $query = "SELECT u.username, r.title, c.submission_id, r.recipe_id    
+                                        FROM Recipe r INNER JOIN User u ON r.user_id = u.user_id 
+                                        INNER JOIN competition_submission c ON r.recipe_id = c.recipe_id 
+                                        WHERE competition_id = '$competition_id'";
+                        $result = mysqli_query($con, $query);
 
-                    if (mysqli_num_rows($result) > 0) {
-                        while ($row = mysqli_fetch_assoc($result)) {
-                            echo "<tr>";
-                            echo "<td>" . $row['username'] . "</td>";
-                            echo '<td>
-                                            <a href="#" 
-                                               onclick="loadRecipeDetails(' . $row['recipe_id'] . ');" 
-                                               class="text-info"
-                                               data-bs-toggle="modal"
-                                               data-bs-target="#viewModal">
-                                                ' . htmlspecialchars($row['title']) . '
-                                            </a>
-                                        </td>';
-                            echo "<td>
-                                            <form action='' method='POST' style='display:inline;'>
-                                                <input type='hidden' name='submission_id' value='" . $row['submission_id'] . "'>
-                                                <button type='submit' class='btn btn-primary'>VOTE</button>
-                                            </form>
-                                        </td>";
-                            echo "</tr>";
+                        if (mysqli_num_rows($result) > 0) {
+                            while ($row = mysqli_fetch_assoc($result)) {
+                                echo "<tr>";
+                                echo "<td>" . $row['username'] . "</td>";
+                                echo '<td>
+                                                <a href="#" 
+                                                onclick="loadRecipeDetails(' . $row['recipe_id'] . ');" 
+                                                class="text-info"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#viewModal">
+                                                    ' . htmlspecialchars($row['title']) . '
+                                                </a>
+                                            </td>';
+                                echo "<td>
+                                                <form action='' method='POST' style='display:inline;'>
+                                                    <input type='hidden' name='submission_id' value='" . $row['submission_id'] . "'>
+                                                    <button type='submit' class='btn btn-primary'>VOTE</button>
+                                                </form>
+                                            </td>";
+                                echo "</tr>";
+                            }
+                        } else {
+                            echo "<p>No participants found for this competition.</p>";
                         }
-                    } else {
-                        echo "<p>No participants found for this competition.</p>";
-                    }
                     ?>
                 </tbody>
             </table>
@@ -292,39 +292,52 @@ $competition_end_date = strtotime($competition['end_date']);
                 </thead>
                 <tbody>
                     <?php
-                    // Fetch the ranking of participants, particpants name, recipe title and total number of vote
-                    $query = "SELECT cr.rank, u.username, r.title, COUNT(cv.vote_id) AS total_votes, r.recipe_id, cs.submission_id
-                                    FROM competition_result cr
-                                    INNER JOIN competition_submission cs ON cr.submission_id = cs.submission_id
-                                    INNER JOIN Recipe r ON cs.recipe_id = r.recipe_id
-                                    INNER JOIN User u ON r.user_id = u.user_id
-                                    LEFT JOIN competition_vote cv ON cs.submission_id = cv.submission_id
-                                    WHERE cs.competition_id = '$competition_id'
-                                    GROUP BY cr.rank, u.username, r.title
-                                    ORDER BY cr.rank ASC";
-                    $result = mysqli_query($con, $query);
+                        // Fetch the ranking of participants, participants name, recipe title and total number of votes
+                        $query = "SELECT 
+                            cr.rank,
+                            u.username,
+                            r.title,
+                            r.recipe_id,
+                            COUNT(cv.vote_id) AS total_votes
+                        FROM 
+                            competition_result cr
+                            INNER JOIN competition_submission cs ON cr.submission_id = cs.submission_id
+                            INNER JOIN Recipe r ON cs.recipe_id = r.recipe_id
+                            INNER JOIN User u ON r.user_id = u.user_id
+                            LEFT JOIN competition_vote cv ON cs.submission_id = cv.submission_id
+                        WHERE 
+                            cr.competition_id = ?
+                        GROUP BY 
+                            cr.rank, u.username, r.title, r.recipe_id
+                        ORDER BY 
+                            cr.rank ASC";
+                        
+                        $stmt = mysqli_prepare($con, $query);
+                        mysqli_stmt_bind_param($stmt, "i", $competition_id);
+                        mysqli_stmt_execute($stmt);
+                        $result = mysqli_stmt_get_result($stmt);
 
-                    // Display the ranking of participants
-                    if (mysqli_num_rows($result) > 0) {
-                        while ($row = mysqli_fetch_assoc($result)) {
-                            echo "<tr>";
-                            echo "<td>" . $row['rank'] . "</td>";
-                            echo "<td>" . $row['username'] . "</td>";
-                            echo '<td>
-                                            <a href="#" 
-                                               onclick="loadRecipeDetails(' . $row['recipe_id'] . ');" 
-                                               class="text-info"
-                                               data-bs-toggle="modal"
-                                               data-bs-target="#viewModal">
-                                                ' . htmlspecialchars($row['title']) . '
-                                            </a>
-                                        </td>';
-                            echo "<td>" . $row['total_votes'] . "</td>";
-                            echo "</tr>";
+                        // Display the ranking of participants
+                        if (mysqli_num_rows($result) > 0) {
+                            while ($row = mysqli_fetch_assoc($result)) {
+                                echo "<tr>";
+                                echo "<td>" . $row['rank'] . "</td>";
+                                echo "<td>" . $row['username'] . "</td>";
+                                echo '<td>
+                                                <a href="#" 
+                                                onclick="loadRecipeDetails(' . $row['recipe_id'] . ');" 
+                                                class="text-info"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#viewModal">
+                                                    ' . htmlspecialchars($row['title']) . '
+                                                </a>
+                                            </td>';
+                                echo "<td>" . $row['total_votes'] . "</td>";
+                                echo "</tr>";
+                            }
+                        } else {
+                            echo "<p>No participants found for this competition.</p>";
                         }
-                    } else {
-                        echo "<p>No participants found for this competition.</p>";
-                    }
                     ?>
                 </tbody>
             </table>
@@ -350,6 +363,7 @@ $competition_end_date = strtotime($competition['end_date']);
             const upcomingCompetition = document.getElementById("upcoming-competition");
             const pastCompetition = document.getElementById("past-competition");
             const participantInfo = document.getElementById("participant-info");
+            const submissionButton = document.getElementById("button-container");
 
             // Get the current date and competition start and end dates
             const currentDate = new Date();
@@ -374,6 +388,7 @@ $competition_end_date = strtotime($competition['end_date']);
                     ongoingCompetition.style.display = "block";
                     upcomingCompetition.style.display = "none";
                     pastCompetition.style.display = "none";
+                    submissionButton.style.display = "block"
                 }
             }
 
