@@ -115,17 +115,26 @@ $result = $con->query($sql);
                     <div class="col-md-3">
                         <select class="form-control" id="filterCuisine">
                             <option value="">All Cuisines</option>
-                            <?php while ($row = $cuisines->fetch_assoc()) { ?>
-                                <option value="<?php echo $row['cuisine_name']; ?>"><?php echo $row['cuisine_name']; ?></option>
-                            <?php } ?>
+                            <?php
+                            $selectedCuisine = isset($_GET['cuisine']) ? $_GET['cuisine'] : '';
+                            while ($row = $cuisines->fetch_assoc()) {
+                                $isSelected = ($row['cuisine_name'] === $selectedCuisine) ? 'selected' : '';
+                                echo "<option value='" . htmlspecialchars($row['cuisine_name']) . "' $isSelected>" . htmlspecialchars($row['cuisine_name']) . "</option>";
+                            }
+                            ?>
                         </select>
                     </div>
+
                     <div class="col-md-3">
                         <select class="form-control" id="filterCategory">
                             <option value="">All Categories</option>
-                            <?php while ($row = $categories->fetch_assoc()) { ?>
-                                <option value="<?php echo $row['category_name']; ?>"><?php echo $row['category_name']; ?></option>
-                            <?php } ?>
+                            <?php
+                            $selectedCategory = isset($_GET['category']) ? $_GET['category'] : '';
+                            while ($row = $categories->fetch_assoc()) {
+                                $isSelected = ($row['category_name'] === $selectedCategory) ? 'selected' : '';
+                                echo "<option value='" . htmlspecialchars($row['category_name']) . "' $isSelected>" . htmlspecialchars($row['category_name']) . "</option>";
+                            }
+                            ?>
                         </select>
                     </div>
                     <div class="col-md-2">
@@ -189,6 +198,62 @@ $result = $con->query($sql);
     </div>
 
     <script>
+        function searchRecipes() {
+            const title = document.getElementById('searchTitle').value;
+            const cuisine = document.getElementById('filterCuisine').value;
+            const category = document.getElementById('filterCategory').value;
+            const ownership = document.getElementById('filterOwnership').value;
+
+            // Update the URL with query parameters
+            const params = new URLSearchParams();
+            if (title) params.set('title', title);
+            if (cuisine) params.set('cuisine', cuisine);
+            if (category) params.set('category', category);
+            if (ownership) params.set('ownership', ownership);
+            window.history.replaceState({}, '', `${window.location.pathname}?${params.toString()}`);
+
+            // Filter the table rows
+            const rows = document.querySelectorAll('#recipeTable tbody tr');
+            rows.forEach(row => {
+                const rowTitle = row.dataset.title.toLowerCase();
+                const rowCuisine = row.dataset.cuisine.toLowerCase();
+                const rowCategory = row.dataset.category.toLowerCase();
+                const rowUserId = row.dataset.userId;
+
+                const matchesTitle = rowTitle.includes(title);
+                const matchesCuisine = !cuisine || rowCuisine === cuisine;
+                const matchesCategory = !category || rowCategory === category;
+                const matchesOwnership = ownership === 'all' || (ownership === 'my' && rowUserId === '<?php echo $user_id; ?>');
+
+                if (matchesTitle && matchesCuisine && matchesCategory && matchesOwnership) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        function populateFiltersFromURL() {
+            const params = new URLSearchParams(window.location.search);
+
+            // Populate the search and filter inputs
+            if (params.has('title')) {
+                document.getElementById('searchTitle').value = params.get('title');
+            }
+            if (params.has('cuisine')) {
+                document.getElementById('filterCuisine').value = params.get('cuisine');
+            }
+            if (params.has('category')) {
+                document.getElementById('filterCategory').value = params.get('category');
+            }
+            if (params.has('ownership')) {
+                document.getElementById('filterOwnership').value = params.get('ownership');
+            }
+
+            // Trigger the search function to apply the filters
+            searchRecipes();
+        }
+
         function loadRecipeDetails(recipeId) {
             const xhr = new XMLHttpRequest();
             xhr.open("GET", "view_recipe.php?recipe_id=" + recipeId, true);
@@ -205,6 +270,8 @@ $result = $con->query($sql);
                 window.location.href = "delete_recipe.php?recipe_id=" + recipeId;
             }
         }
+
+        document.addEventListener('DOMContentLoaded', populateFiltersFromURL);
     </script>
 
     <?php include '../footer.php'; ?>
