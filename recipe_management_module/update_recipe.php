@@ -50,6 +50,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             throw new Exception("All fields are required!");
         }
 
+        // Validate prep time, cook time, and servings
+        if ($prep_time_minutes < 0.01) {
+            throw new Exception("Preparation time must be greater than or equal to 0.01 minutes!");
+        }
+
+        if ($cook_time_minutes < 0.01) {
+            throw new Exception("Cooking time must be greater than or equal to 0.01 minutes!");
+        }
+
+        if ($servings < 1) {
+            throw new Exception("Servings must be at least 1!");
+        }
+
         // Handle file upload
         $uploadDir = "../recipe_management_module/recipe_img/";
         $imagePath = NULL;
@@ -104,8 +117,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $quantity = floatval($_POST['quantities'][$index]);
                 $unit = trim($_POST['units'][$index]);
 
-                if (empty($ingredient_name) || $quantity <= 0 || empty($unit)) {
+                if (empty($ingredient_name) || empty($quantity) || empty($unit)) {
                     throw new Exception("All ingredient fields are required!");
+                }
+
+                if ($quantity < 0.01) {
+                    throw new Exception("Ingredient quantity must be greater than or equal to 0.01!");
                 }
 
                 // Check if the ingredient already exists
@@ -172,7 +189,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         $_SESSION['success'] = "Recipe updated successfully!";
-        
+
         header("Location: recipe.php");
         exit();
     } catch (Exception $e) {
