@@ -117,10 +117,6 @@ session_start();
                     </div>
                     <button type="submit" name="submit" class="btn btn-primary btn-login">Login</button>
                 </form>
-                <p>
-                    <label class="form-label">Remember Me</label>
-                    <input type="checkbox" name="remember_me" id="remember_me">
-                </p>
                 <div class="links">
                     <p class="mt-3">Forgot Password? <a href="forgot_password.php">Reset Here</a></p>
                     <p>Not registered yet? <a href="registration.php">Register Here</a></p>
