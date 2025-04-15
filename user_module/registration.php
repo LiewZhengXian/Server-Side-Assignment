@@ -1,3 +1,7 @@
+<?php
+session_start();
+require('database.php');
+?>
 <!DOCTYPE html>
 <html>
 
@@ -36,6 +40,15 @@
             font-weight: 600;
         }
 
+        .error-message {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #f8d7da;
+            border-radius: 5px;
+            color: #721c24;
+            font-size: 0.875em;
+        }
+
         .success-message {
             text-align: center;
             padding: 30px;
@@ -44,22 +57,6 @@
             margin: 100px auto;
             max-width: 450px;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .login-link {
-            display: inline-block;
-            margin-top: 15px;
-            padding: 8px 20px;
-            background-color: #007bff;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-        }
-
-        .login-link:hover {
-            background-color: #0069d9;
-            color: white;
         }
 
         .form-text {
@@ -73,30 +70,41 @@
 <body>
     <?php include("../navbar.php"); ?>
 
-    <?php
-    require('database.php');
-    if (isset($_REQUEST['username'])) {
-        $username = stripslashes($_REQUEST['username']);
-        $username = mysqli_real_escape_string($con, $username);
-        $email = stripslashes($_REQUEST['email']);
-        $email = mysqli_real_escape_string($con, $email);
-        $password = stripslashes($_REQUEST['password']);
-        $password = mysqli_real_escape_string($con, $password);
-        
-        $query = "INSERT into `user` (username, password, email)
-                  VALUES ('$username', '" . md5($password) . "', '$email')";
-        $result = mysqli_query($con, $query);
-        
-        if ($result) {
-            echo "<div class='success-message'>
-                    <h3 class='mb-4'><i class='bi bi-check-circle-fill'></i> Registration Successful!</h3>
-                    <p>Your account has been created successfully.</p>
-                    <a href='login.php' class='login-link'>Login Now</a>
-                  </div>";
-        }
-    } else {
-    ?>
     <div class="container">
+        <?php
+        $errorMessage = ""; // Initialize error message
+        if (isset($_POST['username'])) {
+            $username = stripslashes($_POST['username']);
+            $username = mysqli_real_escape_string($con, $username);
+            $email = stripslashes($_POST['email']);
+            $email = mysqli_real_escape_string($con, $email);
+            $password = stripslashes($_POST['password']);
+            $password = mysqli_real_escape_string($con, $password);
+
+            // Check if username or email already exists
+            $checkQuery = "SELECT * FROM `user` WHERE username='$username' OR email='$email'";
+            $checkResult = mysqli_query($con, $checkQuery);
+
+            if (mysqli_num_rows($checkResult) > 0) {
+                $errorMessage = "Username or email already exists. Please try again with a different username or email.";
+            } else {
+                // Insert new user
+                $query = "INSERT INTO `user` (username, password, email) VALUES ('$username', '" . md5($password) . "', '$email')";
+                $result = mysqli_query($con, $query);
+
+                if ($result) {
+                    echo "<div class='success-message'>
+                            <h3 class='mb-4'><i class='bi bi-check-circle-fill'></i> Registration Successful!</h3>
+                            <p>Your account has been created successfully.</p>
+                            <a href='login.php' class='btn btn-primary'>Login Now</a>
+                          </div>";
+                    exit(); // Stop further execution after success
+                } else {
+                    $errorMessage = "Something went wrong. Please try again later.";
+                }
+            }
+        }
+        ?>
         <div class="registration-container">
             <h1 class="form-title">Create Account</h1>
             <form name="registration" action="" method="post">
@@ -117,16 +125,18 @@
                     <input type="password" class="form-control" id="password" name="password" placeholder="Create a password" required>
                     <div class="form-text">Use a strong password with at least 8 characters.</div>
                 </div>
-                
-                <button type="submit" name="submit" class="btn btn-primary btn-register">Register</button>
 
+                <button type="submit" name="submit" class="btn btn-primary btn-register">Register</button>
                 <div class="text-center mt-3">
                     <p>Already have an account? <a href="login.php">Login here</a></p>
                 </div>
+                <!-- Display error message below the button -->
+                <?php if (!empty($errorMessage)) : ?>
+                    <div class="error-message"><?php echo $errorMessage; ?></div>
+                <?php endif; ?>
             </form>
         </div>
     </div>
-    <?php ?>
 
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
