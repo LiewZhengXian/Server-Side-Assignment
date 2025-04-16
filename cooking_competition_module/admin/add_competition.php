@@ -33,6 +33,20 @@ if (isset($status) && isset($message)) {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="../style/floating_box.css">
     <title>Add Competition</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            text-align: center;
+            margin: 20px 0;
+            color: #495057;
+            font-size: 2.5rem;
+        }
+    </style>
 </head>
 <body>
     <!-- Navbar -->

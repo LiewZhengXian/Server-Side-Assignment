@@ -161,6 +161,8 @@ if (!$result) {
         }
         }
         .table-container {
+            display: flex;
+            flex-wrap: wrap;
             padding: 40px;
             margin: 20px;
             border-radius: 10px;
@@ -176,13 +178,13 @@ if (!$result) {
     <div class="container mt-4">
         <h1>Admin Dashboard - Competitions</h1>
 
-        <!-- Search Box -->
-        <div class="search-box d-flex justify-content-between align-items-center">
-            <form method="GET" action="" class="d-flex flex-grow-1 me-2">
+        <div class="search-box d-flex justify-content-between align-items-center mb-3">
+            <form method="GET" class="d-flex" action="">
                 <input type="text" name="search" class="form-control me-2" placeholder="Search by Competition Name" aria-label="Search">
                 <button type="submit" class="btn btn-primary">Search</button>
             </form>
-            <a href="add_competition.php" class="add-button">Add New Competition</a>
+            
+            <a href="add_competition.php" class="btn btn-success ms-3">Add New Competition</a>
         </div>
         <div class="table-container">
             <table>
