@@ -1,5 +1,5 @@
 <?php
-session_start();
+include("../user_module/auth.php");
 require '../user_module/database.php';
 
 // Check if the user is logged in and is an admin

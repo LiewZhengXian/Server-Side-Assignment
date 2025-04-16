@@ -1,7 +1,10 @@
 <?php
 session_start();
 include '../user_module/database.php';
-include '../user_module/auth.php';
+
+// Check if the user is logged in
+$user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
+$isAdmin = isset($_SESSION['isAdmin']) ? $_SESSION['isAdmin'] : '';
 
 $sql = "SELECT p.post_id, p.title, p.content, 
        r.title AS recipe_title, r.description AS recipe_desc, 
@@ -113,7 +116,6 @@ $result = $con->query($sql);
                         $ratingClass = "bg-secondary";
                     }
                     $post_id = $row["post_id"];
-                    $user_id = $_SESSION["user_id"];
 
                     $sql2 = "SELECT c.comment_id, c.content, c.creation_datetime, u.username 
                             FROM Comment c
@@ -127,7 +129,6 @@ $result = $con->query($sql);
                     $comments = $stmt->get_result();
                     // Generate the recipe card
                     // Fetch the user's existing rating for this post
-                    $rating_user_id = $_SESSION["user_id"];
                     $rating_post_id = $row["post_id"];
                     $rating_query = "SELECT rating_value FROM Rating WHERE user_id = ? AND post_id = ?";
                     $stmt2 = $con->prepare($rating_query);
@@ -213,7 +214,7 @@ $result = $con->query($sql);
                                             posted by: <?php echo htmlspecialchars($row["username"]); ?>
                                         </h6>
                                     </div>
-                                    <?php if ($_SESSION['isAdmin'] == 1): ?>
+                                    <?php if ($isAdmin == 1): ?>
                                         <form method="POST" action="delete_post.php" class="d-inline">
                                             <input type="hidden" name="post_id" value="<?php echo $row['post_id']; ?>">
                                             <button type="submit" class="btn btn-sm btn-danger">
@@ -246,37 +247,44 @@ $result = $con->query($sql);
                                 </div>
                                 <div class="modal-body">
 
-                                    <!-- Rating Section -->
-                                    <div class="mb-4">
-                                        <h6>Rate this recipe:</h6>
-                                        <form id="ratingForm" action="Add_rating.php" method="POST">
-                                            <input type="hidden" name="post_id" value="<?= $post_id ?>">
-                                            <input type="hidden" name="user_id" value="<?= $user_id ?>">
-                                            <input type="hidden" name="rating" id="selectedRating" value="<?= $existing_rating ?>">
+                                    <?php if ($user_id): ?>
+                                        <!-- Show rating section for logged-in users -->
+                                        <div class="mb-4">
+                                            <h6>Rate this recipe:</h6>
+                                            <form id="ratingForm" action="Add_rating.php" method="POST">
+                                                <input type="hidden" name="post_id" value="<?= $post_id ?>">
+                                                <input type="hidden" name="user_id" value="<?= $user_id ?>">
+                                                <input type="hidden" name="rating" id="selectedRating" value="<?= $existing_rating ?>">
 
-                                            <div class="rating-stars fs-4" data-existing-rating="<?= $existing_rating ?>">
-                                                <?php for ($i = 1; $i <= 5; $i++): ?>
-                                                    <i class="fa-star <?= $i <= $existing_rating ? 'fas' : 'far' ?>"
-                                                        data-rating="<?= $i ?>"></i>
-                                                <?php endfor; ?>
-                                            </div>
-                                        </form>
-                                    </div>
+                                                <div class="rating-stars fs-4" data-existing-rating="<?= $existing_rating ?>">
+                                                    <?php for ($i = 1; $i <= 5; $i++): ?>
+                                                        <i class="fa-star <?= $i <= $existing_rating ? 'fas' : 'far' ?>" data-rating="<?= $i ?>"></i>
+                                                    <?php endfor; ?>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    <?php else: ?>
+                                        <!-- Show message for guests -->
+                                        <p class="text-muted">Please <a href="../user_module/login.php">log in</a> to rate this recipe.</p>
+                                    <?php endif; ?>
                                     <?php
-                                    $comment_user_id = $_SESSION["user_id"];
                                     $comment_post_id = $row["post_id"]
                                     ?>
-                                    <!-- Comment Form -->
-                                    <form class="mb-4" method="post" action="Add_comment.php">
-                                        <input type="hidden" name="user_id" value="<?= htmlspecialchars($comment_user_id) ?>">
-                                        <input type="hidden" name="post_id" value="<?= htmlspecialchars($comment_post_id) ?>">
-                                        <div class="mb-3">
-                                            <label for="commentText" class="form-label">Add your comment or tip:</label>
-                                            <textarea class="form-control" id="commentText" name="commentText" rows="2"
-                                                required></textarea>
-                                        </div>
-                                        <button type="submit" class="btn btn-primary">Post Comment</button>
-                                    </form>
+                                    <?php if ($user_id): ?>
+                                        <!-- Show comment form for logged-in users -->
+                                        <form class="mb-4" method="post" action="Add_comment.php">
+                                            <input type="hidden" name="user_id" value="<?= htmlspecialchars($user_id) ?>">
+                                            <input type="hidden" name="post_id" value="<?= htmlspecialchars($post_id) ?>">
+                                            <div class="mb-3">
+                                                <label for="commentText" class="form-label">Add your comment or tip:</label>
+                                                <textarea class="form-control" id="commentText" name="commentText" rows="2" required></textarea>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary">Post Comment</button>
+                                        </form>
+                                    <?php else: ?>
+                                        <!-- Show message for guests -->
+                                        <p class="text-muted">Please <a href="../user_module/login.php">log in</a> to add a comment.</p>
+                                    <?php endif; ?>
 
                                     <!-- Comment List -->
                                     <h6>Comments (<?php echo $comments->num_rows; ?>) </h6>
@@ -290,7 +298,7 @@ $result = $con->query($sql);
                                                             <small class="text-muted"><?php echo htmlspecialchars($comment["creation_datetime"]); ?></small>
                                                         </div>
                                                     </div>
-                                                    <?php if ($_SESSION['isAdmin'] == 1): ?>
+                                                    <?php if ($isAdmin == 1): ?>
                                                         <form method="POST" action="delete_comment.php" class="d-inline">
                                                             <input type="hidden" name="comment_id" value="<?php echo $comment['comment_id']; ?>">
                                                             <button type="submit" class="btn btn-sm btn-danger">

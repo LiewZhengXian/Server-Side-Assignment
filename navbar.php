@@ -148,22 +148,37 @@
 
                 <!-- User Dropdown -->
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle d-flex align-items-center user-dropdown" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-person-circle me-2"></i>
-                            Hello, <?php echo htmlspecialchars($_SESSION['username']); ?>!
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="/Server-Side-Assignment/user_module/change_password.php">Change Password</a></li>
-                            <?php if (isset($_SESSION['isAdmin']) && $_SESSION['isAdmin'] == 1): ?>
-                                <li><a class="dropdown-item" href="/Server-Side-Assignment/user_module/add_admin.php">Add Admin</a></li>
-                            <?php endif; ?>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                            <li><a class="dropdown-item" href="/Server-Side-Assignment/user_module/logout.php">Logout</a></li>
-                        </ul>
-                    </li>
+                    <?php if (isset($_SESSION['username'])): ?>
+                        <!-- If the user is logged in -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle d-flex align-items-center user-dropdown" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-person-circle me-2"></i>
+                                Hello, <?php echo htmlspecialchars($_SESSION['username']); ?>!
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="/Server-Side-Assignment/user_module/change_password.php">Change Password</a></li>
+                                <?php if (isset($_SESSION['isAdmin']) && $_SESSION['isAdmin'] == 1): ?>
+                                    <li><a class="dropdown-item" href="/Server-Side-Assignment/user_module/add_admin.php">Add Admin</a></li>
+                                <?php endif; ?>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li><a class="dropdown-item" href="/Server-Side-Assignment/user_module/logout.php">Logout</a></li>
+                            </ul>
+                        </li>
+                    <?php else: ?>
+                        <!-- If the user is not logged in -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle d-flex align-items-center user-dropdown" href="#" id="signInDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-box-arrow-in-right me-2"></i>
+                                Sign In
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="/Server-Side-Assignment/user_module/login.php">Login</a></li>
+                                <li><a class="dropdown-item" href="/Server-Side-Assignment/user_module/registration.php">Register</a></li>
+                            </ul>
+                        </li>
+                    <?php endif; ?>
                 </ul>
             </div>
         </div>

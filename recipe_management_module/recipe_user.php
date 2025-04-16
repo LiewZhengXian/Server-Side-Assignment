@@ -2,8 +2,9 @@
 session_start();
 require '../user_module/database.php';
 
-$user_id = $_SESSION['user_id'];
-$isAdmin = $_SESSION['isAdmin']; // Check if the user is an admin
+// Check if the user is logged in
+$user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
+$isAdmin = isset($_SESSION['isAdmin']) ? $_SESSION['isAdmin'] : '';
 
 
 // Fetch all cuisines and categories for filters

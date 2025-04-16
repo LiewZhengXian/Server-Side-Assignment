@@ -1,5 +1,6 @@
 <?php
-include("./user_module/auth.php");
+session_start();
+
 require('./user_module/database.php');
 ?>
 <!DOCTYPE html>
