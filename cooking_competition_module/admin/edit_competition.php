@@ -4,6 +4,13 @@ include("../../user_module/auth.php");
 require("../../user_module/database.php");
 require_once (__DIR__ . "/../function/function.php");
 
+// Check if the user is logged in and is an admin
+if (!isset($_SESSION['isAdmin']) || $_SESSION['isAdmin'] != 1) {
+    // Redirect non-admin users to the user competition page or login page
+    header("Location: ../competition_main.php");
+    exit();
+}
+
 // Get initial information for the competition
 if(isset($_GET["id"])) {
     $competition_id = intval($_GET["id"]);

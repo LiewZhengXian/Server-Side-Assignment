@@ -3,6 +3,14 @@
 include("../../user_module/auth.php");
 require("../../user_module/database.php");
 
+// Check if the user is logged in and is an admin
+if (!isset($_SESSION['isAdmin']) || $_SESSION['isAdmin'] != 1) {
+    // Redirect non-admin users to the user competition page or login page
+    header("Location: ../competition_main.php");
+    exit();
+}
+
+
 // Fetch competitions from the database
 // Determine sorting column and order
 $sort_column = isset($_GET['sort']) ? $_GET['sort'] : 'competition_id';
