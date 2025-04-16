@@ -1,0 +1,37 @@
+.floating-box {
+    position: fixed;
+    top: 40%;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 15px;
+    border-radius: 5px;
+    color: white;
+    z-index: 1000;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    animation: fadeOut 2s forwards;
+}
+
+.floating-box.success {
+    background-color: #28a745;
+    /* Green for success */
+}
+
+.floating-box.error {
+    background-color: #dc3545;
+    /* Red for error */
+}
+
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+    }
+
+    80% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+        display: none;
+    }
+}
