@@ -118,7 +118,7 @@
 
                     <!-- Meal Planning Dropdown -->
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle <?php echo in_array(basename($_SERVER['PHP_SELF']), ['meal_plan_add.php', 'meal_plan_list.php', 'meal_plan_display.php', 'list_templates.php', 'view_template.php', 'edit_template.php', 'meal_plan_edit.php']) ? 'active' : ''; ?>" href="#" id="mealPlanningDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle <?php echo in_array(basename($_SERVER['PHP_SELF']), ['meal_plan_add.php', 'meal_plan_list.php', 'meal_plan_display.php', 'list_templates.php', 'view_template.php', 'edit_template.php', 'meal_plan_edit.php', 'add_template.php']) ? 'active' : ''; ?>" href="#" id="mealPlanningDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Meal Planning
                         </a>
                         <ul class="dropdown-menu">
@@ -156,9 +156,10 @@
                                 Hello, <?php echo htmlspecialchars($_SESSION['username']); ?>!
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end">
-                                <li><a class="dropdown-item" href="/Server-Side-Assignment/user_module/change_password.php">Change Password</a></li>
+                                <li><a class="dropdown-item <?php echo basename($_SERVER['PHP_SELF']) == 'change_password.php' ? 'active' : ''; ?>" href="/Server-Side-Assignment/user_module/change_password.php">Change Password</a></li>
                                 <?php if (isset($_SESSION['isAdmin']) && $_SESSION['isAdmin'] == 1): ?>
-                                    <li><a class="dropdown-item" href="/Server-Side-Assignment/user_module/add_admin.php">Add Admin</a></li>
+                                    <li><a class="dropdown-item <?php echo basename($_SERVER['PHP_SELF']) == 'add_admin.php' ? 'active' : ''; ?>" href="/Server-Side-Assignment/admin_module/add_admin.php">Add Admin</a></li>
+                                    <li><a class="dropdown-item <?php echo basename($_SERVER['PHP_SELF']) == 'manage_user.php' ? 'active' : ''; ?>" href="/Server-Side-Assignment/admin_module/manage_user.php">Manage User</a></li>
                                 <?php endif; ?>
                                 <li>
                                     <hr class="dropdown-divider">
