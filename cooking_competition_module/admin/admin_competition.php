@@ -33,6 +33,9 @@ $result = mysqli_query($con, $query);
     </style>
 </head>
 <body>
+    <!-- Navbar -->
+    <?php include("../../navbar.php"); ?>
+
     <h1>Admin Dashboard - Competitions</h1>
     <a href="add_competition.php" class="add-button">Add New Competition</a>
     <table>

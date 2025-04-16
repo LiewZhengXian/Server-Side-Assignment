@@ -142,7 +142,7 @@
 
                     <!-- Competitions -->
                     <li class="nav-item">
-                        <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'competition_main.php' ? 'active' : ''; ?>" href="/Server-Side-Assignment/cooking_competition_module/competition_main.php">Competitions</a>
+                        <a class="nav-link <?php echo ((basename($_SERVER['PHP_SELF']) == 'competition_main.php') || (basename($_SERVER['PHP_SELF']) == 'admin_competition.php')) ? 'active' : ''; ?>" href="/Server-Side-Assignment/cooking_competition_module/competition_user_type_auth.php">Competitions</a>
                     </li>
                 </ul>
 

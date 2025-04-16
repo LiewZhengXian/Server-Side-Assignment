@@ -3,6 +3,8 @@ include("../user_module/auth.php");
 require("../user_module/database.php");
 
 $competition_id = $_GET['competition_id'] ?? null; // Get the competition ID from the URL
+$user_id = $_SESSION['user_id'] ?? null; // Get the user ID from the session
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -61,10 +63,13 @@ $competition_id = $_GET['competition_id'] ?? null; // Get the competition ID fro
                     <select class="form-select" id="existing_recipe" name="existing_recipe">
                         <option value="">--</option>
                         <?php
-                        $query = "SELECT recipe_id, title FROM Recipe WHERE user_id = '$user_id'";
-                        $result = mysqli_query($con, $query);
+                        $query = "SELECT recipe_id, title FROM Recipe WHERE user_id = ?";
+                        $stmt = mysqli_prepare($con, $query);
+                        mysqli_stmt_bind_param($stmt, "i", $user_id);
+                        mysqli_stmt_execute($stmt);
+                        $result = mysqli_stmt_get_result($stmt);
                         while ($row = mysqli_fetch_assoc($result)) {
-                            echo "<option value='{$row['recipe_id']}'>{$row['title']}</option>";
+                            echo "<option value=" . $row['recipe_id'] . ">" . $row['title'] . "</option>";
                         }
                         ?>
                     </select>
@@ -72,9 +77,9 @@ $competition_id = $_GET['competition_id'] ?? null; // Get the competition ID fro
             </div>
             <div class="mb-3">
                 <input type="checkbox" id="terms" name="terms" required>
-                <label for="terms" class="form-label">I agree to the <a href="../cooking_competition_module/terms_and_conditions.html">terms and conditions</a></label>
+                <label for="terms" class="form-label">I agree to the <a href="../cooking_competition_module/terms_and_conditions.php">terms and conditions</a></label>
             </div>
-            <button type="submit" class="btn btn-primary">Submit Recipe</button>
+            <button type="submit" class="btn btn-primary mb-3">Submit Recipe</button>
         </form>
     </div>
     <?php

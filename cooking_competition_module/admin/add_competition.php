@@ -33,6 +33,9 @@ if (isset($status) && isset($message)) {
     <title>Add Competition</title>
 </head>
 <body>
+    <!-- Navbar -->
+    <?php include("../../navbar.php"); ?>
+
     <div class="container mt-5">
         <h1 class="text-center mb-4">Add Competition</h1>
         <form method="POST" action="" class="p-4 border rounded shadow-sm bg-light">
@@ -66,5 +69,6 @@ if (isset($status) && isset($message)) {
             </div>
         </form>
     </div>
+    <?php include '../../footer.php'; ?>
 </body>
 </html>
