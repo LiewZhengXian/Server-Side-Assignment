@@ -90,6 +90,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $quantity = floatval($_POST['quantities'][$index]);
                 $unit = trim($_POST['units'][$index]);
 
+                // Reset $ingredient_id for each iteration
+                $ingredient_id = null;
+
                 if (empty($ingredient_name) || empty($quantity) || empty($unit)) {
                     throw new Exception("All ingredient fields are required!");
                 }
@@ -125,15 +128,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $stmt_insert->close();
                 }
 
-                // Insert into Recipe_Ingredient table
-                $sql = "INSERT INTO Recipe_Ingredient (recipe_id, ingredient_id, quantity, units) VALUES (?, ?, ?, ?)";
-                $stmt = $con->prepare($sql);
-                if (!$stmt) {
+                // Check if the combination of recipe_id and ingredient_id already exists
+                $sql = "SELECT 1 FROM Recipe_Ingredient WHERE recipe_id = ? AND ingredient_id = ?";
+                $stmt_check_composite = $con->prepare($sql);
+                if (!$stmt_check_composite) {
                     throw new Exception("Failed to prepare statement: " . $con->error);
                 }
 
-                $stmt->bind_param("iids", $recipe_id, $ingredient_id, $quantity, $unit);
-                $stmt->execute();
+                $stmt_check_composite->bind_param("ii", $recipe_id, $ingredient_id);
+                $stmt_check_composite->execute();
+                $stmt_check_composite->store_result();
+
+                if ($stmt_check_composite->num_rows == 0) {
+                    // Insert into Recipe_Ingredient table if the combination does not exist
+                    $sql = "INSERT INTO Recipe_Ingredient (recipe_id, ingredient_id, quantity, units) VALUES (?, ?, ?, ?)";
+                    $stmt = $con->prepare($sql);
+                    if (!$stmt) {
+                        throw new Exception("Failed to prepare statement: " . $con->error);
+                    }
+
+                    $stmt->bind_param("iids", $recipe_id, $ingredient_id, $quantity, $unit);
+                    $stmt->execute();
+                    $stmt->close();
+                }
+
+                $stmt_check_composite->close();
             }
         } else {
             throw new Exception("At least one ingredient is required!");

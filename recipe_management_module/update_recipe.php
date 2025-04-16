@@ -117,6 +117,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $quantity = floatval($_POST['quantities'][$index]);
                 $unit = trim($_POST['units'][$index]);
 
+                // Reset $ingredient_id for each iteration
+                $ingredient_id = null;
+
                 if (empty($ingredient_name) || empty($quantity) || empty($unit)) {
                     throw new Exception("All ingredient fields are required!");
                 }
@@ -153,7 +156,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 }
 
                 // Insert into Recipe_Ingredient table
-                $sql = "INSERT INTO Recipe_Ingredient (recipe_id, ingredient_id, quantity, units) VALUES (?, ?, ?, ?)";
+                $sql = "INSERT INTO Recipe_Ingredient (recipe_id, ingredient_id, quantity, units) VALUES (?, ?, ?, ?)
+                        ON DUPLICATE KEY UPDATE quantity = VALUES(quantity), units = VALUES(units)";
                 $stmt = $con->prepare($sql);
                 if (!$stmt) {
                     throw new Exception("Failed to prepare statement: " . $con->error);
@@ -161,6 +165,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 $stmt->bind_param("iids", $recipe_id, $ingredient_id, $quantity, $unit);
                 $stmt->execute();
+                $stmt->close();
             }
         } else {
             throw new Exception("At least one ingredient is required!");
