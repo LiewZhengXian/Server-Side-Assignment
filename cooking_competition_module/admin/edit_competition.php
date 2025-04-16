@@ -24,13 +24,16 @@ if(isset($_GET["id"])) {
             $start_date = $row['start_date'];
             $end_date = $row['end_date'];
         } else {
-            header("Location: admin_competition.php?error=Competition not found");
-            exit();
+            $status = "error";
+            $message = "Competition not found!: " . mysqli_error($con);
         }
     } else {
-        header("Location: admin_competition.php?error=Failed to fetch competition details");
-        exit();
+        $status = "error";
+        $message = "Failed to fetch competition details: " . mysqli_error($con);
     }
+
+    header("Location: admin_competition.php?status=$status&message=$message");
+    exit();
 }
 
 // Handle form submission to update competition
@@ -49,14 +52,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['competition_name'])) 
         mysqli_stmt_bind_param($stmt, "sssssi", $competition_name, $image_path, $description, $start_date, $end_date, $competition_id);
 
         if (mysqli_stmt_execute($stmt)) {
-            header("Location: admin_competition.php?status=Competition updated successfully");
-            exit();
+            // Redirect to the admin competition page with a success message
+            $status = "success";
+            $message = "Competition updated successfully!";
         } else {
-            $error = "Failed to update competition";
+            $status = "error";
+            $message = "Failed to update competition: " . mysqli_error($con);
         }
     } else {
-        $error = "Failed to prepare update statement";
+        $status = "error";
+        // Prepare the statement failed
+        $message = "Failed to prepare update statement: " . mysqli_error($con);
     }
+
+    header("Location: admin_competition.php?status=$status&message=$message");
+    exit();
 }
 ?>
 

@@ -19,7 +19,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['competition_name'])) 
 
 // Display floating box if there's a status and message
 if (isset($status) && isset($message)) {
-   echo "<div class='floating-box " . ($status === 'success' ? 'success' : 'error') . "'>$message</div>";
    header("Location: admin_competition.php?status=$status&message=$message");
    exit();
 }

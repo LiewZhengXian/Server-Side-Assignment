@@ -36,6 +36,16 @@ if (isset($status) && isset($message)) {
 if (isset($status) && isset($message)) {
     echo "<div class='floating-box " . ($status === 'success' ? 'success' : 'error') . "'>$message</div>";
  } */
+
+ // Search functionality
+$search_query = isset($_GET['search']) ? $_GET['search'] : '';
+$search_query = mysqli_real_escape_string($con, $search_query);
+$search_sql = "SELECT * FROM competition WHERE competition_name LIKE '%$search_query%' ORDER BY $sort_column $sort_order";
+$result = mysqli_query($con, $search_sql);
+if (!$result) {
+    die("Query failed: " . mysqli_error($con));
+}
+
 ?>
 
 <!DOCTYPE html>
