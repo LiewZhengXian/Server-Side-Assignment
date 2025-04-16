@@ -1,4 +1,5 @@
 <?php
+session_start();
 require '../user_module/database.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {

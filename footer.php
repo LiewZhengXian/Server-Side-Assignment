@@ -23,7 +23,7 @@
                 <div class="d-flex justify-content-center justify-content-md-start">
                     <a href="https://www.facebook.com/UTARnet/" class="text-light me-3"><i class="bi bi-facebook fs-4"></i></a>
                     <a href="https://www.linkedin.com/in/leechornghuah/" class="text-light me-3"><i class="bi bi-linkedin fs-4"></i></a>
-                    <a href="https://www.youtube.com/watch?v=0i0bCWGKDE0" class="text-light"><i class="bi bi-youtube fs-4"></i></a>
+                    <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" class="text-light"><i class="bi bi-youtube fs-4"></i></a>
                 </div>
             </div>
         </div>

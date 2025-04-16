@@ -26,21 +26,29 @@ require("../user_module/database.php");
             /* Light gray background */
         }
 
-        h1 {
-            text-align: center;
-            color: #343a40;
-            /* Dark gray for the title */
-            font-size: 3rem;
-            margin-top: 20px;
-            font-weight: bold;
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('../assets/competition_main_bg.jpg') no-repeat center center/cover;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+            padding: 120px 0;
         }
 
-        p {
+        .hero h1 {
             text-align: center;
-            color: #6c757d;
-            /* Muted gray for descriptions */
-            font-size: 1.2rem;
-            margin-bottom: 20px;
+            font-size: 3.5rem;  
+            font-weight: bold;
+            animation: fadeInDown 1s ease-in-out;
+        }
+
+        .hero p {
+            text-align: center;
+            font-size: 1.3rem;
+            margin-top: 20px;
+        }
+
+        .description {
+            animation: fadeInUp 1s ease-in-out;
         }
 
         h2 {
@@ -52,10 +60,6 @@ require("../user_module/database.php");
             font-weight: bold;
         }
 
-        .content-wrapper {
-            margin-top: 20px;
-        }
-
         .card {
             border: none;
             border-radius: 10px;
@@ -63,6 +67,7 @@ require("../user_module/database.php");
             transition: transform 0.3s, box-shadow 0.3s;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             /* Subtle shadow */
+            animation: fadeInUp 0.5s ease-in-out;
         }
 
         .card:hover {
@@ -125,6 +130,31 @@ require("../user_module/database.php");
             color: #6c757d;
             margin-top: 20px;
         }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }    
     </style>
 </head>
 
@@ -134,8 +164,14 @@ require("../user_module/database.php");
 
     <!-- Page Content -->
     <div class="content-wrapper">
-        <h1>Cooking Competition</h1>
-        <p>Where food becomes your own dream</p>
+        <header>
+            <div class="hero text-center">
+                <div class="container">
+                    <h1>Cooking Competition</h1>
+                    <p class="description">Where food becomes your own dream</p>
+                </div>
+            </div>
+        </header>
 
         <!-- Ongoing Competitions -->
         <h2>Ongoing Competitions</h2>
