@@ -1,9 +1,10 @@
 <?php
-// Include database connection
+// Include the authentication and database connection files
+include("../../user_module/auth.php");
 require("../../user_module/database.php");
-require_once (__DIR__ . "/../model/function.php");
+require_once (__DIR__ . "/../function/function.php");
 
-// Handle vote submission
+// Handle adding competition
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['competition_name'])) {
     $competition_name = $_POST['competition_name'];
     $image_path = $_POST['image_path'];
@@ -19,6 +20,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['competition_name'])) 
 // Display floating box if there's a status and message
 if (isset($status) && isset($message)) {
    echo "<div class='floating-box " . ($status === 'success' ? 'success' : 'error') . "'>$message</div>";
+   header("Location: admin_competition.php?status=$status&message=$message");
+   exit();
 }
 ?>
 
@@ -36,22 +39,22 @@ if (isset($status) && isset($message)) {
     <!-- Navbar -->
     <?php include("../../navbar.php"); ?>
 
-    <div class="container mt-5">
+    <div class="container mt-5 mb-5">
         <h1 class="text-center mb-4">Add Competition</h1>
         <form method="POST" action="" class="p-4 border rounded shadow-sm bg-light">
             <div class="mb-3">
                 <label for="competition_name" class="form-label">Competition Name:</label>
-                <input type="text" id="competition_name" name="competition_name" class="form-control" maxlength="255" required>
+                <input type="text" id="competition_name" name="competition_name" class="form-control" maxlength="255" placeholder="Enter Competition Name" required>
             </div>
 
             <div class="mb-3">
                 <label for="image_path" class="form-label">Header Image Path:</label>
-                <input type="text" id="image_path" name="image_path" class="form-control" maxlength="255" required>
+                <input type="text" id="image_path" name="image_path" class="form-control" maxlength="255" placeholder="Enter Image Path for Competition" required>
             </div>
 
             <div class="mb-3">
                 <label for="description" class="form-label">Description:</label>
-                <textarea id="description" name="description" class="form-control" rows="4" required></textarea>
+                <textarea id="description" name="description" class="form-control" rows="4" placeholder="Enter Description for Competition" required></textarea>
             </div>
 
             <div class="mb-3">

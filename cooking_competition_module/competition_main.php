@@ -7,6 +7,7 @@ require("../user_module/database.php");
 // 1. error handling
 // 2. mvc structure
 // 3. admin competition management
+// i still haven do these yet cry
 ?>
 <!DOCTYPE html>
 <html lang="en">
