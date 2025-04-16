@@ -240,27 +240,27 @@ INSERT INTO Category (category_name) VALUES ('Appetizer'), ('Main Course'), ('De
 -- Recipes
 INSERT INTO Recipe (user_id, cuisine_id, category_id, title, description, prep_time, cook_time, servings, spicy, image_path)
 VALUES
-(1, 1, 2, 'Spaghetti Carbonara', 'Classic Italian pasta dish with creamy sauce', '00:15:00', '00:20:00', 2, FALSE, '../recipe_management_module/recipe_img/sample_food.jpg'),
-(2, 2, 2, 'Kung Pao Chicken', 'A spicy, stir-fried Chinese dish with peanuts', '00:10:00', '00:15:00', 4, TRUE, '../recipe_management_module/recipe_img/sample_food.jpg'),
-(3, 3, 2, 'Tacos al Pastor', 'Traditional Mexican tacos with marinated pork', '00:20:00', '00:30:00', 3, TRUE, '../recipe_management_module/recipe_img/sample_food.jpg'),
-(4, 4, 2, 'Butter Chicken', 'Creamy and flavorful Indian chicken dish', '00:25:00', '00:40:00', 4, TRUE, '../recipe_management_module/recipe_img/sample_food.jpg'),
-(5, 5, 3, 'Chocolate Brownie', 'Rich and fudgy American chocolate dessert', '00:10:00', '00:25:00', 6, FALSE, '../recipe_management_module/recipe_img/sample_food.jpg'),
-(8, 1, 1, 'Margherita Pizza', 'Classic Italian pizza with fresh mozzarella and basil', '00:20:00', '00:15:00', 4, FALSE, '../recipe_management_module/recipe_img/sample_food.jpg'),
-(9, 2, 2, 'Sweet and Sour Pork', 'A popular Chinese dish with a tangy sauce', '00:15:00', '00:25:00', 3, FALSE, '../recipe_management_module/recipe_img/sample_food.jpg'),
-(10, 3, 3, 'Churros', 'Mexican fried dough pastry with cinnamon sugar', '00:10:00', '00:20:00', 6, FALSE, '../recipe_management_module/recipe_img/sample_food.jpg'),
-(12, 4, 2, 'Paneer Butter Masala', 'Rich and creamy Indian curry with paneer', '00:25:00', '00:30:00', 4, FALSE, '../recipe_management_module/recipe_img/sample_food.jpg'),
-(13, 5, 4, 'Classic Cheeseburger', 'Juicy American cheeseburger with all the fixings', '00:10:00', '00:15:00', 2, FALSE, '../recipe_management_module/recipe_img/sample_food.jpg'),
-(14, 1, 3, 'Tiramisu', 'Italian coffee-flavored dessert', '00:30:00', '00:00:00', 8, FALSE, '../recipe_management_module/recipe_img/sample_food.jpg'),
-(15, 2, 1, 'Spring Rolls', 'Crispy Chinese appetizer with vegetable filling', '00:15:00', '00:10:00', 4, FALSE, '../recipe_management_module/recipe_img/sample_food.jpg'),
-(16, 3, 2, 'Enchiladas', 'Mexican tortillas filled with meat and topped with sauce', '00:20:00', '00:25:00', 4, TRUE, '../recipe_management_module/recipe_img/sample_food.jpg'),
-(17, 4, 3, 'Gulab Jamun', 'Indian milk-based dessert soaked in syrup', '00:15:00', '00:20:00', 10, FALSE, '../recipe_management_module/recipe_img/sample_food.jpg'),
-(18, 5, 2, 'BBQ Ribs', 'American-style ribs with smoky barbecue sauce', '00:15:00', '01:30:00', 4, TRUE, '../recipe_management_module/recipe_img/sample_food.jpg'),
-(19, 1, 4, 'Caprese Salad', 'Simple Italian salad with tomatoes, mozzarella, and basil', '00:10:00', '00:00:00', 2, FALSE, '../recipe_management_module/recipe_img/sample_food.jpg'),
-(21, 2, 5, 'Dim Sum', 'Assorted Chinese dumplings and buns', '00:30:00', '00:20:00', 6, FALSE, '../recipe_management_module/recipe_img/sample_food.jpg'),
-(22, 3, 1, 'Guacamole', 'Mexican avocado dip with lime and cilantro', '00:10:00', '00:00:00', 4, FALSE, '../recipe_management_module/recipe_img/sample_food.jpg'),
-(23, 4, 2, 'Chicken Biryani', 'Fragrant Indian rice dish with spiced chicken', '00:30:00', '00:40:00', 5, TRUE, '../recipe_management_module/recipe_img/sample_food.jpg'),
-(24, 5, 3, 'Apple Pie', 'Classic American dessert with spiced apple filling', '00:20:00', '00:50:00', 8, FALSE, '../recipe_management_module/recipe_img/sample_food.jpg'),
-(25, 1, 2, 'Lasagna', 'Layered Italian pasta dish with meat and cheese', '00:30:00', '00:45:00', 6, FALSE, '../recipe_management_module/recipe_img/sample_food.jpg');
+(1, 1, 2, 'Spaghetti Carbonara', 'Classic Italian pasta dish with creamy sauce', '00:15:00', '00:20:00', 2, FALSE, '../recipe_management_module/recipe_img/spaghetti_cabonara.jpg'),
+(2, 2, 2, 'Kung Pao Chicken', 'A spicy, stir-fried Chinese dish with peanuts', '00:10:00', '00:15:00', 4, TRUE, '../recipe_management_module/recipe_img/kung_pao_chicken.jpg'),
+(3, 3, 2, 'Tacos al Pastor', 'Traditional Mexican tacos with marinated pork', '00:20:00', '00:30:00', 3, TRUE, '../recipe_management_module/recipe_img/tacos_al_pastor.jpg'),
+(4, 4, 2, 'Butter Chicken', 'Creamy and flavorful Indian chicken dish', '00:25:00', '00:40:00', 4, TRUE, '../recipe_management_module/recipe_img/butter_chicken.jpg'),
+(5, 5, 3, 'Chocolate Brownie', 'Rich and fudgy American chocolate dessert', '00:10:00', '00:25:00', 6, FALSE, '../recipe_management_module/recipe_img/choc_brownie.jpg'),
+(8, 1, 1, 'Margherita Pizza', 'Classic Italian pizza with fresh mozzarella and basil', '00:20:00', '00:15:00', 4, FALSE, '../recipe_management_module/recipe_img/pizza.jpg'),
+(9, 2, 2, 'Sweet and Sour Pork', 'A popular Chinese dish with a tangy sauce', '00:15:00', '00:25:00', 3, FALSE, '../recipe_management_module/recipe_img/snspork.jpg'),
+(10, 3, 3, 'Churros', 'Mexican fried dough pastry with cinnamon sugar', '00:10:00', '00:20:00', 6, FALSE, '../recipe_management_module/recipe_img/churros.jpg'),
+(12, 4, 2, 'Paneer Butter Masala', 'Rich and creamy Indian curry with paneer', '00:25:00', '00:30:00', 4, FALSE, '../recipe_management_module/recipe_img/paneer_butter_masala.jpg'),
+(13, 5, 4, 'Classic Cheeseburger', 'Juicy American cheeseburger with all the fixings', '00:10:00', '00:15:00', 2, FALSE, '../recipe_management_module/recipe_img/cheeseburger.jpg'),
+(14, 1, 3, 'Tiramisu', 'Italian coffee-flavored dessert', '00:30:00', '00:00:00', 8, FALSE, '../recipe_management_module/recipe_img/tiramisu.jpg'),
+(15, 2, 1, 'Spring Rolls', 'Crispy Chinese appetizer with vegetable filling', '00:15:00', '00:10:00', 4, FALSE, '../recipe_management_module/recipe_img/spring_roll.jpg'),
+(16, 3, 2, 'Enchiladas', 'Mexican tortillas filled with meat and topped with sauce', '00:20:00', '00:25:00', 4, TRUE, '../recipe_management_module/recipe_img/enchiladas.jpg'),
+(17, 4, 3, 'Gulab Jamun', 'Indian milk-based dessert soaked in syrup', '00:15:00', '00:20:00', 10, FALSE, '../recipe_management_module/recipe_img/gulab_jamun.jpg'),
+(18, 5, 2, 'BBQ Ribs', 'American-style ribs with smoky barbecue sauce', '00:15:00', '01:30:00', 4, TRUE, '../recipe_management_module/recipe_img/bbq_ribs.jpg'),
+(19, 1, 4, 'Caprese Salad', 'Simple Italian salad with tomatoes, mozzarella, and basil', '00:10:00', '00:00:00', 2, FALSE, '../recipe_management_module/recipe_img/salad.jpg'),
+(21, 2, 5, 'Dim Sum', 'Assorted Chinese dumplings and buns', '00:30:00', '00:20:00', 6, FALSE, '../recipe_management_module/recipe_img/dimsum.jpg'),
+(22, 3, 1, 'Guacamole', 'Mexican avocado dip with lime and cilantro', '00:10:00', '00:00:00', 4, FALSE, '../recipe_management_module/recipe_img/guacamole.jpg'),
+(23, 4, 2, 'Chicken Biryani', 'Fragrant Indian rice dish with spiced chicken', '00:30:00', '00:40:00', 5, TRUE, '../recipe_management_module/recipe_img/chicken_briyani.jpg'),
+(24, 5, 3, 'Apple Pie', 'Classic American dessert with spiced apple filling', '00:20:00', '00:50:00', 8, FALSE, '../recipe_management_module/recipe_img/applepie.jpg'),
+(25, 1, 2, 'Lasagna', 'Layered Italian pasta dish with meat and cheese', '00:30:00', '00:45:00', 6, FALSE, '../recipe_management_module/recipe_img/lasagna.jpg');
 
 -- Ingredients
 INSERT INTO Ingredient (ingredient_name) VALUES ('Pasta'), ('Chicken'), ('Peanuts'), ('Pork'), ('Butter'), ('Chocolate');
