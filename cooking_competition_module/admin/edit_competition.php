@@ -24,16 +24,13 @@ if(isset($_GET["id"])) {
             $start_date = $row['start_date'];
             $end_date = $row['end_date'];
         } else {
-            $status = "error";
-            $message = "Competition not found!: " . mysqli_error($con);
+            header("Location: admin_competition.php?status=error&message=Competition not found");
+            exit();
         }
     } else {
-        $status = "error";
-        $message = "Failed to fetch competition details: " . mysqli_error($con);
+        header("Location: admin_competition.php?status=error&message=Failed to fetch competition details");
+        exit();
     }
-
-    header("Location: admin_competition.php?status=$status&message=$message");
-    exit();
 }
 
 // Handle form submission to update competition
@@ -79,6 +76,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['competition_name'])) 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="../style/floating_box.css">
     <title>Add Competition</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            text-align: center;
+            margin: 20px 0;
+            color: #495057;
+            font-size: 2.5rem;
+        }
+    </style>
 </head>
 <body>
     <!-- Navbar -->

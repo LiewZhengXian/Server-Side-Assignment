@@ -2,7 +2,7 @@
 // Start session and include necessary files
 include("../user_module/auth.php");
 require("../user_module/database.php");
-require_once(__DIR__ . "/model/function.php");
+require_once(__DIR__ . "/function/function.php");
 
 // Fetch competition details based on the competition ID passed in the URL
 $competition_id = isset($_GET['id']) ? intval($_GET['id']) : '';
