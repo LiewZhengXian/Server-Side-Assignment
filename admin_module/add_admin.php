@@ -1,6 +1,7 @@
 <?php
 session_start();
-require('database.php');
+include("../user_module/auth.php");
+require '../user_module/database.php';
 
 // Check if the user is logged in and is an admin
 if (!isset($_SESSION['user_id']) || $_SESSION['isAdmin'] != 1) {
