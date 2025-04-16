@@ -16,12 +16,54 @@ $user_id = $_SESSION['user_id']; // Get the logged-in user's ID
 $cuisines = $con->query("SELECT * FROM Cuisine");
 $categories = $con->query("SELECT * FROM Category");
 
-// Fetch all recipes initially
+// Fetch all recipes with filters
+$whereClauses = [];
+$params = [];
+$types = '';
+
+if (!empty($_GET['title'])) {
+    $whereClauses[] = "r.title LIKE ?";
+    $params[] = '%' . $_GET['title'] . '%';
+    $types .= 's';
+}
+
+if (!empty($_GET['cuisine'])) {
+    $whereClauses[] = "c.cuisine_name = ?";
+    $params[] = $_GET['cuisine'];
+    $types .= 's';
+}
+
+if (!empty($_GET['category'])) {
+    $whereClauses[] = "cat.category_name = ?";
+    $params[] = $_GET['category'];
+    $types .= 's';
+}
+
+if (!empty($_GET['ownership']) && $_GET['ownership'] === 'my' && isset($user_id)) {
+    $whereClauses[] = "r.user_id = ?";
+    $params[] = $user_id;
+    $types .= 'i';
+}
+
+$whereSQL = '';
+if (!empty($whereClauses)) {
+    $whereSQL = 'WHERE ' . implode(' AND ', $whereClauses);
+}
+
 $sql = "SELECT r.recipe_id, r.title, r.description, c.cuisine_name, cat.category_name, r.user_id 
         FROM Recipe r 
         LEFT JOIN Cuisine c ON r.cuisine_id = c.cuisine_id
-        LEFT JOIN Category cat ON r.category_id = cat.category_id";
-$result = $con->query($sql);
+        LEFT JOIN Category cat ON r.category_id = cat.category_id
+        $whereSQL";
+
+$stmt = $con->prepare($sql);
+if ($stmt && !empty($params)) {
+    $stmt->bind_param($types, ...$params);
+    $stmt->execute();
+    $result = $stmt->get_result();
+} else {
+    $result = $con->query($sql);
+}
 ?>
 
 <!DOCTYPE html>
@@ -165,7 +207,7 @@ $result = $con->query($sql);
                 </thead>
                 <tbody>
                     <?php while ($row = $result->fetch_assoc()) { ?>
-                        <tr data-user-id="<?php echo $row['user_id']; ?>" data-title="<?php echo htmlspecialchars($row['title']); ?>" data-cuisine="<?php echo htmlspecialchars($row['cuisine_name']); ?>" data-category="<?php echo htmlspecialchars($row['category_name']); ?>">
+                        <tr>
                             <td><?php echo htmlspecialchars($row['title']); ?></td>
                             <td align="left"><?php echo htmlspecialchars($row['description']); ?></td>
                             <td><?php echo htmlspecialchars($row['cuisine_name']); ?></td>
@@ -211,27 +253,9 @@ $result = $con->query($sql);
             if (cuisine) params.set('cuisine', cuisine);
             if (category) params.set('category', category);
             if (ownership) params.set('ownership', ownership);
-            window.history.replaceState({}, '', `${window.location.pathname}?${params.toString()}`);
 
-            // Filter the table rows
-            const rows = document.querySelectorAll('#recipeTable tbody tr');
-            rows.forEach(row => {
-                const rowTitle = row.dataset.title.toLowerCase();
-                const rowCuisine = row.dataset.cuisine.toLowerCase();
-                const rowCategory = row.dataset.category.toLowerCase();
-                const rowUserId = row.dataset.userId;
-
-                const matchesTitle = rowTitle.includes(title);
-                const matchesCuisine = !cuisine || rowCuisine === cuisine;
-                const matchesCategory = !category || rowCategory === category;
-                const matchesOwnership = ownership === 'all' || (ownership === 'my' && rowUserId === '<?php echo $user_id; ?>');
-
-                if (matchesTitle && matchesCuisine && matchesCategory && matchesOwnership) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
-                }
-            });
+            // Reload the page with the updated query parameters
+            window.location.href = `${window.location.pathname}?${params.toString()}`;
         }
 
         function populateFiltersFromURL() {
@@ -250,10 +274,9 @@ $result = $con->query($sql);
             if (params.has('ownership')) {
                 document.getElementById('filterOwnership').value = params.get('ownership');
             }
-
-            // Trigger the search function to apply the filters
-            searchRecipes();
         }
+
+        document.addEventListener('DOMContentLoaded', populateFiltersFromURL);
 
         function loadRecipeDetails(recipeId) {
             const xhr = new XMLHttpRequest();
@@ -271,8 +294,6 @@ $result = $con->query($sql);
                 window.location.href = "delete_recipe.php?recipe_id=" + recipeId;
             }
         }
-
-        document.addEventListener('DOMContentLoaded', populateFiltersFromURL);
     </script>
 
     <?php include '../footer.php'; ?>
