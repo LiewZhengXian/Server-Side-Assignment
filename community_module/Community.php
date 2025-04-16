@@ -116,7 +116,8 @@ $result = $con->query($sql);
                         $ratingClass = "bg-secondary";
                     }
                     $post_id = $row["post_id"];
-
+                    $rating_user_id = $user_id;
+                    $rating_post_id = $post_id;
                     $sql2 = "SELECT c.comment_id, c.content, c.creation_datetime, u.username 
                             FROM Comment c
                             JOIN User u ON c.user_id = u.user_id
