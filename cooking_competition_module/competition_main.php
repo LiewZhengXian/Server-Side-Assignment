@@ -4,10 +4,10 @@ include("../user_module/auth.php");
 require("../user_module/database.php");
 
 // task todo
-// 1. error handling
-// 2. mvc structure
-// 3. admin competition management
-// i still haven do these yet cry
+// 1. error handling (done)
+// 2. mvc structure (in future after assignment)
+// 3. admin competition management (done)
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -48,19 +48,42 @@ require("../user_module/database.php");
             margin-top: 20px;
         }
 
+        .competition-container {
+            margin: 20px auto;
+            padding: 20px;
+            max-width: 1200px;
+            border-radius: 10px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+
+        }
+
+        /* Initial state for elements to animate */
+        .competition-container, .card {
+            opacity: 0;
+            transform: translateY(20px); /* Matches your fadeInUp animation */
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        /* Visible state when the element is in the viewport */
+        .competition-container.visible, .card.visible {
+            opacity: 1;
+            transform: translateY(0); /* Reset transform */
+        }
+
         .description {
-            animation: fadeInUp 1s ease-in-out;
+            animation: fadeInUp 1.7s ease-in-out;
         }
 
         h2 {
             margin-left: 1%;
-            text-align: left;
+            text-align: center;
             color: #555;
             font-size: 2rem;
             margin-top: 30px;
             font-weight: bold;
         }
-
+        
         .card {
             border: none;
             border-radius: 10px;
@@ -68,8 +91,10 @@ require("../user_module/database.php");
             transition: transform 0.3s, box-shadow 0.3s;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             /* Subtle shadow */
-            animation: fadeInUp 0.5s ease-in-out;
+
+            margin: 10px;
         }
+
 
         .card:hover {
             transform: scale(1.05);
@@ -132,19 +157,6 @@ require("../user_module/database.php");
             margin-top: 20px;
         }
 
-        /* Animations */
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
         @keyframes fadeInUp {
             from {
                 opacity: 0;
@@ -181,7 +193,7 @@ require("../user_module/database.php");
         $result = mysqli_query($con, $query);
 
         if (mysqli_num_rows($result) > 0) {
-            echo '<div class="container"><div class="row">';
+            echo '<div class="competition-container"><div class="row">';
             while ($row = mysqli_fetch_assoc($result)) {
                 echo '<div class="col-md-4">';
                 echo '<div class="card mb-4">';
@@ -206,7 +218,7 @@ require("../user_module/database.php");
         $result = mysqli_query($con, $query);
 
         if (mysqli_num_rows($result) > 0) {
-            echo '<div class="container"><div class="row">';
+            echo '<div class="competition-container"><div class="row">';
             while ($row = mysqli_fetch_assoc($result)) {
                 echo '<div class="col-md-4">';
                 echo '<div class="card mb-4">';
@@ -231,7 +243,7 @@ require("../user_module/database.php");
         $result = mysqli_query($con, $query);
 
         if (mysqli_num_rows($result) > 0) {
-            echo '<div class="container"><div class="row">';
+            echo '<div class="competition-container"><div class="row">';
             while ($row = mysqli_fetch_assoc($result)) {
                 echo '<div class="col-md-4">';
                 echo '<div class="card mb-4">';
@@ -252,9 +264,23 @@ require("../user_module/database.php");
         mysqli_close($con);
         ?>
     </div>
-
     <?php include '../footer.php'; ?>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const elements = document.querySelectorAll(".competition-container, .card");
 
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add("visible");
+                        observer.unobserve(entry.target); // Stop observing once the animation is triggered
+                    }
+                });
+            });
+
+            elements.forEach((el) => observer.observe(el));
+        });
+    </script>
 </body>
 
 </html>
