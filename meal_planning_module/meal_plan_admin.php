@@ -86,8 +86,8 @@ $result_template_details = $con->query($sql_template_details);
                     </td>
                     <td><?= $row['duration'] ? $row['duration'] . ' days' : '1 day' ?></td>
                     <td>
-                        <a href="meal_plan_edit.php?meal_id=<?= $row['meal_id'] ?>" class="btn btn-warning btn-sm">Edit</a>
-                        <a href="meal_plan_delete.php?meal_id=<?= $row['meal_id'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this meal?');">Delete</a>
+                        <a href="meal_plan_edit_admin.php?meal_id=<?= $row['meal_id'] ?>" class="btn btn-warning btn-sm">Edit</a>
+                        <a href="meal_plan_delete_admin.php?meal_id=<?= $row['meal_id'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this meal?');">Delete</a>
                     </td>
                     <td><?= $row['updated_at'] ? date('Y-m-d H:i', strtotime($row['updated_at'])) : 'N/A' ?></td>
                 </tr>
@@ -115,8 +115,8 @@ $result_template_details = $con->query($sql_template_details);
                     <td><?= $row['template_name'] ?></td>
                     <td><?= $row['description'] ?></td>
                     <td>
-                        <a href="../meal_template_module/edit_template.php?template_id=<?= $row['template_id'] ?>" class="btn btn-warning btn-sm">Edit</a>
-                        <a href="../meal_template_module/delete_template.php?template_id=<?= $row['template_id'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this template?');">Delete</a>
+                        <a href="edit_template_admin.php?template_id=<?= $row['template_id'] ?>" class="btn btn-warning btn-sm">Edit</a>
+                        <a href="delete_template_admin.php?template_id=<?= $row['template_id'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this template?');">Delete</a>
                     </td>
                     <td><?= $row['updated_at'] ? date('Y-m-d H:i', strtotime($row['updated_at'])) : 'N/A' ?></td>
                 </tr>
