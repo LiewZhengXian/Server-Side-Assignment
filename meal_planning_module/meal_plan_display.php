@@ -16,7 +16,7 @@ $template_id = $_GET['template_id'] ?? null; // For filtering templates
 // Fetch template data if needed
 $templates = [];
 if ($display_table === 'meal_template_details') {
-    // New code fetching both template_id and template_name from meal_template:
+    // Fetching both template_id and template_name from meal_template for the current user
     $template_sql = "SELECT template_id, template_name FROM meal_template WHERE user_id = ?";
     $stmt_templates = $con->prepare($template_sql);
     $stmt_templates->bind_param("i", $user_id);
@@ -33,13 +33,16 @@ if ($display_table === 'meal_plans') {
     $stmt = $con->prepare($sql);
     $stmt->bind_param("i", $user_id);
 } else {
-    $sql = "SELECT * FROM meal_template_details";
+    $sql = "SELECT mtd.* FROM meal_template_details mtd
+            JOIN meal_template mt ON mtd.template_id = mt.template_id
+            WHERE mt.user_id = ?";
     if ($template_id) {
-        $sql .= " WHERE template_id = ?";
+        $sql .= " AND mtd.template_id = ?";
         $stmt = $con->prepare($sql);
-        $stmt->bind_param("i", $template_id);
+        $stmt->bind_param("ii", $user_id, $template_id);
     } else {
         $stmt = $con->prepare($sql);
+        $stmt->bind_param("i", $user_id);
     }
 }
 
@@ -62,9 +65,7 @@ $meal_times = ["Breakfast", "Lunch", "Dinner"];
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
-<body>
-
-    <!-- Navbar -->
+<body -->
     <?php include("../navbar.php"); ?>
 
     <div class="container mt-4">
