@@ -151,7 +151,7 @@ CREATE TABLE competition_result (
     competition_id INT NOT NULL,
     submission_id INT NOT NULL,
     rank INT NOT NULL,
-    prize VARCHAR(255) NOT NULL,
+    prize VARCHAR(255),
     FOREIGN KEY (competition_id) REFERENCES competition(competition_id) ON DELETE CASCADE,
     FOREIGN KEY (submission_id) REFERENCES competition_submission(submission_id) ON DELETE CASCADE
 );
@@ -568,12 +568,14 @@ INSERT INTO competition_result (competition_id, submission_id, rank, prize) VALU
 (5, 26, 6, NULL);
 
 -- Insert dummy data into competition_prize
--- Note: No prizes for competition 2 (upcoming)
 -- Only top 3 rankings get prizes, others have NULL for prize
 INSERT INTO competition_prize (competition_id, rank, prize) VALUES
 (1, 1, 'RM10000 Cash'),
 (1, 2, 'RM8000 Cash'),
 (1, 3, 'RM2500 Cash'),
+(2, 1, 'RM12000 Cash'),
+(2, 2, 'RM9000 Cash'),
+(2, 3, 'RM5000 Cash'),
 (3, 1, 'RM5000 Cash'),
 (3, 2, 'RM3000 Cash'),
 (3, 3, 'RM1500 Cash'),
