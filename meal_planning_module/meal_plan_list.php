@@ -122,6 +122,7 @@ $meal_times = ["Breakfast", "Lunch", "Dinner"];
         <h2>Scheduled Meals</h2>
         <div class="d-flex justify-content-between align-items-center mb-3">
             <a href="meal_plan_add.php" class="btn btn-success">+ Plan a Meal</a>
+            <a href="meal_plan_admin.php" class="btn btn-success">+ Admin</a>
             <a href="../meal_template_module/list_templates.php" class="btn btn-success">+ Customize Templates</a>
         </div>
 
