@@ -5,7 +5,7 @@ require("../user_module/database.php");
 require_once(__DIR__ . "/function/function.php");
 
 // Fetch competition details based on the competition ID passed in the URL
-$competition_id = isset($_GET['id']) ? intval($_GET['id']) : '';
+$competition_id = intval($_GET['id']) ?? '';
 $query = "SELECT * FROM competition WHERE competition_id = '$competition_id'";
 $result = mysqli_query($con, $query);
 $competition = mysqli_fetch_assoc($result);
@@ -19,8 +19,8 @@ $competition_start_date = strtotime($competition['start_date']);
 $competition_end_date = strtotime($competition['end_date']);
 
 // Check for success or error messages in the URL
-$message = isset($_GET['message']) ? $_GET['message'] : null;
-$status = isset($_GET['status']) ? $_GET['status'] : null;
+$message = $_GET['message'] ?? null;
+$status =  $_GET['status'] ?? null;
 
 // Display floating box if there's a message and error
 if (isset($status) && isset($message)) {
@@ -215,23 +215,45 @@ if (isset($status) && isset($message)) {
                     </div>
                 </div>
             </header>
-            <!-- Competition Details -->
-            <p>What you waiting for? Click the button below to join the competition and submit your recipe!</p>
-            <p><em>Note: You can only submit one recipe for this competition.</em></p>
-
-            <!-- Submit Recipe Button -->
-            <div style="text-align: center; margin: 20px auto; display: none;" id="button-container"> 
-                <a href="submit_recipe.php?competition_id=<?php echo $competition_id; ?>" class="submit-recipe-btn">
-                    Submit Your Recipe !
-                </a>
+            <div id="ongoing-competition-info" class="text-center my-5" style="display: none;">
+                <div id="prize-info" class="text-center my-5">
+                    <h2 class="text-primary" style="font-size: 2.8rem; font-weight: bold; text-transform: uppercase; margin-bottom: 30px; letter-spacing: 2px;">Prizes</h2>
+                    <div class="d-flex flex-column align-items-center">
+                        <?php 
+                            $query = "SELECT rank, prize FROM competition_prize WHERE competition_id = '$competition_id'";
+                            $result = mysqli_query($con, $query);
+                            while($row = mysqli_fetch_assoc($result)) {
+                                echo '<p class="text-secondary" style="font-size: 1.3rem; margin: 10px 0; background-color: #fff3cd; padding: 15px 25px; border-radius: 10px; box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); border-left: 5px solid #ffc107;"><strong>' . htmlspecialchars($row['rank']) . '.</strong> ' . htmlspecialchars($row['prize']) . '</p>';
+                            }
+                        ?>
+                    </div>
+                </div>
+                <div id="recipe-submission" class="text-center my-5">
+                    <p class="lead" style="font-size: 1.6rem; color: #495057; margin-bottom: 25px; font-weight: 500;">What are you waiting for? Click the button below to join the competition and submit your recipe!</p>
+                    <p style="font-size: 1.1rem; color: #6c757d; margin-bottom: 20px;"><em>Note: You can only submit one recipe for this competition.</em></p>
+                    <div class="d-flex justify-content-center">
+                        <a href="submit_recipe.php?competition_id=<?php echo $competition_id; ?>" class="btn btn-success btn-lg" style="font-size: 1.3rem; padding: 15px 40px; border-radius: 10px; box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); transition: transform 0.3s ease, background-color 0.3s ease;">
+                            Submit Your Recipe!
+                        </a>
+                    </div>
+                </div>
+                <div id="participant-info" class="mt-5">
+                    <h2 class="text-primary" style="font-size: 2.8rem; font-weight: bold; text-transform: uppercase; margin-bottom: 30px; letter-spacing: 2px;">Participants</h2>
+                    <p class="text-secondary" style="font-size: 1.3rem; margin-bottom: 15px;">These are the participants who have submitted their recipes for this competition.</p>
+                    <p class="text-secondary" style="font-size: 1.3rem; margin-bottom: 15px;">Click the <b>VOTE</b> button to vote for your favorite recipe!</p>
+                    <p class="text-muted" style="font-size: 1.1rem; margin-bottom: 20px;"><em>Note: You can only vote once for each recipe.</em></p>
+                </div>
+                </div>
             </div>
-            <div class="b-example-divider"></div>
-            <!-- Participant Info -->
-            <div id="participant-info">
-                <h2 style="text-align: center; margin-top: 30px;">Participants</h2>
-                <p>These are the participants who have submitted their recipes for this competition.</p>
-                <p>Click the <b>VOTE</b> to vote for your favorite recipe!</p>
-                <p><em>Note: You can only vote once for each recipe.</em></p>
+            <div id="upcoming-competition-info" class="text-center my-5" style="display: none;">
+                <h2 class="text-primary" style="font-size: 2.8rem; font-weight: bold; text-transform: uppercase; margin-bottom: 30px; letter-spacing: 2px;">Stay tuned for the Upcoming Competition!</h2>
+                <p>While waiting for this competiton, why not join the <strong><a href="competition_main.php" style="color: black;">Ongoing Competition</a></strong> now to bring the back attractive prizes home!</p>
+            </div>
+
+            <div id="past-competition-info" class="text-center my-5" style="display: none;">
+                <h2 class="text-primary" style="font-size: 2.8rem; font-weight: bold; text-transform: uppercase; margin-bottom: 30px; letter-spacing: 2px;">Past Competition</h2>
+                <p>These are the list of participants who have won the competition with amazing prize with their recipes!</p>
+                <p>Join the <strong><a href="competition_main.php" style="color: black;">Ongoing Competition</a></strong> now to bring the back attractive prizes home!</p>
             </div>
             
             <!-- Ongoing Table -->
@@ -308,7 +330,8 @@ if (isset($status) && isset($message)) {
                             <th>Rank</th>
                             <th>Participant Name</th>
                             <th>Recipe</th>
-                            <th>Number of Vote</th>
+                            <th>Prize</th>
+                            <th>Total Votes</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -319,6 +342,7 @@ if (isset($status) && isset($message)) {
                                 u.username,
                                 r.title,
                                 r.recipe_id,
+                                cr.prize,
                                 COUNT(cv.vote_id) AS total_votes
                             FROM 
                                 competition_result cr
@@ -353,6 +377,7 @@ if (isset($status) && isset($message)) {
                                                         ' . htmlspecialchars($row['title']) . '
                                                     </a>
                                                 </td>';
+                                    echo "<td>" . (!empty($row['prize']) ? $row['prize'] : 'Appreciation of Participation') . "</td>";
                                     echo "<td>" . $row['total_votes'] . "</td>";
                                     echo "</tr>";
                                 }
@@ -383,8 +408,9 @@ if (isset($status) && isset($message)) {
                 const ongoingCompetition = document.getElementById("ongoing-competition");
                 const upcomingCompetition = document.getElementById("upcoming-competition");
                 const pastCompetition = document.getElementById("past-competition");
-                const participantInfo = document.getElementById("participant-info");
-                const submissionButton = document.getElementById("button-container");
+                const ongoingCompetitionInfo = document.getElementById("ongoing-competition-info");
+                const upcomingCompetitionInfo = document.getElementById("upcoming-competition-info");
+                const pastCompetitionInfo = document.getElementById("past-competition-info");
 
                 // Get the current date and competition start and end dates
                 const currentDate = new Date();
@@ -398,18 +424,19 @@ if (isset($status) && isset($message)) {
                         upcomingCompetition.style.display = "block";
                         ongoingCompetition.style.display = "none";
                         pastCompetition.style.display = "none";
-                        participantInfo.style.display = "none";
+                        upcomingCompetitionInfo.style.display = "block";
                     } else if (currentDate > competitionEndDate) {
                         // Show past competition and hide others
                         pastCompetition.style.display = "block";
                         ongoingCompetition.style.display = "none";
                         upcomingCompetition.style.display = "none";
+                        pastCompetitionInfo.style.display = "block";
                     } else {
                         // Show ongoing competition and hide others
                         ongoingCompetition.style.display = "block";
                         upcomingCompetition.style.display = "none";
                         pastCompetition.style.display = "none";
-                        submissionButton.style.display = "block"
+                        ongoingCompetitionInfo.style.display = "block";
                     }
                 }
 
