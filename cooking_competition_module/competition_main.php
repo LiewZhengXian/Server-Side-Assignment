@@ -5,8 +5,11 @@ require("../user_module/database.php");
 
 // task todo
 // 1. error handling (done)
-// 2. mvc structure (in future after assignment)
+// 2. mvc structure (in future after assignment, cant make it now)
 // 3. admin competition management (done)
+// 4. admin modify submission and vote (declined as might alter competition results)
+// 5. decorate abit competition_details.php (done)
+// 6. showing reward for each rank in competiion (done)
 
 ?>
 <!DOCTYPE html>
