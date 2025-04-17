@@ -16,7 +16,8 @@ if(isset($_GET["id"])) {
     $competition_id = intval($_GET["id"]);
 
     // Prepare the SQL query to fetch competition details
-    $query = "SELECT * FROM competition WHERE competition_id = ?";
+    $query = "SELECT * FROM competition c INNER JOIN competition_prize cp ON c.competition_id = cp.competition_id
+              WHERE c.competition_id = ?"; // Assuming rank 1 is the main competition details
     $stmt = mysqli_prepare($con, $query);
 
     if ($stmt) {
@@ -30,6 +31,8 @@ if(isset($_GET["id"])) {
             $description = $row['description'];
             $start_date = $row['start_date'];
             $end_date = $row['end_date'];
+            $rank = $row['rank'];
+            $prize = $row['prize'];
         } else {
             header("Location: admin_competition.php?status=error&message=Competition not found");
             exit();
@@ -47,6 +50,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['competition_name'])) 
     $description = $_POST['description'];
     $start_date = $_POST['start_date'];
     $end_date = $_POST['end_date'];
+    $rank = $_POST['rank'];
+    $prize = $_POST['prize'];
 
     // Prepare the SQL query to update competition details
     $update_query = "UPDATE competition SET competition_name = ?, image_path = ?, description = ?, start_date = ?, end_date = ? WHERE competition_id = ?";
@@ -56,13 +61,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['competition_name'])) 
         mysqli_stmt_bind_param($stmt, "sssssi", $competition_name, $image_path, $description, $start_date, $end_date, $competition_id);
 
         if (mysqli_stmt_execute($stmt)) {
-            // Redirect to the admin competition page with a success message
-            $status = "success";
-            $message = "Competition updated successfully!";
+            // Update the competition prize details
+            $update_prize_query = "UPDATE competition_prize SET rank = ?, prize = ? WHERE competition_id = ?";
+            $stmt_prize = mysqli_prepare($con, $update_prize_query);
+            if ($stmt_prize) {
+                mysqli_stmt_bind_param($stmt_prize, "isi", $rank, $prize, $competition_id);
+                if(mysqli_stmt_execute($stmt_prize)) {
+                    // Successfully updated the competition and prize
+                    $status = "success";
+                    $message = "Competition updated successfully!";
+                } else {
+                    $status = "error";
+                    $message = "Failed to update prize: " . mysqli_error($con);
+                }
+                mysqli_stmt_close($stmt_prize);
+            } else {
+                $status = "error";
+                $message = "Failed to prepare update prize statement: " . mysqli_error($con);
+            }
         } else {
             $status = "error";
             $message = "Failed to update competition: " . mysqli_error($con);
         }
+        mysqli_stmt_close($stmt);
     } else {
         $status = "error";
         // Prepare the statement failed
@@ -128,6 +149,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['competition_name'])) 
             <div class="mb-3">
                 <label for="end_date" class="form-label">End Date:</label>
                 <input type="datetime-local" id="end_date" name="end_date" class="form-control" value="<?php echo date('Y-m-d\TH:i', strtotime($end_date)); ?>" required>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-3">
+                    <label for="rank" class="form-label">Rank:</label>
+                    <input type="number" id="rank" name="rank" class="form-control" min="1" max="10" value="<?php echo htmlspecialchars($rank) ?>" required>
+                </div>
+                <div class="col-9">
+                    <label for="prize" class="form-label">Prize:</label>
+                    <input type="text" id="prize" name="prize" class="form-control" maxlength="255" value="<?php echo htmlspecialchars($prize) ?>" required>
+                </div>
             </div>
 
             <div class="text-center">
