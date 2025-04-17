@@ -22,7 +22,7 @@ if (!$user || $user['isAdmin'] != 1) {
     // Show an alert, then redirect back to login
     echo "<script>
             alert('You do not have permission to access the admin page.');
-            window.location.href = '../user_module/login.php';
+            window.location.href = '../meal_planning_module/meal_plan_list.php';
           </script>";
     exit();
 }
