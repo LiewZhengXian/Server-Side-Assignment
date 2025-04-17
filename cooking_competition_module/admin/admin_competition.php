@@ -212,7 +212,7 @@ if (!$result) {
                         <?php while ($row = mysqli_fetch_assoc($result)): ?>
                             <tr>
                                 <td><?php echo $row['competition_id']; ?></td>
-                                <td><?php echo $row['competition_name']; ?></td>
+                                <td><a href="../competition_details.php?id=<?php echo $row['competition_id'] ?>" style="text-decoration: none;"><?php echo $row['competition_name']; ?></a></td>
                                 <td>
                                     <?php 
                                     if (!empty($row['image_path'])) {
