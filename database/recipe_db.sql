@@ -156,6 +156,14 @@ CREATE TABLE competition_result (
     FOREIGN KEY (submission_id) REFERENCES competition_submission(submission_id) ON DELETE CASCADE
 );
 
+CREATE TABLE competition_prize (
+    prize_id INT PRIMARY KEY AUTO_INCREMENT,
+    competition_id INT NOT NULL,
+    rank INT NOT NULL, -- 1 for 1st place, etc.
+    prize VARCHAR(255) NOT NULL, -- e.g. "RM500 Cash", "Gift Hamper"
+    FOREIGN KEY (competition_id) REFERENCES competition(competition_id) ON DELETE CASCADE
+);
+
 -- Meal Plans Table
 CREATE TABLE meal_plans (
     meal_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -558,6 +566,23 @@ INSERT INTO competition_result (competition_id, submission_id, rank, prize) VALU
 (5, 23, 5, NULL),
 (5, 25, 5, NULL),
 (5, 26, 6, NULL);
+
+-- Insert dummy data into competition_prize
+-- Note: No prizes for competition 2 (upcoming)
+-- Only top 3 rankings get prizes, others have NULL for prize
+INSERT INTO competition_prize (competition_id, rank, prize) VALUES
+(1, 1, 'RM10000 Cash'),
+(1, 2, 'RM8000 Cash'),
+(1, 3, 'RM2500 Cash'),
+(3, 1, 'RM5000 Cash'),
+(3, 2, 'RM3000 Cash'),
+(3, 3, 'RM1500 Cash'),
+(4, 1, 'RM5500 Cash'),
+(4, 2, 'RM3200 Cash'),
+(4, 3, 'RM1800 Cash'),
+(5, 1, 'RM7000 Cash'),
+(5, 2, 'RM4000 Cash'),
+(5, 3, 'RM2500 Cash');
 
 -- Meal Plans
 INSERT INTO meal_plans (meal_id, user_id, meal_name, meal_date, meal_time, meal_type, created_at, recipe_id, custom_meal, duration, updated_at) VALUES
