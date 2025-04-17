@@ -17,7 +17,7 @@
         }
     }
 
-    function addCompetition($competition_name, $image_path, $description, $start_date, $end_date, $con) {
+    function addCompetition($competition_name, $image_path, $description, $start_date, $end_date, $rank, $prize, $con) {
         // Check if competition exists in the database using a prepared statement
         $check_query = "SELECT * FROM competition WHERE competition_name = ?";
         $stmt = mysqli_prepare($con, $check_query);
@@ -42,7 +42,23 @@
         mysqli_stmt_bind_param($stmt, "sssss", $competition_name, $image_path, $description, $start_date, $end_date);
 
         if (mysqli_stmt_execute($stmt)) {
-            return ["status" => "success", "message" => "Competition added successfully!"];
+            // Get the last inserted competition ID
+            $competition_id = mysqli_insert_id($con);
+
+            // Insert rank and prize into competition_prize table
+            $prize_query = "INSERT INTO competition_prize (competition_id, rank, prize) VALUES (?, ?, ?)";
+            $stmt_prize = mysqli_prepare($con, $prize_query);
+            if (!$stmt_prize) {
+                return ["status" => "error", "message" => "Failed to prepare prize query: " . mysqli_error($con)];
+            }
+
+            mysqli_stmt_bind_param($stmt_prize, "iis", $competition_id, $rank, $prize);
+
+            if (mysqli_stmt_execute($stmt_prize)) {
+                return ["status" => "success", "message" => "Competition and prize added successfully!"];
+            } else {
+                return ["status" => "error", "message" => "Failed to add prize. Please try again."];
+            }
         } else {
             return ["status" => "error", "message" => "Failed to add competition. Please try again."];
         }

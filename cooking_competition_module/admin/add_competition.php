@@ -18,8 +18,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['competition_name'])) 
     $description = $_POST['description'];
     $start_date = $_POST['start_date'];
     $end_date = $_POST['end_date'];
+    $rank = $_POST['rank'];
+    $prize = $_POST['prize'];
 
-    $add_competition_result = addCompetition($competition_name, $image_path, $description, $start_date, $end_date, $con);
+    $add_competition_result = addCompetition($competition_name, $image_path, $description, $start_date, $end_date, $rank, $prize, $con);
     $status = $add_competition_result['status'];
     $message = $add_competition_result['message'];
 }
@@ -85,6 +87,17 @@ if (isset($status) && isset($message)) {
             <div class="mb-3">
                 <label for="end_date" class="form-label">End Date:</label>
                 <input type="datetime-local" id="end_date" name="end_date" class="form-control" required>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-3">
+                    <label for="rank" class="form-label">Rank:</label>
+                    <input type="number" id="rank" name="rank" class="form-control" min="1" max="10" placeholder="Enter Rank for Competition" required>
+                </div>
+                <div class="col-9">
+                    <label for="prize" class="form-label">Prize:</label>
+                    <input type="text" id="prize" name="prize" class="form-control" maxlength="255" placeholder="Enter Prize for Competition" required>
+                </div>
             </div>
 
             <div class="text-center">
