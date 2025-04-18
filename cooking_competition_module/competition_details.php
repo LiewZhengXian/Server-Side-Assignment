@@ -444,9 +444,8 @@ if (isset($status) && isset($message)) {
 
                 // Function to load recipe details into the modal
                 function loadRecipeDetails(recipeId) {
-                    console.log("Loading recipe: ", recipeId);
                     const xhr = new XMLHttpRequest();
-                    xhr.open("GET", "../recipe_management_module/view_recipe.php?id=" + recipeId, true);
+                    xhr.open("GET", "../recipe_management_module/view_recipe.php?recipe_id=" + recipeId, true);
                     xhr.onload = function() {
                         if (this.status === 200) {
                             document.getElementById("recipeDetails").innerHTML = this.responseText;
